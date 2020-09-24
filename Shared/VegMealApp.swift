@@ -6,12 +6,27 @@
 //
 
 import SwiftUI
+import UIKit
+
 
 @main
 struct VegMealApp: App {
+    @StateObject var userStore = UserStore()
+    @StateObject var networkingController = ApolloNetworkingController()
+    @StateObject var groceryListController = GroceryListApolloController()
+    @StateObject var mealListController = MealListApolloController()
+    @StateObject var mealLogController = MealLogApolloController()
+
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home()
+                .environmentObject(userStore)
+                .environmentObject(networkingController)
+                .environmentObject(groceryListController)
+                .environmentObject(mealListController)
+                .environmentObject(mealLogController)
+
         }
     }
 }

@@ -1,0 +1,354 @@
+# Write your query or mutation here
+mutation CREATE_MEAL(
+  $authorId: ID!
+  $name: String
+  $description: String
+  $mealImage: Upload
+) {
+  createMeal(
+    data: {
+      name: $name
+      description: $description
+      mealImage: $mealImage
+      author: { connect: { id: $authorId } }
+    }
+  ) {
+    ...MealFragment
+  }
+}
+
+mutation ADD_GROCERY_LIST($ingredient: String!, $amount: String!) {
+  addGroceryList(ingredient: $ingredient, amount: $amount) {
+    id
+  }
+}
+
+mutation ADD_MEAL_INGREDIENT_LIST(
+  $id: ID!
+  $ingredient: String!
+  $amount: String!
+) {
+  addMealIngredientList(id: $id, ingredient: $ingredient, amount: $amount) {
+    id
+  }
+}
+
+query GET_MEAL_INGREDIENT_LIST($id:ID!) {
+  MealIngredientList(where:{id:$id}){
+    id
+    ingredient{
+      id
+      name
+    }
+    amount{
+      id
+      name
+    }
+  }
+}
+
+
+query SEARCH_FOR_INGREDIENT($inputValue: String) {
+  allIngredients(where: { name_starts_with: $inputValue }) {
+    id
+    name
+  }
+}
+
+query SEARCH_FOR_AMOUNT($inputValue: String) {
+  allAmounts(where: { name_starts_with: $inputValue }) {
+    id
+    name
+  }
+}
+
+mutation DELETE_MEAL_MUTATION($id: ID!) {
+  deleteMeal(id: $id) {
+    id
+  }
+}
+
+query GET_GROCERY_LIST($id: ID!) {
+  groceryToComplete: allGroceryLists(
+    where: { author: { id: $id }, isCompleted: false }
+  ) {
+    ...GroceryListFragment
+  }
+  groceryCompleted: allGroceryLists(
+    where: { author: { id: $id }, isCompleted: true }
+  ) {
+    ...GroceryListFragment
+  }
+}
+
+query GET_GROCERY_LIST_ITEM($id:ID!){
+  allGroceryLists(where:{id:$id}){
+    ...GroceryListFragment
+  }
+}
+
+mutation DELETE_GROCERY_LIST_ITEM($id:ID!){
+  deleteGroceryList(id:$id){
+    id
+  }
+}
+
+fragment GroceryListFragment on GroceryList {
+    id
+    ingredient {
+      id
+      name
+    }
+    amount {
+      id
+      name
+    }
+    isCompleted
+    dateCompleted
+}
+
+mutation COMPLETE_GROCERY_LIST(
+  $id: ID!
+  $dateCompleted: DateTime
+  $isCompleted: Boolean
+) {
+  updateGroceryList(
+    id: $id
+    data: { isCompleted: $isCompleted, dateCompleted: $dateCompleted }
+  ) {
+    id
+  }
+}
+
+query ALL_MEALS_QUERY($skip: Int = 0, $first: Int) {
+  allMeals(first: $first, skip: $skip, sortBy: name_ASC) {
+    ...MealFragment
+  }
+}
+
+fragment IngredientFragment on Ingredient {
+    id
+    name
+}
+
+fragment AmountFragment on Amount {
+    id
+    name
+}
+
+fragment MealFragment on Meal {
+  id
+  name
+  description
+  mealImage {
+    publicUrlTransformed
+  }
+  author {
+    id
+  }
+  ingredientList {
+    id
+    ingredient {
+      id
+      name
+    }
+    amount {
+      id
+      name
+    }
+  }
+}
+
+
+query MY_MEALS_QUERY($authorId: ID!) {
+  allMealLists(where: { author: { id: $authorId }, isCompleted: false }) {
+   ...MealListFragment
+  }
+}
+
+fragment MealListFragment on MealList {
+    id
+    isCompleted
+    meal {
+      id
+      name
+      description
+      mealImage {
+        publicUrlTransformed
+      }
+    }
+}
+
+mutation COMPLETE_MY_MEAL($id: ID!, $dateCompleted: DateTime) {
+  updateMealList(
+    id: $id
+    data: { isCompleted: true, dateCompleted: $dateCompleted }
+  ) {
+    id
+  }
+}
+
+mutation DELETE_MY_MEAL_LIST_ITEM($id:ID!){
+  deleteMealList(id:$id){
+    id
+  }
+}
+
+query PAGINATION_QUERY {
+  _allMealsMeta {
+    count
+  }
+}
+
+mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+  authenticateUserWithPassword(email: $email, password: $password) {
+    item {
+      id
+      email
+      name
+    }
+  }
+}
+
+mutation SIGN_OUT_MUTATION {
+  unauthenticateUser {
+    success
+  }
+}
+
+mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
+  createUser(data: { email: $email, name: $name, password: $password }) {
+    id
+    email
+    name
+  }
+}
+
+query SINGLE_MEAL_QUERY($id: ID!) {
+  Meal(where: { id: $id }) {
+    id
+    name
+    description
+    mealImage {
+      publicUrlTransformed
+    }
+    author {
+      id
+    }
+    ingredientList {
+      id
+      ingredient {
+        id
+        name
+      }
+      amount {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation DELETE_MEAL_INGREDIENT_LIST(
+  $mealIngredientListId: ID!
+  $ingredientId: ID!
+  $mealId: ID!
+) {
+  updateIngredient(
+    id: $ingredientId
+    data: { meal: { disconnect: { id: $mealId } } }
+  ) {
+    id
+  }
+
+  deleteMealIngredientList(id: $mealIngredientListId) {
+    id
+  }
+}
+
+mutation ADD_MEAL_TO_GROCERY_LIST($mealId: ID!, $authorId: ID!) {
+  addMealToGroceryList(mealId:$mealId){
+    id
+  }
+  addMealToMealList: createMealList(
+    data: {
+      meal: { connect: { id: $mealId } }
+      author: { connect: { id: $authorId } }
+    }
+  ) {
+    id
+  }
+}
+mutation MADE_MEAL($mealId: ID!, $authorId: ID!, $dateMade: String) {
+  createMadeMeal(
+    data: {
+      meal: { connect: { id: $mealId } }
+      author: { connect: { id: $authorId } }
+      dateMade: $dateMade
+    }
+  ) {
+    ...MadeMealFragment
+  }
+}
+
+mutation DELETE_MADE_MEAL($id: ID!) {
+  deleteMadeMeal(id: $id) {
+    id
+  }
+}
+
+mutation UPDATE_MADE_MEAL($id: ID!, $thoughts: String, $dateMade: String) {
+  updateMadeMeal(id: $id, data: { thoughts: $thoughts, dateMade: $dateMade }) {
+    id
+  }
+}
+
+query GET_MADE_MEALS($mealId: ID!, $authorId: ID!) {
+  allMadeMeals(
+    where: { author: { id: $authorId }, meal: { id: $mealId } }
+    sortBy: dateMade_DESC
+  ) {
+    ...MadeMealFragment
+  }
+}
+
+fragment MadeMealFragment on MadeMeal {
+    id
+    dateMade
+    thoughts
+}
+
+query SINGLE_MEAL_UPDATE_QUERY($id: ID!) {
+  Meal(where: { id: $id }) {
+    id
+    name
+    description
+  }
+}
+
+mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
+  updateMeal(id: $id, data: { name: $name, description: $description }) {
+    id
+    name
+    description
+  }
+}
+
+query CURRENT_USER_QUERY {
+  authenticatedUser {
+    id
+    email
+    name
+    permissions
+  }
+}
+
+mutation AUTHENTICATE_USER($email: String!, $password: String) {
+  authenticateUserWithPassword(email: $email, password: $password) {
+    token
+    item {
+      id
+      email
+    }
+  }
+}
