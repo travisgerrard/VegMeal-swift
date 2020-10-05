@@ -162,7 +162,11 @@ fragment MealFragment on Meal {
 
 query MY_MEALS_QUERY($authorId: ID!) {
   allMealLists(where: { author: { id: $authorId }, isCompleted: false }) {
-   ...MealListFragment
+    id
+    isCompleted
+    meal {
+        ...MealFragment
+    }
   }
 }
 
@@ -350,5 +354,12 @@ mutation AUTHENTICATE_USER($email: String!, $password: String) {
       id
       email
     }
+  }
+}
+
+query IS_AUTHENTICATED_USER {
+  authenticatedUser{
+    id
+    email
   }
 }

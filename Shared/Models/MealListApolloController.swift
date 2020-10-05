@@ -9,8 +9,14 @@ import Apollo
 import Combine
 import SwiftUI
 
+struct MealListItem: Identifiable {
+    var id: String
+    var isCompleted: Bool
+    var meal: MealFragment
+}
+
 class  MealListApolloController: ObservableObject {
-    @Published var mealList: [MealListFragment] = []
+    @Published var mealList: [MealListItem] = []
     @Published var mealListQueryRunning: Bool = false
     @Published var mealListQueryError: Error?
 
@@ -28,7 +34,7 @@ class  MealListApolloController: ObservableObject {
                 guard let returnedMealList = graphQLResults.data?.allMealLists else { break }
                 self.mealList.removeAll()
                 for meal in returnedMealList {
-                    self.mealList.append(meal!.fragments.mealListFragment)
+                    self.mealList.append(MealListItem(id: meal!.id!, isCompleted: meal!.isCompleted!, meal: meal!.meal!.fragments.mealFragment))
                 }
             }
         }

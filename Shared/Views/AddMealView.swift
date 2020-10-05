@@ -17,7 +17,7 @@ struct AddMealView: View {
     @EnvironmentObject var user: UserStore
     @State var isUploadingImage = false
     @EnvironmentObject var networkingController: ApolloNetworkingController
-
+    
     func loadImage() {
         guard let inputImage = inputImage else { return }
         image = Image(uiImage: inputImage)
@@ -25,16 +25,16 @@ struct AddMealView: View {
     
     func addNewMeal() {
         
-//        let imageName = UUID().uuidString
+        //        let imageName = UUID().uuidString
         
         if image != nil && name != "" && description != "" {
-//         
+            //         
             self.networkingController.addNewMeal(authorId: user.userid, inputImage: inputImage!, name: name, description: description)
         } else {
             return
         }
         
-
+        
     }
     
     var body: some View {
@@ -58,29 +58,51 @@ struct AddMealView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                         .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
                 } else {
-                    Rectangle()
-                        .fill(Color.secondary)
-                        .frame(width: 250, height: 250, alignment: .center)
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-                    Text("Tap to select a picture")
-                        .foregroundColor(.white)
-                        .font(.headline)
+                    HStack {
+                        ZStack {
+                            Rectangle()
+                                .fill(Color.secondary)
+                                .frame(width: 150, height: 150, alignment: .center)
+                                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                                .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
+                            Text("Tap to select photo from photo album")
+                                .font(.headline)
+                        }
+                        .onTapGesture {
+                            self.showingImagePicker = true
+                        }
+                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                            ImagePicker(image: self.$inputImage)
+                        }
+                        .padding()
+                        
+                        ZStack {
+                            Rectangle()
+                                .fill(Color.secondary)
+                                .frame(width: 150, height: 150, alignment: .center)
+                                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                                .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
+                            Text("Tap to take a picture")
+                                .font(.headline)
+                        }
+                        .onTapGesture {
+                            self.showingImagePicker = true
+                        }
+                        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                            ImagePicker(image: self.$inputImage, sourceType: .camera)
+                        }
+                        .padding()
+                    }
+                    
                 }
                 
             }
-            .onTapGesture {
-                self.showingImagePicker = true
-            }
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(image: self.$inputImage)
-            }
-            .padding()
-
+            
+            
             VStack {
                 TextField("Name", text: $name).padding(.horizontal)
                 Divider().background(Color.black).padding(.horizontal)
-
+                
                 TextField("Description", text: $description).padding(.horizontal)
                 Divider().background(Color.black).padding(.horizontal)
             }
@@ -90,9 +112,9 @@ struct AddMealView: View {
                     addNewMeal()
                 }).padding()
             }
-
+            
             Spacer()
-
+            
         }
     }
 }
@@ -104,12 +126,19 @@ struct AddMealView_Previews: PreviewProvider {
 }
 
 struct ImagePicker: UIViewControllerRepresentable {
-    @Environment(\.presentationMode) var presentationMode
     @Binding var image: UIImage?
+    var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @Environment(\.presentationMode) var presentationMode
+    
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
+        if !UIImagePickerController.isSourceTypeAvailable(.camera){
+            picker.sourceType = .photoLibrary
+        } else {
+            picker.sourceType = .camera
+        }
         return picker
     }
     

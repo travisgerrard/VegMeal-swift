@@ -11,7 +11,6 @@ import SwiftUI
 
 class ApolloNetworkingController: ObservableObject {
     @Published var meals: [MealFragment] = []
-    @Published var meal: MealFragment?
     @Published var mealsQueryRunning: Bool = false
     @Published var mealsQueryError: Error?
     
@@ -25,7 +24,7 @@ class ApolloNetworkingController: ObservableObject {
         self.mealsQueryRunning = true
         self.meals.removeAll()
         
-        let query = AllMealsQueryQuery(skip: 0, first: 6)
+        let query = AllMealsQueryQuery(skip: 0, first: 50)
         ApolloController.shared.apollo.fetch(query: query) { (results) in
             self.mealsQueryRunning = false
             switch results {
@@ -118,6 +117,11 @@ class ApolloNetworkingController: ObservableObject {
                         self.addingIngredientError = error
                         
                     case .success(let graphQLResult):
+                        if let error = graphQLResult.errors {
+                            print(error)
+                            return
+                        }
+                        
                         guard let mealIngredientList = graphQLResult.data?.mealIngredientList else { break }
                         
                         if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
@@ -127,7 +131,6 @@ class ApolloNetworkingController: ObservableObject {
                             self.meals[mealToUpdateIndex].ingredientList.append(ingredientListToAdd)
                             print("self.meals[mealToUpdateIndex]: \(self.meals[mealToUpdateIndex].ingredientList)")
                             
-                            self.meal!.ingredientList.append(ingredientListToAdd)
                         }
                         
                     }
@@ -167,7 +170,6 @@ class ApolloNetworkingController: ObservableObject {
                 if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}){
                     if let ingredientListToDeleteIndex = self.meals[mealToUpdateIndex].ingredientList.firstIndex(where: {$0.id == mealIngredientListId}) {
                         self.meals[mealToUpdateIndex].ingredientList.remove(at: ingredientListToDeleteIndex)
-                        self.meal!.ingredientList.remove(at: ingredientListToDeleteIndex)
                     }
                     
                    

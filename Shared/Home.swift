@@ -14,84 +14,67 @@ struct Home: View {
     @EnvironmentObject var user: UserStore
     
     var body: some View {
-        TabView {
             ZStack {
                 Color.white
                     .edgesIgnoringSafeArea(.all)
                 
-                HomeBackgroundView(showProfile: $showProfile)
-                    .offset(y: showProfile ? -450 : 0)
-                    .rotation3DEffect(
-                        Angle(degrees: showProfile ? Double(viewState.height / 10) - 10 : 0),
-                        axis: (x: 10.0, y: 0.0, z: 0)
-                    )
-                    .scaleEffect(showProfile ? 0.9 : 1)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-                    .edgesIgnoringSafeArea(.all)
+//                HomeBackgroundView(showProfile: $showProfile)
+//                    .offset(y: showProfile ? -450 : 0)
+//                    .rotation3DEffect(
+//                        Angle(degrees: showProfile ? Double(viewState.height / 10) - 10 : 0),
+//                        axis: (x: 10.0, y: 0.0, z: 0)
+//                    )
+//                    .scaleEffect(showProfile ? 0.9 : 1)
+//                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
+//                    .edgesIgnoringSafeArea(.all)
                 
-                ContentView(showProfile: $showProfile, viewState: $viewState)
-                
-                
-                MenuView(showProfile: $showProfile)
-                    .background(Color.black.opacity(0.001))
-                    .offset(y: showProfile ? 0 : screen.height)
-                    .offset(y: viewState.height)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-                    .onTapGesture(count: 1, perform: {
-                        showProfile.toggle()
-                    })
-                    .gesture(DragGesture().onChanged{value in
-                        viewState = value.translation
-                    }
-                    .onEnded( { value in
-                        if viewState.height > 50 {
-                            showProfile = false
-                        }
-                        viewState = .zero
-                    })
-                    )
+                ContentView()
                 
                 
+//                MenuView(showProfile: $showProfile)
+//                    .background(Color.black.opacity(0.001))
+//                    .offset(y: showProfile ? 0 : screen.height)
+//                    .offset(y: viewState.height)
+//                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
+//                    .onTapGesture(count: 1, perform: {
+//                        showProfile.toggle()
+//                    })
+//                    .gesture(DragGesture().onChanged{value in
+//                        viewState = value.translation
+//                    }
+//                    .onEnded( { value in
+//                        if viewState.height > 50 {
+//                            showProfile = false
+//                        }
+//                        viewState = .zero
+//                    })
+//                    )
                 
-                if user.showLogin {
-                    ZStack {
-                        LoginView()
-                        
-                        VStack {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "xmark")
-                                    .frame(width: 36, height: 36)
-                                    .foregroundColor(.white)
-                                    .background(Color.black)
-                                    .clipShape(Circle())
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                        .onTapGesture(count: 1, perform: {
-                            user.showLogin = false
-                        })
-                    }
-                }
-            }.tabItem {
-                Image(systemName: "rectangle.stack")
-                Text("All Meals")
-            }.tag(0)
+                
+                
+//                if user.showLogin {
+//                    ZStack {
+////                        LoginView()
+//
+//                        VStack {
+//                            HStack {
+//                                Spacer()
+//                                Image(systemName: "xmark")
+//                                    .frame(width: 36, height: 36)
+//                                    .foregroundColor(.white)
+//                                    .background(Color.black)
+//                                    .clipShape(Circle())
+//                            }
+//                            Spacer()
+//                        }
+//                        .padding()
+//                        .onTapGesture(count: 1, perform: {
+//                            user.showLogin = false
+//                        })
+//                    }
+//                }
+            }
             
-            GroceryListView()
-                .tabItem {
-                    Image(systemName: "bag")
-                    Text("Grocery List")
-                }.tag(1)
-            
-            MealListView()
-                .tabItem {
-                    Image(systemName: "text.book.closed")
-                    Text("Meal Planner")
-                }.tag(2)
-           
-        }
         
     }
 }

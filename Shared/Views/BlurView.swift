@@ -32,7 +32,31 @@ struct BlurView: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {
         
     }
+}
+
+struct BlurViewTwo: View {
+    @Environment(\.colorScheme) var scheme
+
+    var active: Bool
+    var onTap: () -> ()
+
+    var body: some View {
+        if active {
+            VisualEffectView(uiVisualEffect: UIBlurEffect(style: scheme == .dark ? .dark : .light))
+                .edgesIgnoringSafeArea(.all)
+                .onTapGesture(perform: self.onTap)
+        }
+    }
+}
+
+struct VisualEffectView: UIViewRepresentable {
+    var uiVisualEffect: UIVisualEffect?
     
+    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView {
+        UIVisualEffectView()
+    }
     
-    
+    func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) {
+        uiView.effect = uiVisualEffect
+    }
 }

@@ -18,54 +18,114 @@ struct GroceryListView: View {
     
     @State var completeIsPressed = false
     
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }
+    
     var body: some View {
         if user.isLogged {
             ZStack {
-                NavigationView {
-                    List {
-                        ForEach(self.groceryListController.groceryList) {grocery in
-                            HStack {
-                                Button(action: {
-                                }) {
-                                    Circle()
-                                        .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
-                                        .frame(width: 32, height: 32)
-                                        .padding(.trailing, 3)
+                VStack {
+                    NavigationView {
+                        List {
+                            Section(header: Text("To Complete")) {
+                                ForEach(self.groceryListController.groceryList) {grocery in
+                                    HStack {
+                                        Button(action: {
+                                        }) {
+                                            Circle()
+                                                .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
+                                                .frame(width: 32, height: 32)
+                                                .padding(.trailing, 3)
+                                        }
+                                        .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                                                    .onChanged { _ in
+                                                        completeIsPressed = true
+                                                    }
+                                                    .onEnded { _ in
+                                                        self.groceryListController.completeGroceryListItem(id: grocery.id!)
+                                                        completeIsPressed = false
+                                                    }
+                                        )
+                                        
+                                        
+                                        Text("\(grocery.ingredient?.name ?? "No ingredient") - \(grocery.amount?.name ?? "No amount")")
+                                        Spacer()
+                                        Button(action: {
+                                        }) {
+                                            Image(systemName: "trash")
+                                                .font(.system(size: 17, weight: .bold))
+                                                .foregroundColor(.white)
+                                                .padding(.all, 10)
+                                                .background(Color.black.opacity(0.6))
+                                                .clipShape(Circle())
+                                        }
+                                        .gesture(TapGesture()
+                                                    .onEnded {
+                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id!)
+                                                    }
+                                        )
+                                        
+                                    }
                                 }
-                                .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
-                                            .onChanged { _ in
-                                                completeIsPressed = true
-                                            }
-                                            .onEnded { _ in
-                                                self.groceryListController.completeGroceryListItem(id: grocery.id!)
-                                                completeIsPressed = false
-                                            }
-                                )
-                                
-                                
-                                Text("\(grocery.ingredient?.name ?? "No ingredient") - \(grocery.amount?.name ?? "No amount")")
-                                Spacer()
-                                Button(action: {
-                                }) {
-                                    Image(systemName: "trash")
-                                        .font(.system(size: 17, weight: .bold))
-                                        .foregroundColor(.white)
-                                        .padding(.all, 10)
-                                        .background(Color.black.opacity(0.6))
-                                        .clipShape(Circle())
+                            }
+                            Section(header: Text("Completed")) {
+                                ForEach(self.groceryListController.completedGroceryList) {grocery in
+                                    HStack {
+                                        Button(action: {
+                                        }) {
+                                            Circle()
+//                                                .strokeBorder(Color.gray.opacity(0.6),lineWidth: 1)
+                                                .frame(width: 32, height: 32)
+                                                .foregroundColor(.gray)
+                                                .padding(.trailing, 3)
+                                        }
+                                        .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                                                    .onChanged { _ in
+                                                        completeIsPressed = true
+                                                    }
+                                                    .onEnded { _ in
+                                                        self.groceryListController.completeGroceryListItem(id: grocery.id!)
+                                                        completeIsPressed = false
+                                                    }
+                                        )
+                                        
+                                        
+                                        VStack(alignment: .leading) {
+                                            Text("\(grocery.ingredient?.name ?? "No ingredient") - \(grocery.amount?.name ?? "No amount")")
+                                            
+                                            Text("\(grocery.dateCompleted ?? "Just Now")").font(.caption)
+                                        }
+                                        .foregroundColor(.gray)
+                                        
+                                        Spacer()
+                                        Button(action: {
+                                        }) {
+                                            Image(systemName: "trash")
+                                                .font(.system(size: 17, weight: .bold))
+                                                .foregroundColor(.white)
+                                                .padding(.all, 10)
+                                                .background(Color.black.opacity(0.6))
+                                                .clipShape(Circle())
+                                        }
+                                        .gesture(TapGesture()
+                                                    .onEnded {
+                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id!)
+                                                    }
+                                        )
+                                        
+                                    }
                                 }
-                                .gesture(TapGesture()
-                                            .onEnded {
-                                                self.groceryListController.deleteGroceryListItem(id: grocery.id!)
-                                            }
-                                )
-                                
                             }
                         }
-                    }
-                    .navigationBarTitle("Grocery List")
-                    .onAppear {
-                        self.groceryListController.getGroceryList(userId: user.userid)
+                        
+                        .navigationBarTitle("Grocery List")
+                        .onAppear {
+                            self.groceryListController.getGroceryList(userId: user.userid)
+                        }
                     }
                 }
                 
@@ -118,9 +178,9 @@ struct GroceryListView: View {
                             if showFull {
                                 bottomState.height += -600
                             }
-//                            if bottomState.height < -500 {
-//                                bottomState.height = -500
-//                            }
+                            //                            if bottomState.height < -500 {
+                            //                                bottomState.height = -500
+                            //                            }
                         }
                         .onEnded{ value in
                             if bottomState.height > 50 {
@@ -131,6 +191,7 @@ struct GroceryListView: View {
                                 showFull = true
                             } else {
                                 showFull = false
+                                hideKeyboard()
                                 bottomState = .zero
                             }
                         }
@@ -141,8 +202,8 @@ struct GroceryListView: View {
         } else {
             Text("Please log in or create an account")
         }
-
-
+        
+        
     }
 }
 

@@ -9,9 +9,6 @@ import SwiftUI
 
 struct AddToGroceryListView: View {
     @EnvironmentObject var groceryListController: GroceryListApolloController
-
-    @State var amount = ""
-    @State var ingredient = ""
     
     @State var amountList = [String]()
     @State var isEditingAmount = false
@@ -20,14 +17,12 @@ struct AddToGroceryListView: View {
     @State var ingredientList = [String]()
     @State var isEditingIngredient = false
     @State var ingredientListIsLoading = false
-    
-    @State var addingIngredientIsLoading = false
-    
+        
     func searchForAmount() {
-        if isEditingAmount && amount.count > 0 {
+        if isEditingAmount && groceryListController.amount.count > 0 {
             amountListIsLoading = true
             
-            let query = SearchForAmountQuery(inputValue: amount)
+            let query = SearchForAmountQuery(inputValue: groceryListController.amount)
             
             ApolloController.shared.apollo.fetch(query: query) { result in
                 
@@ -54,10 +49,10 @@ struct AddToGroceryListView: View {
     }
     
     func searchForIngredient() {
-        if isEditingIngredient && ingredient.count > 0 {
+        if isEditingIngredient && groceryListController.ingredient.count > 0 {
             ingredientListIsLoading = true
             
-            let query = SearchForIngredientQuery(inputValue: ingredient.lowercased())
+            let query = SearchForIngredientQuery(inputValue: groceryListController.ingredient.lowercased())
             ApolloController.shared.apollo.fetch(query: query) { result in
                 
                 ingredientListIsLoading = false
@@ -83,7 +78,7 @@ struct AddToGroceryListView: View {
     }
     
     func addIngredientToGroceryList() {
-        groceryListController.addIngredientToGroceryList(ingredient: ingredient, amount: amount)
+        groceryListController.addIngredientToGroceryList()
     }
     
     var body: some View {
@@ -101,20 +96,20 @@ struct AddToGroceryListView: View {
             
             ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(text: $amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, placeHolder: "Amount").onChange(of: amount, perform: { value in
+                    SearchBar(text: self.$groceryListController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, placeHolder: "Amount").onChange(of: groceryListController.amount, perform: { value in
                         searchForAmount()
                     })
                     if !amountList.isEmpty && isEditingAmount {
-                        OptionsList(list: amountList, text: $amount, isEditing: $isEditingAmount)
+                        OptionsList(list: amountList, text: self.$groceryListController.amount, isEditing: $isEditingAmount)
                     }
                 }.padding(.bottom).zIndex(3)
                 
                 VStack {
-                    SearchBar(text: $ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, placeHolder: "Ingredient").onChange(of: ingredient, perform: { value in
+                    SearchBar(text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, placeHolder: "Ingredient").onChange(of: self.groceryListController.ingredient, perform: { value in
                         searchForIngredient()
                     })
                     if !ingredientList.isEmpty && isEditingIngredient {
-                        OptionsList(list: ingredientList, text: $ingredient, isEditing: $isEditingIngredient)
+                        OptionsList(list: ingredientList, text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient)
                         
                     }
                     
@@ -129,13 +124,13 @@ struct AddToGroceryListView: View {
                 HStack{
                     Spacer()
                     
-                    if addingIngredientIsLoading {
+                    if self.groceryListController.addIngredientToGroceryListMutationRunning {
                         ProgressView()
                     }
                     
                     Button("Add", action: {
                         addIngredientToGroceryList()
-                    }).padding().disabled(amount.count == 0 || ingredient.count == 0 || addingIngredientIsLoading)
+                    }).padding().disabled(self.groceryListController.amount.count == 0 || self.groceryListController.ingredient.count == 0 || self.groceryListController.addIngredientToGroceryListMutationRunning)
                     
                 }.offset(x: 0, y: 100)
             }

@@ -47,7 +47,7 @@ struct MealLogView: View {
 
 struct MealLog_Previews: PreviewProvider {
     static var previews: some View {
-        MealLogView(mealId: "5f6283d37809550e4783c227", authorId: "5f3fcabfd69edf321f60ede6")
+        MealLogView(mealId: "5f4c7bfdf818ca3c74eb7d6d", authorId: "5f4c7b0cf818ca3c74eb7d6b")
             .environmentObject(MealLogApolloController())
     }
 }
