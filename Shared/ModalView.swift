@@ -43,7 +43,8 @@ struct ModalMod: AnimatableModifier {
     let pictureSize = CGSize(width: screen.width, height: 375)
     @State var isAddIngredientsOpen = false
     let onClose: () -> ()
-    
+    @State private var showEditMealModal: Bool = false
+
     var animatableData: CGFloat {
         get { pct }
         set { pct = newValue }
@@ -111,10 +112,15 @@ struct ModalMod: AnimatableModifier {
                                         }
                                         Spacer()
                                         if userId != nil ? userId == meal.author!.id! : false {
-                                            Button("Edit", action: {})
+                                            Button("Edit", action: {showEditMealModal.toggle()})
                                                 .font(.callout)
                                                 .padding(.trailing)
                                                 .padding(.bottom)
+                                                .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
+                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id!, name: meal.name!, description: meal.description!)
+                                                        .environmentObject(self.user)
+                                                        .environmentObject(self.networkingController)
+                                                }
                                         }
                                         
                                     }

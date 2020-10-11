@@ -15,6 +15,8 @@ struct ContentView: View {
     
     @Namespace private var ns_grid // ids to match grid elements with modal
     @Namespace private var ns_favorites // ids to match favorite icons with modal
+    @Namespace private var ns_search // ids to match grid elements with modal
+
     
     @State private var shake = false
     @State private var blur: Bool = false
@@ -24,6 +26,7 @@ struct ContentView: View {
     @State private var mealTap: String? = nil
     @State private var mealIndex: Int? = nil
     @State private var favoriteTap: String? = nil
+    @State private var searchTap: Bool = false
     
     // Views are matched at insertion, but onAppear we broke the match
     // in order to animate immediately after view insertion
@@ -54,7 +57,7 @@ struct ContentView: View {
                 TabView {
                     
                     ZStack {
-                        MealsHeaderView().zIndex(2)
+                        MealsHeaderView(searchTap: $searchTap, blur: $blur, ns_search: ns_search).zIndex(2)
                         VStack {
                             NavigationView {
                                 ScrollView {
@@ -75,27 +78,6 @@ struct ContentView: View {
                                 }
                                 .navigationBarTitle("Veggily")
                             }.zIndex(1)
-                            //                            HStack {
-                            //                                ForEach(self.mealListController.mealList.indices) { i in
-                            //                                    MealPlannerFavoriteView(image: self.parse(object: self.mealListController.mealList[i].meal), pct: matchGridToFavorite(self.mealListController.mealList[i].id) ? 0.0 : 1.0)
-                            //                                        .offset(shake ? CGSize.random(width: 10...40, height: 0...0) : .zero)
-                            //                                        .matchedGeometryEffect(id: matchGridToFavorite(self.mealListController.mealList[i].id) ? i : -i,
-                            //                                                               in: ns_grid,
-                            //                                                               isSource: false)
-                            //                                        .matchedGeometryEffect(id: self.mealListController.mealList[i].id,
-                            //                                                               in: ns_favorites,
-                            //                                                               isSource: true)
-                            //                                        .frame(height: 65)
-                            //                                        .onAppear {
-                            //                                            withAnimation(.fly) {
-                            //                                                flyFromGridToFavorite = true
-                            //                                            }
-                            //                                        }
-                            //                                }.onAppear{
-                            //                                    self.mealListController.getMealList(userId: user.userid)
-                            //                                }
-                            //                            }.frame(height: 65)
-                            
                         }
                     }
                     .tabItem {
@@ -141,6 +123,17 @@ struct ContentView: View {
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
+                    .zIndex(4)
+            }
+            
+            if searchTap {
+                SearchView(shouldCloseView: $searchTap)
+//                    .matchedGeometryEffect(id: searchTap ? "search" : "0", in: ns_search, isSource: false)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
+                    .onDisappear { flyFromGridToModal = false }
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
+                    .onDisappear {blur = false}
                     .zIndex(4)
             }
             
@@ -200,6 +193,9 @@ struct MealsHeaderView: View {
     @State private var showAddMealModal: Bool = false
     @State private var isLoadingIsUserAuthenticated: Bool = false
     @State private var showingAlert = false
+    @Binding var searchTap: Bool
+    @Binding var blur: Bool
+    var ns_search: Namespace.ID
     
     var body: some View {
         VStack {
@@ -247,6 +243,20 @@ struct MealsHeaderView: View {
                 
                 
                 Spacer()
+                Button(action: {
+                    searchTap.toggle()
+                        withAnimation(.basic) {
+                            blur = true
+                        }                }) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 17, weight: .medium))
+                        .frame(width: 36, height: 36, alignment: .center)
+                        .clipShape(Circle())
+                        .padding(.trailing)
+                        .padding(.bottom)
+                        .matchedGeometryEffect(id: "search", in: ns_search, isSource: true)
+                }
+                
                 if user.isLogged{
                     Button(action: {showAddMealModal = true}) {
                         Image(systemName: "rectangle.stack.badge.plus")

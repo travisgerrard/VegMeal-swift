@@ -82,6 +82,26 @@ class ApolloNetworkingController: ObservableObject {
         }
     }
     
+    func updateMeal(mealId: String, name: String, description: String) {
+        let mutation = UpdateMealMutation(name: name, description: description, id: mealId)
+        ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            switch result {
+            case .failure(let error):
+                self.uploadImageError = error
+            
+            case .success(let graphQLResult):
+                print("Success: \(graphQLResult)")
+                guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealFragment else { break }
+                
+                if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
+                    self.meals[mealToUpdateIndex].name = fragment.name
+                    self.meals[mealToUpdateIndex].description = fragment.description
+                }
+            }
+            
+        }
+    }
+    
     
     @Published var addingIngredientIsLoading: Bool = false
     @Published var addingIngredientError: Error?

@@ -12,10 +12,12 @@ struct AddToGroceryListView: View {
     
     @State var amountList = [String]()
     @State var isEditingAmount = false
+    @State var shouldAmountBeOpen = false
     @State var amountListIsLoading = false
     
     @State var ingredientList = [String]()
     @State var isEditingIngredient = false
+    @State var shouldIngredientBeOpen = false
     @State var ingredientListIsLoading = false
         
     func searchForAmount() {
@@ -96,7 +98,7 @@ struct AddToGroceryListView: View {
             
             ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(text: self.$groceryListController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, placeHolder: "Amount").onChange(of: groceryListController.amount, perform: { value in
+                    SearchBar(text: self.$groceryListController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, shouldCloseView: $shouldAmountBeOpen, placeHolder: "Amount").onChange(of: groceryListController.amount, perform: { value in
                         searchForAmount()
                     })
                     if !amountList.isEmpty && isEditingAmount {
@@ -105,7 +107,7 @@ struct AddToGroceryListView: View {
                 }.padding(.bottom).zIndex(3)
                 
                 VStack {
-                    SearchBar(text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, placeHolder: "Ingredient").onChange(of: self.groceryListController.ingredient, perform: { value in
+                    SearchBar(text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, shouldCloseView: $shouldIngredientBeOpen, placeHolder: "Ingredient").onChange(of: self.groceryListController.ingredient, perform: { value in
                         searchForIngredient()
                     })
                     if !ingredientList.isEmpty && isEditingIngredient {

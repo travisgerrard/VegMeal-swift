@@ -126,6 +126,12 @@ query ALL_MEALS_QUERY($skip: Int = 0, $first: Int) {
   }
 }
 
+query SEARCH_FOR_MEALS($searchText:String){
+  allMeals(where:{name_contains_i:$searchText}, sortBy:id_DESC){
+    ...MealFragment
+  }
+}
+
 fragment IngredientFragment on Ingredient {
     id
     name
@@ -332,9 +338,7 @@ query SINGLE_MEAL_UPDATE_QUERY($id: ID!) {
 
 mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
   updateMeal(id: $id, data: { name: $name, description: $description }) {
-    id
-    name
-    description
+    ...MealFragment
   }
 }
 

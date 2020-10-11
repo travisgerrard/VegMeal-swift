@@ -14,14 +14,16 @@ struct AddIngredients: View {
 
     @State var amountList = [String]()
     @State var isEditingAmount = false
+    @State var shouldAmountBeOpen = false
     @State var amountListIsLoading = false
 
     @State var ingredientList = [String]()
     @State var isEditingIngredient = false
+    @State var shouldIngredientBeOpen = false
     @State var ingredientListIsLoading = false
     
     func searchForAmount() {
-        if isEditingAmount && self.networkingController.amount.count > 0 {
+        if isEditingAmount && self.networkingController.amount.count > 0{
             amountListIsLoading = true
 
             let query = SearchForAmountQuery(inputValue: self.networkingController.amount)
@@ -53,7 +55,8 @@ struct AddIngredients: View {
         if isEditingIngredient && self.networkingController.ingredient.count > 0 {
             ingredientListIsLoading = true
 
-            ApolloController.shared.apollo.fetch(query: SearchForIngredientQuery(inputValue: self.networkingController.ingredient.lowercased()), cachePolicy: .fetchIgnoringCacheData) { result in
+            let query = SearchForIngredientQuery(inputValue: self.networkingController.ingredient.lowercased())
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
 
                 ingredientListIsLoading = false
 
@@ -98,7 +101,7 @@ struct AddIngredients: View {
 
             ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(text: self.$networkingController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, placeHolder: "Amount").onChange(of: self.networkingController.amount, perform: { value in
+                    SearchBar(text: self.$networkingController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, shouldCloseView: $shouldAmountBeOpen, placeHolder: "Amount").onChange(of: self.networkingController.amount, perform: { value in
                         searchForAmount()
                     })
                     if !amountList.isEmpty && isEditingAmount {
@@ -110,7 +113,7 @@ struct AddIngredients: View {
 
 
                 VStack {
-                    SearchBar(text: self.$networkingController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, placeHolder: "Ingredient").onChange(of: self.networkingController.ingredient, perform: { value in
+                    SearchBar(text: self.$networkingController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, shouldCloseView: $shouldIngredientBeOpen, placeHolder: "Ingredient").onChange(of: self.networkingController.ingredient, perform: { value in
                         searchForIngredient()
                     })
                     if !ingredientList.isEmpty && isEditingIngredient {

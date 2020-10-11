@@ -150,7 +150,9 @@ struct MealLog: View {
                         }
                         VStack {
                             HStack {
-                                Text(thoughts).padding(.leading)
+                                Text(thoughts)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.leading)
                                 Spacer()
                                 
                             }
