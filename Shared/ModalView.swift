@@ -101,7 +101,7 @@ struct ModalMod: AnimatableModifier {
                                     HStack {
                                         if userId != nil {
                                             Button("Add To Grocery List", action: {
-                                                self.networkingController.addMealToGroceryList(mealId: meal.id!, userId: userId!)
+                                                self.networkingController.addMealToGroceryList(mealId: meal.id, userId: userId!)
                                             })
                                             .font(.callout)
                                             .padding(.leading)
@@ -111,13 +111,13 @@ struct ModalMod: AnimatableModifier {
                                             ProgressView()
                                         }
                                         Spacer()
-                                        if userId != nil ? userId == meal.author!.id! : false {
+                                        if userId != nil ? userId == meal.author!.id : false {
                                             Button("Edit", action: {showEditMealModal.toggle()})
                                                 .font(.callout)
                                                 .padding(.trailing)
                                                 .padding(.bottom)
                                                 .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
-                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id!, name: meal.name!, description: meal.description!)
+                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!)
                                                         .environmentObject(self.user)
                                                         .environmentObject(self.networkingController)
                                                 }
@@ -134,16 +134,16 @@ struct ModalMod: AnimatableModifier {
                         
                     }
                     
-                    ListOfIngredients(ingredientList: $meal.ingredientList, didCreateMeal:  (userId != nil ? userId == meal.author!.id! : false), mealId: meal.id!)
+                    ListOfIngredients(ingredientList: $meal.ingredientList, didCreateMeal:  (userId != nil ? userId == meal.author!.id : false), mealId: meal.id)
                     
                     VStack {
                         VStack() {
-                            AddIngredients(mealId: meal.id!).zIndex(10)
+                            AddIngredients(mealId: meal.id).zIndex(10)
                             
                             if userId != nil {
                                 VStack {
                                     Divider().background(Color.black)
-                                    MealLogView(mealId: meal.id!, authorId: userId!)
+                                    MealLogView(mealId: meal.id, authorId: userId!)
                                 }.offset(y: -320).zIndex(9)
                             }
                         }

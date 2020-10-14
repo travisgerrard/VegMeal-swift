@@ -46,7 +46,7 @@ struct GroceryListView: View {
                                                         completeIsPressed = true
                                                     }
                                                     .onEnded { _ in
-                                                        self.groceryListController.completeGroceryListItem(id: grocery.id!)
+                                                        self.groceryListController.completeGroceryListItem(id: grocery.id)
                                                         completeIsPressed = false
                                                     }
                                         )
@@ -65,7 +65,7 @@ struct GroceryListView: View {
                                         }
                                         .gesture(TapGesture()
                                                     .onEnded {
-                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id!)
+                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id)
                                                     }
                                         )
                                         
@@ -78,7 +78,6 @@ struct GroceryListView: View {
                                         Button(action: {
                                         }) {
                                             Circle()
-//                                                .strokeBorder(Color.gray.opacity(0.6),lineWidth: 1)
                                                 .frame(width: 32, height: 32)
                                                 .foregroundColor(.gray)
                                                 .padding(.trailing, 3)
@@ -88,7 +87,7 @@ struct GroceryListView: View {
                                                         completeIsPressed = true
                                                     }
                                                     .onEnded { _ in
-                                                        self.groceryListController.completeGroceryListItem(id: grocery.id!)
+                                                        self.groceryListController.completeGroceryListItem(id: grocery.id)
                                                         completeIsPressed = false
                                                     }
                                         )
@@ -113,7 +112,7 @@ struct GroceryListView: View {
                                         }
                                         .gesture(TapGesture()
                                                     .onEnded {
-                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id!)
+                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id)
                                                     }
                                         )
                                         

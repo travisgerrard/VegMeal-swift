@@ -313,8 +313,8 @@ struct MealsHeaderView: View {
                         self.user.email = userDetails.email!
                         UserDefaults.standard.set(userDetails.email!, forKey: "email")
                         
-                        self.user.userid = userDetails.id!
-                        UserDefaults.standard.set(userDetails.id!, forKey: "userid")
+                        self.user.userid = userDetails.id
+                        UserDefaults.standard.set(userDetails.id, forKey: "userid")
                         
                         self.user.isLogged = true
                         UserDefaults.standard.set(true, forKey: "isLogged")

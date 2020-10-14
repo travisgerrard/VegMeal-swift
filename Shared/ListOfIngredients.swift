@@ -33,7 +33,7 @@ struct ListOfIngredients: View {
                         if didCreateMeal {
                             Button(action: {
                                 withAnimation(.spring()) {
-                                    self.networkingController.deleteMealIngredientList(mealIngredientListId: ingredient.id!, ingredientId: ingredient.ingredient!.id!, mealId: mealId)
+                                    self.networkingController.deleteMealIngredientList(mealIngredientListId: ingredient.id, ingredientId: ingredient.ingredient!.id, mealId: mealId)
                                 }
                             }) {
                                 Image(systemName: "trash")

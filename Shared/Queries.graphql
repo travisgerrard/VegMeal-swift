@@ -167,9 +167,18 @@ fragment MealFragment on Meal {
 
 
 query MY_MEALS_QUERY($authorId: ID!) {
-  allMealLists(where: { author: { id: $authorId }, isCompleted: false }) {
+  myMealToComplete: allMealLists(where: { author: { id: $authorId }, isCompleted: false }) {
     id
     isCompleted
+    dateCompleted
+    meal {
+        ...MealFragment
+    }
+  }
+  myMealCompleted: allMealLists(where: { author: { id: $authorId }, isCompleted: true } sortBy: dateCompleted_DESC) {
+    id
+    isCompleted
+    dateCompleted
     meal {
         ...MealFragment
     }
@@ -189,10 +198,10 @@ fragment MealListFragment on MealList {
     }
 }
 
-mutation COMPLETE_MY_MEAL($id: ID!, $dateCompleted: DateTime) {
+mutation COMPLETE_MY_MEAL($id: ID!, $dateCompleted: DateTime, $isCompleted: Boolean) {
   updateMealList(
     id: $id
-    data: { isCompleted: true, dateCompleted: $dateCompleted }
+    data: { isCompleted: $isCompleted, dateCompleted: $dateCompleted }
   ) {
     id
   }

@@ -43,8 +43,8 @@ struct LoginView: View {
                             self.user.email = item.email!
                             UserDefaults.standard.set(item.email!, forKey: "email")
                             
-                            self.user.userid = item.id!
-                            UserDefaults.standard.set(item.id!, forKey: "userid")
+                            self.user.userid = item.id
+                            UserDefaults.standard.set(item.id, forKey: "userid")
                             
                         }
                         isSuccessful = true

@@ -34,7 +34,7 @@ struct MealLogView: View {
                 }).padding(.trailing)
             }
             ForEach(self.mealLogController.mealLogList) { mealLog in
-                MealLog(id: mealLog.id!, mealLogDate: dateFormatter.date(from: mealLog.dateMade!)!, thoughts: mealLog.thoughts ?? "Thoughts on meal and life?")
+                MealLog(id: mealLog.id, mealLogDate: dateFormatter.date(from: mealLog.dateMade!)!, thoughts: mealLog.thoughts ?? "Thoughts on meal and life?")
             }
             Spacer()
             

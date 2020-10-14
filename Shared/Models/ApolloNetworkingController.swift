@@ -130,7 +130,7 @@ class ApolloNetworkingController: ObservableObject {
                 self.ingredient = ""
                 self.amount = ""
                 
-                let query = GetMealIngredientListQuery(id: mealIngredientListId.id!)
+                let query = GetMealIngredientListQuery(id: mealIngredientListId.id)
                 ApolloController.shared.apollo.fetch(query: query) { result in
                     switch result {
                     case .failure(let error):
