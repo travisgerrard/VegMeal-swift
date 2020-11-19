@@ -17,12 +17,36 @@ struct GroceryListView: View {
     @State var showFull = false
     
     @State var completeIsPressed = false
+    @State var category = ""
+    @State var groceryListIndex = 999
+    
+    var options = [
+        0: "none",
+        1: "produce",
+        2: "bakery",
+        3: "frozen",
+        4: "baking & spices",
+        5: "nuts, seeds & dried fruit",
+        6: "rice, grains & beans",
+        7: "canned & jarred goods",
+        8: "oils, sauces & condiments",
+        9: "ethnic",
+        10: "refrigerated",
+    ];
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
+    }
+    
+     func toCompleteListView(groceryListItem: GroceryListFragment) -> some View {
+        return  VStack {
+            HStack {
+                Text("\(options[(groceryListItem.ingredient?.category)!] ?? "no value")").font(.title3)
+            }
+        }
     }
     
     var body: some View {
@@ -32,7 +56,13 @@ struct GroceryListView: View {
                     NavigationView {
                         List {
                             Section(header: Text("To Complete")) {
-                                ForEach(self.groceryListController.groceryList) {grocery in
+                                ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
+                                    
+                                    if i == 0 || i > 0 && self.groceryListController.groceryList[i].ingredient?.category != self.groceryListController.groceryList[i-1].ingredient?.category {
+                                        self.toCompleteListView(groceryListItem: self.groceryListController.groceryList[i])
+                                    }
+                                    
+                                    
                                     HStack {
                                         Button(action: {
                                         }) {
@@ -46,13 +76,12 @@ struct GroceryListView: View {
                                                         completeIsPressed = true
                                                     }
                                                     .onEnded { _ in
-                                                        self.groceryListController.completeGroceryListItem(id: grocery.id)
+                                                        self.groceryListController.completeGroceryListItem(id: self.groceryListController.groceryList[i].id)
                                                         completeIsPressed = false
                                                     }
                                         )
-                                        
-                                        
-                                        Text("\(grocery.ingredient?.name ?? "No ingredient") - \(grocery.amount?.name ?? "No amount")")
+
+                                        Text("\(self.groceryListController.groceryList[i].ingredient?.name ?? "No ingredient") - \(self.groceryListController.groceryList[i].amount?.name ?? "No amount")")
                                         Spacer()
                                         Button(action: {
                                         }) {
@@ -65,10 +94,10 @@ struct GroceryListView: View {
                                         }
                                         .gesture(TapGesture()
                                                     .onEnded {
-                                                        self.groceryListController.deleteGroceryListItem(id: grocery.id)
+                                                        self.groceryListController.deleteGroceryListItem(id: self.groceryListController.groceryList[i].id)
                                                     }
                                         )
-                                        
+
                                     }
                                 }
                             }

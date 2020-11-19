@@ -4299,6 +4299,7 @@ public struct GroceryListFragment: GraphQLFragment {
         __typename
         id
         name
+        category
       }
       amount {
         __typename
@@ -4395,6 +4396,7 @@ public struct GroceryListFragment: GraphQLFragment {
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
         GraphQLField("name", type: .scalar(String.self)),
+        GraphQLField("category", type: .scalar(Int.self)),
       ]
     }
 
@@ -4404,8 +4406,8 @@ public struct GroceryListFragment: GraphQLFragment {
       self.resultMap = unsafeResultMap
     }
 
-    public init(id: GraphQLID, name: String? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Ingredient", "id": id, "name": name])
+    public init(id: GraphQLID, name: String? = nil, category: Int? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Ingredient", "id": id, "name": name, "category": category])
     }
 
     public var __typename: String {
@@ -4432,6 +4434,15 @@ public struct GroceryListFragment: GraphQLFragment {
       }
       set {
         resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+
+    public var category: Int? {
+      get {
+        return resultMap["category"] as? Int
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "category")
       }
     }
   }

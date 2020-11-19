@@ -49,132 +49,156 @@ struct MealListView: View {
     var body: some View {
         if user.isLogged {
             ZStack{
-                NavigationView {
-                    List {
-                        Section(header: Text("To Make")) {
-                            ForEach(self.mealListController.mealList) { item in
-                                    
-                                    HStack {
-                                        Button(action: {
-                                        }) {
-                                            Circle()
-                                                .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
-                                                .frame(width: 32, height: 32)
-                                                .padding(.trailing, 3)
-                                        }
-                                        .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
-                                                    .onChanged { _ in
-                                                    }
-                                                    .onEnded { _ in
-                                                        self.mealListController.completeMealListItem(id: item.id)
-                                                    }
-                                        )
+                VStack {
+                    NavigationView {
+                        List {
+                            Section(header: Text("To Make")) {
+                                ForEach(self.mealListController.mealList) { item in
                                         
                                         HStack {
-                                            WebImage(url: self.parse(object: item.meal))
-                                                .resizable()
-                                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 50, height: 50)
-                                            Divider().background(Color.black).padding(0)
-                                            Text("\(item.meal.name ?? "No name")").font(.body)
-                                                .fontWeight(.bold)
-                                                .minimumScaleFactor(0.5)
-                                        }
-                                        .onTapGesture(count: 1) { openModal(item, fromGrid: true) }
-                                        .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
-                                        
-                                        
-                                        
-                                        
-                                        Spacer()
-                                        Button(action: {
-                                        }) {
-                                            Image(systemName: "trash")
-                                                .font(.system(size: 17, weight: .bold))
-                                                .foregroundColor(.white)
-                                                .padding(.all, 10)
-                                                .background(Color.black.opacity(0.6))
-                                                .clipShape(Circle())
-                                        }
-                                        .gesture(TapGesture()
-                                                    .onEnded {
-                                                        self.mealListController.deleteMealListItem(id: item.id)
-                                                    }
-                                        )
-                                    }
-                                
-                                
-                            }
-                        }
-                        Section(header: Text("Made")) {
-                            ForEach(self.mealListController.completedMealList) { item in
-                                    
-                                    HStack {
-                                        Button(action: {
-                                        }) {
-                                            Circle()
-                                                .frame(width: 32, height: 32)
-                                                .foregroundColor(.gray)
-                                                .padding(.trailing, 3)
-                                        }
-                                        .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
-                                                    .onChanged { _ in
-                                                    }
-                                                    .onEnded { _ in
-                                                        self.mealListController.completeMealListItem(id: item.id)
-                                                    }
-                                        )
-                                        
-                                        HStack {
-                                            WebImage(url: self.parse(object: item.meal))
-                                                .resizable()
-                                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 50, height: 50)
-                                            Divider().background(Color.black).padding(0)
-                                            VStack(alignment: .leading) {
+                                            Button(action: {
+                                            }) {
+                                                Circle()
+                                                    .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
+                                                    .frame(width: 32, height: 32)
+                                                    .padding(.trailing, 3)
+                                            }
+                                            .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                                                        .onChanged { _ in
+                                                        }
+                                                        .onEnded { _ in
+                                                            self.mealListController.completeMealListItem(id: item.id)
+                                                        }
+                                            )
+                                            
+                                            HStack {
+                                                WebImage(url: self.parse(object: item.meal))
+                                                    .resizable()
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 50, height: 50)
+                                                Divider().background(Color.black).padding(0)
                                                 Text("\(item.meal.name ?? "No name")").font(.body)
                                                     .fontWeight(.bold)
                                                     .minimumScaleFactor(0.5)
-                                                Text("\(item.dateCompleted)").font(.caption)
-                                                
                                             }
-                                            .foregroundColor(.gray)
+                                            .onTapGesture(count: 1) { openModal(item, fromGrid: true) }
+                                            .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
+                                            
+                                            
+                                            
+                                            
+                                            Spacer()
+                                            Button(action: {
+                                            }) {
+                                                Image(systemName: "trash")
+                                                    .font(.system(size: 17, weight: .bold))
+                                                    .foregroundColor(.white)
+                                                    .padding(.all, 10)
+                                                    .background(Color.black.opacity(0.6))
+                                                    .clipShape(Circle())
+                                            }
+                                            .gesture(TapGesture()
+                                                        .onEnded {
+                                                            self.mealListController.deleteMealListItem(id: item.id)
+                                                        }
+                                            )
+                                        }
+                                    
+                                    
+                                }
+                            }
+                            Section(header: Text("Made")) {
+                                ForEach(self.mealListController.completedMealList) { item in
+                                        
+                                        HStack {
+                                            Button(action: {
+                                            }) {
+                                                Circle()
+                                                    .frame(width: 32, height: 32)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.trailing, 3)
+                                            }
+                                            .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                                                        .onChanged { _ in
+                                                        }
+                                                        .onEnded { _ in
+                                                            self.mealListController.completeMealListItem(id: item.id)
+                                                        }
+                                            )
+                                            
+                                            HStack {
+                                                WebImage(url: self.parse(object: item.meal))
+                                                    .resizable()
+                                                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 50, height: 50)
+                                                Divider().background(Color.black).padding(0)
+                                                VStack(alignment: .leading) {
+                                                    Text("\(item.meal.name ?? "No name")").font(.body)
+                                                        .fontWeight(.bold)
+                                                        .minimumScaleFactor(0.5)
+                                                    Text("\(item.dateCompleted)").font(.caption)
+                                                    
+                                                }
+                                                .foregroundColor(.gray)
 
+                                            }
+                                            .onTapGesture(count: 1) { openModal(item, fromGrid: true) }
+                                            .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
+                                            
+                                            
+                                            
+                                            
+                                            Spacer()
+                                            Button(action: {
+                                            }) {
+                                                Image(systemName: "trash")
+                                                    .font(.system(size: 17, weight: .bold))
+                                                    .foregroundColor(.white)
+                                                    .padding(.all, 10)
+                                                    .background(Color.black.opacity(0.6))
+                                                    .clipShape(Circle())
+                                            }
+                                            .gesture(TapGesture()
+                                                        .onEnded {
+                                                            self.mealListController.deleteMealListItem(id: item.id)
+                                                        }
+                                            )
                                         }
-                                        .onTapGesture(count: 1) { openModal(item, fromGrid: true) }
-                                        .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
-                                        
-                                        
-                                        
-                                        
-                                        Spacer()
-                                        Button(action: {
-                                        }) {
-                                            Image(systemName: "trash")
-                                                .font(.system(size: 17, weight: .bold))
-                                                .foregroundColor(.white)
-                                                .padding(.all, 10)
-                                                .background(Color.black.opacity(0.6))
-                                                .clipShape(Circle())
-                                        }
-                                        .gesture(TapGesture()
-                                                    .onEnded {
-                                                        self.mealListController.deleteMealListItem(id: item.id)
-                                                    }
-                                        )
-                                    }
-                                
-                                
+                                    
+                                    
+                                }
                             }
                         }
+                        .navigationBarTitle("Meal Planner")
+                        .onAppear {
+                            self.mealListController.getMealList(userId: user.userid)
+                        }
+                    }.zIndex(1.0)
+                }
+                VStack {
+                    HStack {
+                        if self.mealListController.mealListQueryRunning {
+                            ProgressView().padding(.leading).padding(.all, 10)
+                        } else {
+                            Button(action: {
+                                self.mealListController.getMealList(userId: user.userid)
+                            }) {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .font(.system(size: 17, weight: .bold))
+                                    .padding(.all, 10)
+                                    .clipShape(Circle())
+                            }
+                            .padding(.leading)
+                        }
+                        
+                        
+                        Spacer()
+                        
                     }
-                    .navigationBarTitle("Meal Planner")
-                    .onAppear {
-                        self.mealListController.getMealList(userId: user.userid)
-                    }
-                }.zIndex(1.0)
+                    Spacer()
+                }.zIndex(1.1)
                 
                 //-------------------------------------------------------
                 // Backdrop blurred view (zIndex = 3)

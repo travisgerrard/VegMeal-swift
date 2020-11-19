@@ -98,6 +98,7 @@ fragment GroceryListFragment on GroceryList {
     ingredient {
       id
       name
+      category
     }
     amount {
       id
