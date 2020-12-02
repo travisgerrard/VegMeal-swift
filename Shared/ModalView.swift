@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
+import KingfisherSwiftUI
+import struct Kingfisher.DownsamplingImageProcessor
 
 struct ModalView: View {
     let id: String
@@ -73,9 +74,27 @@ struct ModalMod: AnimatableModifier {
             ZStack {
                 ScrollView {
                     VStack {
-                        WebImage(url: self.parse(object: meal))
+                        KFImage(self.parse(object: meal),
+                                options: [
+                                    .transition(.fade(0.2)),
+                                    .processor(
+                                        DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))
+                                    ),
+                                    .cacheOriginalImage
+                                ])
+                            .placeholder {
+                                HStack {
+                                    Image("009-eggplant")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .padding(10)
+                                    Text("Loading...").font(.title)
+                                }
+                                .foregroundColor(.gray)
+                            }
                             .resizable()
                             .scaledToFill()
+                            .frame(maxWidth: UIScreen.main.bounds.size.width)
                             .frame(height: 375)
                             .overlay(
                                 VStack{
@@ -117,7 +136,7 @@ struct ModalMod: AnimatableModifier {
                                                 .padding(.trailing)
                                                 .padding(.bottom)
                                                 .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
-                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!)
+                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!, showModal: self.$showEditMealModal)
                                                         .environmentObject(self.user)
                                                         .environmentObject(self.networkingController)
                                                 }
@@ -138,7 +157,9 @@ struct ModalMod: AnimatableModifier {
                     
                     VStack {
                         VStack() {
-                            AddIngredients(mealId: meal.id).zIndex(10)
+                            if userId != nil ? userId == meal.author!.id : false {
+                                AddIngredients(mealId: meal.id).zIndex(10)
+                            }
                             
                             if userId != nil {
                                 VStack {

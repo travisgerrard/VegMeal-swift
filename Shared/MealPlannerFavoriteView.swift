@@ -40,6 +40,7 @@ struct MealPlannerFavoriteViewMod: AnimatableModifier {
         
         return WebImage(url: URL(string: image))
             .resizable()
+            .indicator(.activity)
             .aspectRatio(contentMode: .fit)
             .clipShape(RectangleToCircle(cornerRadiusPercent: radiusPercent))
             .overlay(RectangleToCircle(cornerRadiusPercent: radiusPercent).stroke(Color.white, lineWidth: 2 * pct))

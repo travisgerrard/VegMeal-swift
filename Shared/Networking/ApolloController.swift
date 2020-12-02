@@ -45,13 +45,13 @@ extension ApolloController: HTTPNetworkTransportPreflightDelegate {
             // Add any new headers you need
             headers["Authorization"] = "Bearer \(UserDefaults.standard.string(forKey: "token") ?? "")"
             
-            print("Headers: \(headers)")
+//            print("Headers: \(headers)")
             // Re-assign the updated headers to the request.
             request.allHTTPHeaderFields = headers
         }
         
         
-        print("Outgoing request: \(request)")
+//        print("Outgoing request: \(request)")
     }
 }
 

@@ -36,6 +36,7 @@
 		35897F0124F011A900397A4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35897EEC24F011A900397A4C /* Assets.xcassets */; };
 		35897F0224F011A900397A4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35897EEC24F011A900397A4C /* Assets.xcassets */; };
 		35897F0D24F0125400397A4C /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 35897F0C24F0125400397A4C /* Apollo */; };
+		3590F93C256EE4E8003E90D3 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3590F93B256EE4E8003E90D3 /* KingfisherSwiftUI */; };
 		359CD0AE2512AFF200D425F4 /* MealFragmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0AD2512AFF200D425F4 /* MealFragmentView.swift */; };
 		359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0AD2512AFF200D425F4 /* MealFragmentView.swift */; };
 		359CD0B62512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0B52512B42C00D425F4 /* MealFragment_Extentions.swift */; };
@@ -151,6 +152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3590F93C256EE4E8003E90D3 /* KingfisherSwiftUI in Frameworks */,
 				35BEEB152509368C003EAADD /* SDWebImageSwiftUI in Frameworks */,
 				35897F0D24F0125400397A4C /* Apollo in Frameworks */,
 			);
@@ -345,6 +347,7 @@
 			packageProductDependencies = (
 				35897F0C24F0125400397A4C /* Apollo */,
 				35BEEB142509368C003EAADD /* SDWebImageSwiftUI */,
+				3590F93B256EE4E8003E90D3 /* KingfisherSwiftUI */,
 			);
 			productName = "VegMeal (iOS)";
 			productReference = 35897EF124F011A900397A4C /* VegMeal.app */;
@@ -396,6 +399,7 @@
 			packageReferences = (
 				35897F0B24F0125400397A4C /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				35BEEB132509368C003EAADD /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				3590F93A256EE4E8003E90D3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 35897EF224F011A900397A4C /* Products */;
 			projectDirPath = "";
@@ -797,6 +801,14 @@
 				minimumVersion = 0.31.0;
 			};
 		};
+		3590F93A256EE4E8003E90D3 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.15.7;
+			};
+		};
 		35BEEB132509368C003EAADD /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -812,6 +824,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 35897F0B24F0125400397A4C /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		3590F93B256EE4E8003E90D3 /* KingfisherSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3590F93A256EE4E8003E90D3 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = KingfisherSwiftUI;
 		};
 		35BEEB142509368C003EAADD /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

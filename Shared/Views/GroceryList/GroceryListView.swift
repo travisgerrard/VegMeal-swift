@@ -58,6 +58,7 @@ struct GroceryListView: View {
                             Section(header: Text("To Complete")) {
                                 ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
                                     
+                                    // Updates the section heading
                                     if i == 0 || i > 0 && self.groceryListController.groceryList[i].ingredient?.category != self.groceryListController.groceryList[i-1].ingredient?.category {
                                         self.toCompleteListView(groceryListItem: self.groceryListController.groceryList[i])
                                     }

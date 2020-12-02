@@ -18,20 +18,20 @@ class MealLogApolloController: ObservableObject {
     func getMealLogList(mealId: String, authorId: String) {
         self.mealLogListQueryRunning = true
         let query = GetMadeMealsQuery(mealId: mealId, authorId: authorId)
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheCompletely) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.mealLogListQueryRunning = false
             switch result {
             case .failure(let error):
                 self.mealLogListQueryError = error
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 guard let returnedMealLogs = graphQLResults.data?.allMadeMeals else { break }
                 
                 self.mealLogList.removeAll()
                 
                 for mealLog in returnedMealLogs {
-                    print(mealLog!.fragments.madeMealFragment)
+//                    print(mealLog!.fragments.madeMealFragment)
                     self.mealLogList.append(mealLog!.fragments.madeMealFragment)
                 }
             }
@@ -43,7 +43,7 @@ class MealLogApolloController: ObservableObject {
         iso8601DateFormatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
         let formatter3 = iso8601DateFormatter.string(from: dateMade)
         
-        print("id: \(id), thoughts: \(thoughts), dateMade: \(formatter3)")
+//        print("id: \(id), thoughts: \(thoughts), dateMade: \(formatter3)")
         
         let mutation = UpdateMadeMealMutation(id: id, thoughts: thoughts, dateMade: formatter3)
         
@@ -69,7 +69,7 @@ class MealLogApolloController: ObservableObject {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     return
@@ -95,7 +95,7 @@ class MealLogApolloController: ObservableObject {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     return

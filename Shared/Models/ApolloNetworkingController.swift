@@ -44,9 +44,11 @@ class ApolloNetworkingController: ObservableObject {
     }
     
     @Published var isUploadingImage: Bool = false
+    @Published var shouldCloseAddUpdateMealScreen = false
     @Published var uploadImageError: Error?
     
     func addNewMeal(authorId: String, inputImage: UIImage, name: String, description: String) {
+        
         self.uploadImageError = nil
         self.isUploadingImage = true
         
@@ -60,22 +62,24 @@ class ApolloNetworkingController: ObservableObject {
         let mutation = CreateMealMutation(authorId: authorId, name: name, description: description, mealImage: name)
         ApolloController.shared.apollo.upload(operation: mutation, files: [file]) { result in
             self.isUploadingImage = false
+
             
             switch result {
             case .failure(let error):
                 self.uploadImageError = error
                 
             case .success(let graphQLResult):
-                print("Success: \(graphQLResult)")
+//                print("Success: \(graphQLResult)")
                 guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
                 
                 self.meals.append(fragment)
+                self.shouldCloseAddUpdateMealScreen = true
+                self.shouldCloseAddUpdateMealScreen = true
                 
                 if let errors = graphQLResult.errors {
                     print("Errors: \(errors)")
                     let errorOne = errors[0]
                     print(errorOne)
-                    
                 }
             }
             
@@ -84,19 +88,27 @@ class ApolloNetworkingController: ObservableObject {
     
     func updateMeal(mealId: String, name: String, description: String) {
         let mutation = UpdateMealMutation(name: name, description: description, id: mealId)
+        self.isUploadingImage = true
+
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            self.isUploadingImage = false
+
             switch result {
             case .failure(let error):
                 self.uploadImageError = error
             
             case .success(let graphQLResult):
-                print("Success: \(graphQLResult)")
+//                print("Success: \(graphQLResult)")
                 guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealFragment else { break }
                 
                 if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
                     self.meals[mealToUpdateIndex].name = fragment.name
                     self.meals[mealToUpdateIndex].description = fragment.description
                 }
+                self.shouldCloseAddUpdateMealScreen = true
+                self.shouldCloseAddUpdateMealScreen = true
+
+
             }
             
         }
@@ -124,7 +136,7 @@ class ApolloNetworkingController: ObservableObject {
                 self.addingIngredientError = error
                 
             case .success(let graphQLResult):
-                print("Success: \(graphQLResult)")
+//                print("Success: \(graphQLResult)")
                 guard let mealIngredientListId = graphQLResult.data?.addMealIngredientList else { break }
                 
                 self.ingredient = ""
@@ -146,10 +158,10 @@ class ApolloNetworkingController: ObservableObject {
                         
                         if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
                             let ingredientListToAdd = MealFragment.IngredientList(id: mealIngredientList.id, ingredient: self.parseIngredient(object: mealIngredientList), amount: self.parseAmount(object: mealIngredientList))
-                            print("ingredientListToAdd: \(ingredientListToAdd)")
+//                            print("ingredientListToAdd: \(ingredientListToAdd)")
                             
                             self.meals[mealToUpdateIndex].ingredientList.append(ingredientListToAdd)
-                            print("self.meals[mealToUpdateIndex]: \(self.meals[mealToUpdateIndex].ingredientList)")
+//                            print("self.meals[mealToUpdateIndex]: \(self.meals[mealToUpdateIndex].ingredientList)")
                             
                         }
                         
@@ -184,8 +196,7 @@ class ApolloNetworkingController: ObservableObject {
             case .failure(let error):
                 print(error)
             
-            case .success(let graphQLResult):
-                print("Success: \(graphQLResult)")
+            case .success:
                 
                 if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}){
                     if let ingredientListToDeleteIndex = self.meals[mealToUpdateIndex].ingredientList.firstIndex(where: {$0.id == mealIngredientListId}) {

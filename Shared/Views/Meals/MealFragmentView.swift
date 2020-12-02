@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
+import KingfisherSwiftUI
+import struct Kingfisher.DownsamplingImageProcessor
 
 struct MealFragmentView: View {
     //MARK: Properties
@@ -15,10 +16,28 @@ struct MealFragmentView: View {
     
     //MARK: Computed Properties
     var body: some View {
-        WebImage(url: self.parse(object: self.meal))
+        
+        KFImage(self.parse(object: self.meal),
+                options: [
+                    .transition(.fade(0.2)),
+                    .processor(
+                        DownsamplingImageProcessor(size: CGSize(width: 375, height: 375))
+                    ),
+                    .cacheOriginalImage
+                ])
+            .placeholder {
+                HStack {
+                    Image("009-eggplant")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .padding(10)
+                    Text("Loading...").font(.title)
+                }
+                .foregroundColor(.gray)
+            }
             .resizable()
             .scaledToFill()
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: 375)
             .frame(height: 300)
             .overlay(
                 VStack{
@@ -30,7 +49,7 @@ struct MealFragmentView: View {
                             .padding(.leading)
                             .padding(.top)
                             .padding(.bottom, 1)
-
+                        
                         Spacer()
                     }
                     HStack {
@@ -47,7 +66,7 @@ struct MealFragmentView: View {
             .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
             .padding(.horizontal, 30)
             .padding(.bottom, 30)
-           
+        
     }
     
     //MARK: Functions

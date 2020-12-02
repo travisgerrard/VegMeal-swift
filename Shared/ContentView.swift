@@ -266,7 +266,7 @@ struct MealsHeaderView: View {
                             .padding(.trailing)
                             .padding(.bottom)
                     }.sheet(isPresented: $showAddMealModal, onDismiss: {}) {
-                        AddMealView()
+                        AddMealView(showModal: self.$showAddMealModal)
                             .environmentObject(self.user)
                             .environmentObject(self.networkingController)
                     }
@@ -282,7 +282,7 @@ struct MealsHeaderView: View {
                         print(error)
                         
                     case .success(let graphQLResult):
-                        print(graphQLResult)
+//                        print(graphQLResult)
                         
                         if let error = graphQLResult.errors {
                             self.user.email = ""

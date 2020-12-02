@@ -7,7 +7,8 @@
 
 import SwiftUI
 import Apollo
-import SDWebImageSwiftUI
+import KingfisherSwiftUI
+import struct Kingfisher.DownsamplingImageProcessor
 
 struct AddMealView: View {
     @State private var image: Image?
@@ -25,7 +26,8 @@ struct AddMealView: View {
     @EnvironmentObject var user: UserStore
     @State var isUploadingImage = false
     @EnvironmentObject var networkingController: ApolloNetworkingController
-    
+    @Binding var showModal: Bool
+
     func loadImage() {
         guard let inputImage = inputImage else { return }
         image = Image(uiImage: inputImage)
@@ -48,14 +50,31 @@ struct AddMealView: View {
     }
     
     var body: some View {
-        VStack {
+      VStack {
             HStack {
                 Text(isEditingMeal ? "Edit \(name)" : "Add A New Meal").font(.title).padding()
                 Spacer()
             }
             
             if isEditingMeal {
-                WebImage(url: url!)
+                KFImage(url!,
+                        options: [
+                            .transition(.fade(0.2)),
+                            .processor(
+                                DownsamplingImageProcessor(size: CGSize(width: 375, height: 375))
+                            ),
+                            .cacheOriginalImage
+                        ])
+                    .placeholder {
+                        HStack {
+                            Image("009-eggplant")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .padding(10)
+                            Text("Loading...").font(.title)
+                        }
+                        .foregroundColor(.gray)
+                    }
                     .resizable()
                     .scaledToFill()
                     .frame(maxWidth: .infinity)
@@ -70,7 +89,7 @@ struct AddMealView: View {
                                     .padding(.leading)
                                     .padding(.top)
                                     .padding(.bottom, 1)
-
+                                
                                 Spacer()
                             }
                             HStack {
@@ -86,7 +105,7 @@ struct AddMealView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                     .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
                     .padding(.horizontal, 30)
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 20)
             } else {
                 if image != nil {
                     image!
@@ -119,7 +138,7 @@ struct AddMealView: View {
                             , alignment: .bottom)
                         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                         .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 20)
                 } else {
                     Rectangle()
                         .fill(Color.secondary)
@@ -151,15 +170,14 @@ struct AddMealView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                         .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
                         .padding(.horizontal, 30)
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 20)
                 }
             }
             
-            if isUploadingImage {
+            if self.networkingController.isUploadingImage {
                 Text("Uploading Image")
             }
-            Spacer()
-            
+                        
             if !isEditingMeal {
                 HStack {
                     Button("Add photo", action: {
@@ -190,22 +208,31 @@ struct AddMealView: View {
             
             VStack {
                 TextField("Name", text: $name).padding(.horizontal)
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
                 Divider().background(Color.black).padding(.horizontal)
                 
                 TextField("Description", text: $description).padding(.horizontal)
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
                 Divider().background(Color.black).padding(.horizontal)
             }
             HStack{
                 Spacer()
+                if self.networkingController.isUploadingImage {
+                    ProgressView().onDisappear {
+                        if self.networkingController.shouldCloseAddUpdateMealScreen {
+                            self.showModal.toggle()
+                        }
+                    }
+                }
                 Button("Submit", action: {
                     if isEditingMeal{
                         updateMeal()
                     } else {
                         addNewMeal()
                     }
-                }).padding()
+                }).padding().disabled(self.networkingController.isUploadingImage)
             }
-            
+                        
             Spacer()
             
         }
@@ -214,7 +241,7 @@ struct AddMealView: View {
 
 struct AddMealView_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealView()
+        AddMealView(showModal: .constant(true))
     }
 }
 

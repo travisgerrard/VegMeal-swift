@@ -25,14 +25,14 @@ class  MealListApolloController: ObservableObject {
     func getMealList(userId: String) {
         mealListQueryRunning = true
         let query = MyMealsQueryQuery(authorId: userId)
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheCompletely) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.mealListQueryRunning = false
             switch result {
             case .failure(let error):
                 self.mealListQueryError = error
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 guard let returnedMealList = graphQLResults.data?.myMealToComplete else { break }
                 self.mealList.removeAll()
                 for meal in returnedMealList {
@@ -57,7 +57,7 @@ class  MealListApolloController: ObservableObject {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     return
@@ -92,7 +92,7 @@ class  MealListApolloController: ObservableObject {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     return

@@ -354,11 +354,19 @@ mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
 
 query CURRENT_USER_QUERY {
   authenticatedUser {
-    id
-    email
-    name
-    permissions
-  }
+      id
+      email
+      name
+      permissions
+      follows {
+        name
+        id
+      }
+      followers {
+        name
+        id
+      }
+    }
 }
 
 mutation AUTHENTICATE_USER($email: String!, $password: String) {
@@ -377,3 +385,44 @@ query IS_AUTHENTICATED_USER {
     email
   }
 }
+
+
+mutation START_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
+    startFollowUser: updateUser(
+      id: $current_user
+      data: { follows: { connect: { id: $id_to_change_following } } }
+    ) {
+      id
+      email
+      name
+      permissions
+      follows {
+        name
+        id
+      }
+      followers {
+        name
+        id
+      }
+    }
+  }
+  
+  mutation STOP_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
+    stopFollowUser: updateUser(
+      id: $current_user
+      data: { follows: { disconnect: { id: $id_to_change_following } } }
+    ) {
+      id
+      email
+      name
+      permissions
+      follows {
+        name
+        id
+      }
+      followers {
+        name
+        id
+      }
+    }
+  }

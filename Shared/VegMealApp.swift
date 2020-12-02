@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import SDWebImageSwiftUI
 
 
 @main
@@ -17,6 +18,7 @@ struct VegMealApp: App {
     @StateObject var mealListController = MealListApolloController()
     @StateObject var mealLogController = MealLogApolloController()
 
+    
     
     var body: some Scene {
         WindowGroup {

@@ -49,7 +49,7 @@ struct SearchView: View {
 
             let query = SearchForMealsQuery(searchText: searchText)
             
-            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
 
                 searchQueryIsLoading = false
 

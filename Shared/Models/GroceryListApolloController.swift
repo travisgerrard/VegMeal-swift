@@ -19,7 +19,7 @@ class GroceryListApolloController: ObservableObject {
     func getGroceryList(userId: String) {
         groceryListQueryRunning = true
         let query = GetGroceryListQuery(id: userId)
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheCompletely) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.groceryListQueryRunning = false
             switch result {
             case .failure(let error):
@@ -32,12 +32,15 @@ class GroceryListApolloController: ObservableObject {
                 for grocery in returnedGroceryList {
                     self.groceryList.append(grocery!.fragments.groceryListFragment)
                 }
+                self.groceryList = self.groceryList.sorted(by: { $0.ingredient!.category! > $1.ingredient!.category! }) // Sorts by category
                 
                 guard let returnedCompleteGroceryList = graphQLResults.data?.groceryCompleted else { break }
                 self.completedGroceryList.removeAll()
                 for grocery in returnedCompleteGroceryList {
                     self.completedGroceryList.append(grocery!.fragments.groceryListFragment)
                 }
+            
+                
             }
         }
     }
@@ -57,7 +60,7 @@ class GroceryListApolloController: ObservableObject {
                 self.addIngredientToGroceryListMutationError = error
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 guard let groceryListId = graphQLResults.data?.addGroceryList else { break }
                 
                 let query = GetGroceryListItemQuery(id: groceryListId.id)
@@ -67,7 +70,7 @@ class GroceryListApolloController: ObservableObject {
                         self.addIngredientToGroceryListMutationError = error
                         
                     case .success(let graphQLResultTwo):
-                        print("Success: \(graphQLResultTwo)")
+//                        print("Success: \(graphQLResultTwo)")
                         self.amount = ""
                         self.ingredient = ""
                         hideKeyboard()
@@ -90,8 +93,7 @@ class GroceryListApolloController: ObservableObject {
             case .failure(let error):
                 print(error)
                 
-            case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+            case .success:
                 if let groceryListToDeleteIndex = self.groceryList.firstIndex(where: {$0.id == id}) {
                     self.groceryList.remove(at: groceryListToDeleteIndex)
                 }
@@ -122,7 +124,7 @@ class GroceryListApolloController: ObservableObject {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     return

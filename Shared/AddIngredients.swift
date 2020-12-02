@@ -27,7 +27,7 @@ struct AddIngredients: View {
             amountListIsLoading = true
 
             let query = SearchForAmountQuery(inputValue: self.networkingController.amount)
-            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
 
                 amountListIsLoading = false
 
@@ -56,7 +56,7 @@ struct AddIngredients: View {
             ingredientListIsLoading = true
 
             let query = SearchForIngredientQuery(inputValue: self.networkingController.ingredient.lowercased())
-            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
 
                 ingredientListIsLoading = false
 
@@ -81,8 +81,8 @@ struct AddIngredients: View {
     }
     
     func createMealIngredientList() {
-        print(self.networkingController.amount.count)
-        print(self.networkingController.ingredient.count)
+//        print(self.networkingController.amount.count)
+//        print(self.networkingController.ingredient.count)
         if self.networkingController.amount.count > 0 && self.networkingController.ingredient.count > 0 {
             self.networkingController.createMealIngredientList(mealId: mealId)
         }
