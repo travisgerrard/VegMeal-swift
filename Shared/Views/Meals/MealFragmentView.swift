@@ -21,7 +21,7 @@ struct MealFragmentView: View {
                 options: [
                     .transition(.fade(0.2)),
                     .processor(
-                        DownsamplingImageProcessor(size: CGSize(width: 375, height: 375))
+                        DownsamplingImageProcessor(size: CGSize(width: 400, height: 400))
                     ),
                     .cacheOriginalImage
                 ])
@@ -37,27 +37,30 @@ struct MealFragmentView: View {
             }
             .resizable()
             .scaledToFill()
-            .frame(maxWidth: 375)
-            .frame(height: 300)
+            .frame(maxWidth: 175)
+            .frame(height: 225)
             .overlay(
                 VStack{
                     HStack {
                         Text(meal.name ?? "No name")
-                            .font(.title3)
+                            .font(.body)
                             .fontWeight(.bold)
                             .minimumScaleFactor(0.5)
                             .padding(.leading)
                             .padding(.top)
                             .padding(.bottom, 1)
+                            .lineLimit(/*@START_MENU_TOKEN@*/2/*@END_MENU_TOKEN@*/)
                         
                         Spacer()
                     }
                     HStack {
                         Text(meal.description ?? "No description")
-                            .font(.subheadline)
+                            .font(.footnote)
+                            .minimumScaleFactor(0.5)
                             .padding(.leading)
                             .padding(.bottom)
-                        
+                            .lineLimit(1)
+
                         Spacer()
                     }
                 }.background(BlurView(style: .systemMaterial))

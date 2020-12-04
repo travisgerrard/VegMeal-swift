@@ -36,7 +36,6 @@ extension ApolloController: HTTPNetworkTransportPreflightDelegate {
                           willSend request: inout URLRequest) {
         
         
-        
         if UserDefaults.standard.bool(forKey: "isLogged") {
             // Get the existing headers, or create new ones if they're nil
             var headers = request.allHTTPHeaderFields ?? [String: String]()

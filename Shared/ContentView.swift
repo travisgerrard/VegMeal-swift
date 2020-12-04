@@ -16,7 +16,7 @@ struct ContentView: View {
     @Namespace private var ns_grid // ids to match grid elements with modal
     @Namespace private var ns_favorites // ids to match favorite icons with modal
     @Namespace private var ns_search // ids to match grid elements with modal
-
+    
     
     @State private var shake = false
     @State private var blur: Bool = false
@@ -39,7 +39,7 @@ struct ContentView: View {
     var matchGridToModal: Bool { !flyFromGridToModal && mealTap != nil }
     var matchFavoriteToModal: Bool { !flyFromGridToModal && favoriteTap != nil }
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
-    let c = GridItem(.adaptive(minimum: 200, maximum: 400), spacing: 20)
+    let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
     
     func parse(object: MealFragment) -> String {
         guard let mealImage = object.mealImage?.publicUrlTransformed else { return "" }
@@ -128,7 +128,7 @@ struct ContentView: View {
             
             if searchTap {
                 SearchView(shouldCloseView: $searchTap)
-//                    .matchedGeometryEffect(id: searchTap ? "search" : "0", in: ns_search, isSource: false)
+                    //                    .matchedGeometryEffect(id: searchTap ? "search" : "0", in: ns_search, isSource: false)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }
@@ -185,6 +185,11 @@ struct ContentView_Previews: PreviewProvider {
 
 
 struct MealsHeaderView: View {
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("email") var email = ""
+    @AppStorage("userid") var userid = ""
+    @AppStorage("token") var token = ""
+
     @EnvironmentObject var user: UserStore // get user
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
     
@@ -193,6 +198,7 @@ struct MealsHeaderView: View {
     @State private var showAddMealModal: Bool = false
     @State private var isLoadingIsUserAuthenticated: Bool = false
     @State private var showingAlert = false
+    @State var showLogin = false
     @Binding var searchTap: Bool
     @Binding var blur: Bool
     var ns_search: Namespace.ID
@@ -205,7 +211,7 @@ struct MealsHeaderView: View {
                         .padding(.leading)
                         .padding(.bottom)
                 } else {
-                    if user.isLogged {
+                    if isLogged {
                         Button(action: {self.showingAlert = true}) {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 16, weight: .medium))
@@ -215,28 +221,26 @@ struct MealsHeaderView: View {
                                 .padding(.bottom)
                         }.alert(isPresented:$showingAlert) {
                             Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
-                                self.user.email = ""
-                                UserDefaults.standard.set("", forKey: "email")
                                 
-                                self.user.userid = ""
-                                UserDefaults.standard.set("", forKey: "userid")
+                                email = ""
+                                userid = ""
+                                isLogged = false
+                                token = ""
+
                                 
-                                self.user.isLogged = false
-                                UserDefaults.standard.set(false, forKey: "isLogged")
                             }, secondaryButton: .cancel())
                         }
                         
                     } else {
-                        Button(action: {user.showLogin.toggle()}) {
+                        Button(action: {showLogin.toggle()}) {
                             Image(systemName: "person")
                                 .font(.system(size: 16, weight: .medium))
                                 .frame(width: 36, height: 36, alignment: .center)
                                 .clipShape(Circle())
                                 .padding(.leading)
                                 .padding(.bottom)
-                        }.sheet(isPresented: $user.showLogin, onDismiss: {}) {
-                            LoginView()
-                                .environmentObject(self.user)
+                        }.sheet(isPresented: $showLogin, onDismiss: {}) {
+                            LoginView(showLogin: $showLogin)
                         }
                     }
                 }
@@ -244,7 +248,7 @@ struct MealsHeaderView: View {
                 
                 Spacer()
                 Button(action: {
-                    searchTap.toggle()
+                        searchTap.toggle()
                         withAnimation(.basic) {
                             blur = true
                         }                }) {
@@ -257,7 +261,8 @@ struct MealsHeaderView: View {
                         .matchedGeometryEffect(id: "search", in: ns_search, isSource: true)
                 }
                 
-                if user.isLogged{
+                // Only show addmeal if user is logged in
+                if isLogged{
                     Button(action: {showAddMealModal = true}) {
                         Image(systemName: "rectangle.stack.badge.plus")
                             .font(.system(size: 17, weight: .medium))
@@ -282,42 +287,28 @@ struct MealsHeaderView: View {
                         print(error)
                         
                     case .success(let graphQLResult):
-//                        print(graphQLResult)
                         
                         if let error = graphQLResult.errors {
-                            self.user.email = ""
-                            UserDefaults.standard.removeObject(forKey: "email")
-                            
-                            self.user.userid = ""
-                            UserDefaults.standard.removeObject(forKey: "userid")
-                            
-                            self.user.isLogged = false
-                            UserDefaults.standard.set(false, forKey: "isLogged")
+                            email = ""
+                            userid = ""
+                            isLogged = false
                             
                             print(error)
                             return
                         }
                         
                         guard let userDetails = graphQLResult.data?.authenticatedUser else {
-                            self.user.email = ""
-                            UserDefaults.standard.set("", forKey: "email")
+                            email = ""
+                            userid = ""
+                            isLogged = false
                             
-                            self.user.userid = ""
-                            UserDefaults.standard.set("", forKey: "userid")
-                            
-                            self.user.isLogged = false
-                            UserDefaults.standard.set(false, forKey: "isLogged")
                             return
                         }
                         
-                        self.user.email = userDetails.email!
-                        UserDefaults.standard.set(userDetails.email!, forKey: "email")
+                        email = userDetails.email!
+                        userid = userDetails.id
+                        isLogged = true
                         
-                        self.user.userid = userDetails.id
-                        UserDefaults.standard.set(userDetails.id, forKey: "userid")
-                        
-                        self.user.isLogged = true
-                        UserDefaults.standard.set(true, forKey: "isLogged")
                     }
                 }
             }

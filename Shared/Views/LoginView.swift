@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct LoginView: View {
-    @State var email = ""
+    @State var emailText = ""
     @State var password = ""
     @State var isFocused = false
     @State var showAlert = false
@@ -19,43 +19,41 @@ struct LoginView: View {
     @State var viewState = CGSize.zero
     @State var show = false
     @State private var keyboardHeight: CGFloat = 0
+    @Binding var showLogin: Bool
     
-    @EnvironmentObject var user: UserStore
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("email") var email = ""
+    @AppStorage("userid") var userid = ""
+    @AppStorage("token") var token = ""
     
     func login() {
         hideKeyboard()
         isFocused = false
         isLoading = true
         
-        ApolloController.shared.apollo.perform(mutation: AuthenticateUserMutation(email: email, password: password)) { result in
+        ApolloController.shared.apollo.perform(mutation: AuthenticateUserMutation(email: emailText, password: password)) { result in
             isLoading = false
             
             switch result {
             case .success(let graphQLResult):
                 if let data = graphQLResult.data {
                     if let authenticateUserWithPassword = data.authenticateUserWithPassword {
-                        if let token = authenticateUserWithPassword.token {
-                            
-                            self.user.token = token
-                            UserDefaults.standard.set(token, forKey: "token")
+                        if let tokenAPI = authenticateUserWithPassword.token {
+                            token = tokenAPI
                         }
                         if let item = authenticateUserWithPassword.item {
-                            self.user.email = item.email!
-                            UserDefaults.standard.set(item.email!, forKey: "email")
-                            
-                            self.user.userid = item.id
-                            UserDefaults.standard.set(item.id, forKey: "userid")
-                            
+                            email = item.email!
+                            userid = item.id
                         }
                         isSuccessful = true
                         
-                        self.user.isLogged = true
-                        UserDefaults.standard.set(true, forKey: "isLogged")
+                        isLogged = true
+
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             isSuccessful = false
-                            email = ""
+                            emailText = ""
                             password = ""
-                            user.showLogin = false
+                            showLogin = false
                         }
                         
                     }
@@ -131,7 +129,7 @@ var body: some View {
                             .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
                             .padding(.leading)
                         
-                        TextField("Your Email".uppercased(), text: $email)
+                        TextField("Your Email".uppercased(), text: $emailText)
                             .autocapitalization(.none)
                             .keyboardType(.emailAddress)
                             .font(.subheadline)
@@ -232,8 +230,10 @@ var body: some View {
 }
 
 struct LoginView_Previews: PreviewProvider {
+    @State static var showLogin = true
+    
     static var previews: some View {
-        LoginView()
+        LoginView(showLogin: $showLogin)
     }
 }
 

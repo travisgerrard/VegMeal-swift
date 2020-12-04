@@ -78,7 +78,7 @@ struct ModalMod: AnimatableModifier {
                                 options: [
                                     .transition(.fade(0.2)),
                                     .processor(
-                                        DownsamplingImageProcessor(size: CGSize(width: 300, height: 300))
+                                        DownsamplingImageProcessor(size: CGSize(width: 400, height: 400))
                                     ),
                                     .cacheOriginalImage
                                 ])

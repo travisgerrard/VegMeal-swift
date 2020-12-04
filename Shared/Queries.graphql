@@ -386,6 +386,15 @@ query IS_AUTHENTICATED_USER {
   }
 }
 
+query GET_INGREDIENT_INFO($id: ID!) {
+    Ingredient(where: { id: $id }) {
+      name
+      category
+      meal {
+        ...MealFragment
+      }
+    }
+  }
 
 mutation START_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
     startFollowUser: updateUser(
