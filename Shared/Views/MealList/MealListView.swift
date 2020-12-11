@@ -11,8 +11,10 @@ import struct Kingfisher.DownsamplingImageProcessor
 
 struct MealListView: View {
     @EnvironmentObject var networkingController: ApolloNetworkingController
-    @EnvironmentObject var user: UserStore
     @EnvironmentObject var mealListController: MealListApolloController
+    
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("userid") var userid = ""
     
     @Namespace private var ns_grid // ids to match grid elements with modal
     @Namespace private var ns_favorites // ids to match favorite icons with modal
@@ -48,7 +50,7 @@ struct MealListView: View {
     }
     
     var body: some View {
-        if user.isLogged {
+        if isLogged {
             ZStack{
                 VStack {
                     NavigationView {
@@ -204,7 +206,7 @@ struct MealListView: View {
                         }
                         .navigationBarTitle("Meal Planner")
                         .onAppear {
-                            self.mealListController.getMealList(userId: user.userid)
+                            self.mealListController.getMealList(userId: userid)
                         }
                     }.zIndex(1.0)
                 }
@@ -214,7 +216,7 @@ struct MealListView: View {
                             ProgressView().padding(.leading).padding(.all, 10)
                         } else {
                             Button(action: {
-                                self.mealListController.getMealList(userId: user.userid)
+                                self.mealListController.getMealList(userId: userid)
                             }) {
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                     .font(.system(size: 17, weight: .bold))
@@ -246,7 +248,7 @@ struct MealListView: View {
                         meal: self.$networkingController.meals[mealIndex!],
                         pct: flyFromGridToModal ? 1 : 0,
                         flyingFromGrid: mealTap != nil,
-                        userId: user.isLogged ? user.userid : nil,
+                        userId: isLogged ? userid : nil,
                         onClose: dismissModal)
                         .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
                         .matchedGeometryEffect(id: matchFavoriteToModal ? favoriteTap! : "0", in: ns_favorites, isSource: false)
@@ -293,7 +295,6 @@ struct MealListView: View {
 struct MealListView_Previews: PreviewProvider {
     static var previews: some View {
         MealListView()
-            .environmentObject(UserStore())
             .environmentObject(ApolloNetworkingController())
             .environmentObject(GroceryListApolloController())
             .environmentObject(MealListApolloController())

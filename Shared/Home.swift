@@ -24,7 +24,6 @@ let screen = UIScreen.main.bounds
 struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Home()
-            .environmentObject(UserStore())
             .environmentObject(ApolloNetworkingController())
             .environmentObject(GroceryListApolloController())
             .environmentObject(MealListApolloController())

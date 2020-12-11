@@ -9,9 +9,11 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var user: UserStore // get user
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
     @EnvironmentObject var mealListController: MealListApolloController
+    
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("userid") var userid = ""
     
     @Namespace private var ns_grid // ids to match grid elements with modal
     @Namespace private var ns_favorites // ids to match favorite icons with modal
@@ -27,6 +29,7 @@ struct ContentView: View {
     @State private var mealIndex: Int? = nil
     @State private var favoriteTap: String? = nil
     @State private var searchTap: Bool = false
+    @State private var accountTap: Bool = false
     
     // Views are matched at insertion, but onAppear we broke the match
     // in order to animate immediately after view insertion
@@ -57,7 +60,7 @@ struct ContentView: View {
                 TabView {
                     
                     ZStack {
-                        MealsHeaderView(searchTap: $searchTap, blur: $blur, ns_search: ns_search).zIndex(2)
+                        MealsHeaderView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search).zIndex(2)
                         VStack {
                             NavigationView {
                                 ScrollView {
@@ -115,7 +118,7 @@ struct ContentView: View {
                     meal: self.$networkingController.meals[mealIndex!],
                     pct: flyFromGridToModal ? 1 : 0,
                     flyingFromGrid: mealTap != nil,
-                    userId: user.isLogged ? user.userid : nil,
+                    userId: isLogged ? userid : nil,
                     onClose: dismissModal)
                     .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
                     .matchedGeometryEffect(id: matchFavoriteToModal ? favoriteTap! : "0", in: ns_favorites, isSource: false)
@@ -135,6 +138,17 @@ struct ContentView: View {
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
                     .onDisappear {blur = false}
                     .zIndex(4)
+            }
+            
+            if accountTap {
+                UserView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
+                    .onDisappear { flyFromGridToModal = false }
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
+                    .onDisappear {blur = false}
+                    .zIndex(4)
+
             }
             
         }
@@ -171,7 +185,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(UserStore())
             .environmentObject(ApolloNetworkingController())
             .environmentObject(GroceryListApolloController())
             .environmentObject(MealListApolloController())
@@ -190,46 +203,62 @@ struct MealsHeaderView: View {
     @AppStorage("userid") var userid = ""
     @AppStorage("token") var token = ""
 
-    @EnvironmentObject var user: UserStore // get user
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
-    
+    @EnvironmentObject var userController: UserApolloController
+
     
     // Add Meal Modal Showing
     @State private var showAddMealModal: Bool = false
-    @State private var isLoadingIsUserAuthenticated: Bool = false
     @State private var showingAlert = false
     @State var showLogin = false
     @Binding var searchTap: Bool
+    @Binding var accountTap: Bool
+
     @Binding var blur: Bool
     var ns_search: Namespace.ID
     
     var body: some View {
         VStack {
             HStack {
-                if isLoadingIsUserAuthenticated {
+                if userController.getUserQueryRunning {
                     ProgressView()
                         .padding(.leading)
                         .padding(.bottom)
                 } else {
                     if isLogged {
-                        Button(action: {self.showingAlert = true}) {
+                        Button(action: {
+                                accountTap.toggle()
+                                withAnimation(.basic) {
+                                    blur = true
+                                }
+                        }) {
                             Image(systemName: "person.fill")
                                 .font(.system(size: 16, weight: .medium))
                                 .frame(width: 36, height: 36, alignment: .center)
                                 .clipShape(Circle())
                                 .padding(.leading)
                                 .padding(.bottom)
-                        }.alert(isPresented:$showingAlert) {
-                            Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
-                                
-                                email = ""
-                                userid = ""
-                                isLogged = false
-                                token = ""
-
-                                
-                            }, secondaryButton: .cancel())
                         }
+                        
+                        // This was for when clicking user logged user out
+//                        Button(action: {self.showingAlert = true}) {
+//                            Image(systemName: "person.fill")
+//                                .font(.system(size: 16, weight: .medium))
+//                                .frame(width: 36, height: 36, alignment: .center)
+//                                .clipShape(Circle())
+//                                .padding(.leading)
+//                                .padding(.bottom)
+//                        }.alert(isPresented:$showingAlert) {
+//                            Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
+//
+//                                email = ""
+//                                userid = ""
+//                                isLogged = false
+//                                token = ""
+//
+//
+//                            }, secondaryButton: .cancel())
+//                        }
                         
                     } else {
                         Button(action: {showLogin.toggle()}) {
@@ -272,45 +301,14 @@ struct MealsHeaderView: View {
                             .padding(.bottom)
                     }.sheet(isPresented: $showAddMealModal, onDismiss: {}) {
                         AddMealView(showModal: self.$showAddMealModal)
-                            .environmentObject(self.user)
                             .environmentObject(self.networkingController)
                     }
                 }
                 
             }.onAppear{
-                isLoadingIsUserAuthenticated = true
-                let query = IsAuthenticatedUserQuery()
-                ApolloController.shared.apollo.fetch(query: query) { result in
-                    isLoadingIsUserAuthenticated = false
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                        
-                    case .success(let graphQLResult):
-                        
-                        if let error = graphQLResult.errors {
-                            email = ""
-                            userid = ""
-                            isLogged = false
-                            
-                            print(error)
-                            return
-                        }
-                        
-                        guard let userDetails = graphQLResult.data?.authenticatedUser else {
-                            email = ""
-                            userid = ""
-                            isLogged = false
-                            
-                            return
-                        }
-                        
-                        email = userDetails.email!
-                        userid = userDetails.id
-                        isLogged = true
-                        
-                    }
-                }
+                userController.getUserQueryRunning = true
+                userController.getUserData()
+                
             }
             Spacer()
         }

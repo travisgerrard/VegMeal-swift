@@ -48,7 +48,7 @@ struct LoginView: View {
                         isSuccessful = true
                         
                         isLogged = true
-
+                        
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             isSuccessful = false
                             emailText = ""
@@ -73,160 +73,160 @@ struct LoginView: View {
             }
         }
     }
-
-func hideKeyboard() {
-    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-}
-
-var body: some View {
-    ZStack {
-        Color.black.edgesIgnoringSafeArea(.all)
-        
-        VStack {
-            ZStack(alignment: .top) {
-                Color.white
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    var body: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                ZStack(alignment: .top) {
+                    Color.white
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .edgesIgnoringSafeArea(.bottom)
+                    
+                    VStack {
+                        GeometryReader { geometry in
+                            Text("Veggily")
+                                .font(.system(size: geometry.size.width / 10, weight: .bold))
+                                .padding(.leading)
+                        }
+                        .frame(maxWidth: 375, maxHeight: 100)
+                        .padding(.horizontal, 16)
+                        //                        .offset(x: viewState.width / 15, y: viewState.height / 15)
+                        
+                        
+                        Text("Come For The Meals, Stay For The Memories")
+                            .font(.subheadline)
+                            .frame(width: 350)
+                        //                            .offset(x: viewState.width / 15, y: viewState.height / 15)
+                        
+                        Spacer()
+                        
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 95)
+                    .frame(height: 477)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        Image(uiImage: #imageLiteral(resourceName: "009-eggplant.png"))
+                            .offset(x: viewState.width / 25, y: viewState.height / 25).opacity(0.05)
+                        , alignment: .bottom
+                    )
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .edgesIgnoringSafeArea(.bottom)
-                
-                VStack {
-                    GeometryReader { geometry in
-                        Text("Veggily")
-                            .font(.system(size: geometry.size.width / 10, weight: .bold))
-                            .padding(.leading)
-                    }
-                    .frame(maxWidth: 375, maxHeight: 100)
-                    .padding(.horizontal, 16)
-                    //                        .offset(x: viewState.width / 15, y: viewState.height / 15)
                     
                     
-                    Text("Come For The Meals, Stay For The Memories")
-                        .font(.subheadline)
-                        .frame(width: 350)
-                    //                            .offset(x: viewState.width / 15, y: viewState.height / 15)
-                    
-                    Spacer()
-                    
-                }
-                .multilineTextAlignment(.center)
-                .padding(.top, 95)
-                .frame(height: 477)
-                .frame(maxWidth: .infinity)
-                .background(
-                    Image(uiImage: #imageLiteral(resourceName: "009-eggplant.png"))
-                        .offset(x: viewState.width / 25, y: viewState.height / 25).opacity(0.05)
-                    , alignment: .bottom
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                
-                
-                VStack {
-                    HStack {
-                        Image(systemName: "person.crop.circle.fill")
-                            .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
-                            .frame(width: 44, height: 44)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
-                            .padding(.leading)
+                    VStack {
+                        HStack {
+                            Image(systemName: "person.crop.circle.fill")
+                                .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
+                                .frame(width: 44, height: 44)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
+                                .padding(.leading)
+                            
+                            TextField("Your Email".uppercased(), text: $emailText)
+                                .autocapitalization(.none)
+                                .keyboardType(.emailAddress)
+                                .font(.subheadline)
+                                .padding(.leading)
+                                .frame(height: 44)
+                                .onTapGesture(count: 1, perform: {
+                                    isFocused = true
+                                })
+                        }
                         
-                        TextField("Your Email".uppercased(), text: $emailText)
-                            .autocapitalization(.none)
-                            .keyboardType(.emailAddress)
-                            .font(.subheadline)
-                            .padding(.leading)
-                            .frame(height: 44)
-                            .onTapGesture(count: 1, perform: {
-                                isFocused = true
-                            })
+                        Divider().padding(.leading, 80)
+                        
+                        HStack {
+                            Image(systemName: "lock.fill")
+                                .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
+                                .frame(width: 44, height: 44)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
+                                .padding(.leading)
+                            
+                            SecureField("Password".uppercased(), text: $password)
+                                .keyboardType(.emailAddress)
+                                .font(.subheadline)
+                                .padding(.leading)
+                                .frame(height: 44)
+                                .onTapGesture(count: 1, perform: {
+                                    isFocused = true
+                                })
+                        }
                     }
-                    
-                    Divider().padding(.leading, 80)
+                    .frame(height: 136)
+                    .frame(maxWidth: 712)
+                    .background(BlurView(style: .systemMaterial))
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 20)
+                    .padding(.horizontal)
+                    .offset(y: 250)
                     
                     HStack {
-                        Image(systemName: "lock.fill")
-                            .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
-                            .frame(width: 44, height: 44)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
-                            .padding(.leading)
-                        
-                        SecureField("Password".uppercased(), text: $password)
-                            .keyboardType(.emailAddress)
+                        Text("Forgot password?")
                             .font(.subheadline)
-                            .padding(.leading)
-                            .frame(height: 44)
-                            .onTapGesture(count: 1, perform: {
-                                isFocused = true
-                            })
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            login()
+                        }, label: {
+                            Text("Log in").foregroundColor(.black)
+                        })
+                        .padding(12)
+                        .padding(.horizontal, 30)
+                        .background(Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)))
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .shadow(color: Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3), radius: 20, x: 0, y: 20)
+                        .alert(isPresented: $showAlert)  {
+                            Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .padding()
                 }
-                .frame(height: 136)
-                .frame(maxWidth: 712)
-                .background(BlurView(style: .systemMaterial))
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 20)
-                .padding(.horizontal)
-                .offset(y: 250)
-                
-                HStack {
-                    Text("Forgot password?")
-                        .font(.subheadline)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        login()
-                    }, label: {
-                        Text("Log in").foregroundColor(.black)
-                    })
-                    .padding(12)
-                    .padding(.horizontal, 30)
-                    .background(Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)))
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                    .shadow(color: Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3), radius: 20, x: 0, y: 20)
-                    .alert(isPresented: $showAlert)  {
-                        Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
+            .padding(.bottom, keyboardHeight)
+            .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
+            
+            .animation(.easeInOut)
+            .onTapGesture(count: 1, perform: {
+                isFocused = false
+                hideKeyboard()
+            })
+            
+            if isLoading {
+                Text("Loading...").frame(width: 200, height: 200)
+            }
+            
+            if isSuccessful {
+                Text("Success!")
+                    .font(.title).bold()
+                    .opacity(show ? 1 : 0)
+                    .animation(Animation.linear(duration: 1).delay(0.2))
+                    .padding(.top, 30)
+                    .background(BlurView(style: .systemMaterial))
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.2), radius: 30, x: 0, y:30)
+                    .scaleEffect(show ? 1 : 0.5)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
+                    .onAppear {
+                        show = true
                     }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(show ? 0.5 : 0))
+                    .animation(.linear(duration: 0.5))
+                    .edgesIgnoringSafeArea(.all)
             }
         }
-        .padding(.bottom, keyboardHeight)
-        .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
-        
-        .animation(.easeInOut)
-        .onTapGesture(count: 1, perform: {
-            isFocused = false
-            hideKeyboard()
-        })
-        
-        if isLoading {
-            Text("Loading...").frame(width: 200, height: 200)
-        }
-        
-        if isSuccessful {
-            Text("Success!")
-                .font(.title).bold()
-                .opacity(show ? 1 : 0)
-                .animation(Animation.linear(duration: 1).delay(0.2))
-                .padding(.top, 30)
-                .background(BlurView(style: .systemMaterial))
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: Color.black.opacity(0.2), radius: 30, x: 0, y:30)
-                .scaleEffect(show ? 1 : 0.5)
-                .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-                .onAppear {
-                    show = true
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black.opacity(show ? 0.5 : 0))
-                .animation(.linear(duration: 0.5))
-                .edgesIgnoringSafeArea(.all)
-        }
     }
-}
 }
 
 struct LoginView_Previews: PreviewProvider {

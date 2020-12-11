@@ -9,8 +9,10 @@ import SwiftUI
 import Combine
 
 struct SearchView: View {
-    @EnvironmentObject var user: UserStore // get user
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
+
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("userid") var userid = ""
 
     @Namespace private var ns_grid // ids to match grid elements with modal
 
@@ -41,7 +43,7 @@ struct SearchView: View {
     var matchGridToModal: Bool { !flyFromGridToModal && mealTap != nil }
     var matchFavoriteToModal: Bool { !flyFromGridToModal && favoriteTap != nil }
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
-    let c = GridItem(.adaptive(minimum: 200, maximum: 400), spacing: 20)
+    let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
 
     func searchForMeal() {
         if isEditing && searchText.count > 0 {
@@ -115,7 +117,7 @@ struct SearchView: View {
                     meal: self.$networkingController.meals[mealIndex!],
                     pct: flyFromGridToModal ? 1 : 0,
                     flyingFromGrid: mealTap != nil,
-                    userId: user.isLogged ? user.userid : nil,
+                    userId: isLogged ? userid : nil,
                     onClose: dismissModal)
                     .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

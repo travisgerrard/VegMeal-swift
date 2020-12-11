@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct GroceryListView: View {
-    @EnvironmentObject var user: UserStore
     @EnvironmentObject var groceryListController: GroceryListApolloController
+    
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("userid") var userid = ""
     
     @State var showCard = false
     @State var show = false
@@ -19,6 +21,8 @@ struct GroceryListView: View {
     @State var completeIsPressed = false
     @State var category = ""
     @State var groceryListIndex = 999
+    
+    @State var sectionName = ""
     
     var options = [
         0: "none",
@@ -40,29 +44,31 @@ struct GroceryListView: View {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }
-    
-     func toCompleteListView(groceryListItem: GroceryListFragment) -> some View {
-        return  VStack {
-            HStack {
-                Text("\(options[(groceryListItem.ingredient?.category)!] ?? "no value")").font(.title3)
-            }
-        }
-    }
+//    
+//    func toCompleteListView(groceryListItem: GroceryListFragment) -> some View {
+//        
+//        return  VStack {
+//            HStack {
+//                Text("\(options[(groceryListItem.ingredient?.category)!] ?? "no value")").font(.title3)
+//            }
+//        }
+//    }
     
     var body: some View {
-        if user.isLogged {
+        if isLogged {
             ZStack {
                 VStack {
                     NavigationView {
                         List {
-                            Section(header: Text("To Complete")) {
-                                ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
-                                    
-                                    // Updates the section heading
-                                    if i == 0 || i > 0 && self.groceryListController.groceryList[i].ingredient?.category != self.groceryListController.groceryList[i-1].ingredient?.category {
-                                        self.toCompleteListView(groceryListItem: self.groceryListController.groceryList[i])
-                                    }
-                                    
+                            ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
+                                
+//                                // Updates the section heading
+//                                if i == 0 || i > 0 && self.groceryListController.groceryList[i].ingredient?.category != self.groceryListController.groceryList[i-1].ingredient?.category {
+//
+////                                    self.toCompleteListView(groceryListItem: self.groceryListController.groceryList[i])
+//                                }
+                                
+                                Section(header: Text("\(options[(self.groceryListController.groceryList[i].ingredient?.category)!] ?? "no value")")) {
                                     
                                     HStack {
                                         Button(action: {
@@ -81,7 +87,7 @@ struct GroceryListView: View {
                                                         completeIsPressed = false
                                                     }
                                         )
-
+                                        
                                         Text("\(self.groceryListController.groceryList[i].ingredient?.name ?? "No ingredient") - \(self.groceryListController.groceryList[i].amount?.name ?? "No amount")")
                                         Spacer()
                                         Button(action: {
@@ -98,7 +104,7 @@ struct GroceryListView: View {
                                                         self.groceryListController.deleteGroceryListItem(id: self.groceryListController.groceryList[i].id)
                                                     }
                                         )
-
+                                        
                                     }
                                 }
                             }
@@ -153,7 +159,7 @@ struct GroceryListView: View {
                         
                         .navigationBarTitle("Grocery List")
                         .onAppear {
-                            self.groceryListController.getGroceryList(userId: user.userid)
+                            self.groceryListController.getGroceryList(userId: userid)
                         }
                     }
                 }
@@ -167,7 +173,7 @@ struct GroceryListView: View {
                             
                         } else {
                             Button(action: {
-                                self.groceryListController.getGroceryList(userId: user.userid)
+                                self.groceryListController.getGroceryList(userId: userid)
                             }) {
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                     .font(.system(size: 17, weight: .bold))
@@ -239,7 +245,6 @@ struct GroceryListView: View {
 struct GroceryListView_Previews: PreviewProvider {
     static var previews: some View {
         GroceryListView()
-            .environmentObject(UserStore())
             .environmentObject(GroceryListApolloController())
     }
 }
@@ -251,10 +256,6 @@ struct BottomCardView: View {
     var body: some View {
         
         VStack(spacing: 20) {
-            //            Text("\(bottomState.height)")
-            //            if show {
-            //                Text("Show")
-            //            }
             Rectangle()
                 .frame(width: 40, height: 5)
                 .cornerRadius(3.0)

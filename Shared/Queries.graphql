@@ -1,4 +1,27 @@
 # Write your query or mutation here
+fragment MealFragment on Meal {
+  id
+  name
+  description
+  mealImage {
+    publicUrlTransformed
+  }
+  author {
+    id
+  }
+  ingredientList {
+    id
+    ingredient {
+      id
+      name
+    }
+    amount {
+      id
+      name
+    }
+  }
+}
+
 mutation CREATE_MEAL(
   $authorId: ID!
   $name: String
@@ -12,6 +35,26 @@ mutation CREATE_MEAL(
       mealImage: $mealImage
       author: { connect: { id: $authorId } }
     }
+  ) {
+    ...MealFragment
+  }
+}
+
+mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
+  updateMeal(id: $id, data: { name: $name, description: $description }) {
+    ...MealFragment
+  }
+}
+
+mutation UPDATE_MEAL_WITH_IMAGE(
+  $name: String
+  $description: String
+  $id: ID!
+  $mealImage: Upload
+) {
+  updateMeal(
+    id: $id
+    data: { name: $name, description: $description, mealImage: $mealImage }
   ) {
     ...MealFragment
   }
@@ -142,30 +185,6 @@ fragment AmountFragment on Amount {
     id
     name
 }
-
-fragment MealFragment on Meal {
-  id
-  name
-  description
-  mealImage {
-    publicUrlTransformed
-  }
-  author {
-    id
-  }
-  ingredientList {
-    id
-    ingredient {
-      id
-      name
-    }
-    amount {
-      id
-      name
-    }
-  }
-}
-
 
 query MY_MEALS_QUERY($authorId: ID!) {
   myMealToComplete: allMealLists(where: { author: { id: $authorId }, isCompleted: false }) {
@@ -346,27 +365,26 @@ query SINGLE_MEAL_UPDATE_QUERY($id: ID!) {
   }
 }
 
-mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
-  updateMeal(id: $id, data: { name: $name, description: $description }) {
-    ...MealFragment
+fragment UserFragment on User {
+  id
+  email
+  name
+  permissions
+  follows {
+    name
+    id
   }
+  followers {
+    name
+    id
+  }
+    
 }
 
 query CURRENT_USER_QUERY {
   authenticatedUser {
-      id
-      email
-      name
-      permissions
-      follows {
-        name
-        id
-      }
-      followers {
-        name
-        id
-      }
-    }
+     ...UserFragment
+  }
 }
 
 mutation AUTHENTICATE_USER($email: String!, $password: String) {
@@ -381,8 +399,7 @@ mutation AUTHENTICATE_USER($email: String!, $password: String) {
 
 query IS_AUTHENTICATED_USER {
   authenticatedUser{
-    id
-    email
+    ...UserFragment
   }
 }
 
@@ -396,42 +413,26 @@ query GET_INGREDIENT_INFO($id: ID!) {
     }
   }
 
+query ALL_USERS {
+    allUsers {
+      ...UserFragment
+    }
+  }
+
 mutation START_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
     startFollowUser: updateUser(
       id: $current_user
       data: { follows: { connect: { id: $id_to_change_following } } }
     ) {
-      id
-      email
-      name
-      permissions
-      follows {
-        name
-        id
-      }
-      followers {
-        name
-        id
-      }
-    }
+    ...UserFragment
   }
+}
   
   mutation STOP_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
     stopFollowUser: updateUser(
       id: $current_user
       data: { follows: { disconnect: { id: $id_to_change_following } } }
     ) {
-      id
-      email
-      name
-      permissions
-      follows {
-        name
-        id
-      }
-      followers {
-        name
-        id
-      }
-    }
+      ...UserFragment
   }
+}

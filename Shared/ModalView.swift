@@ -26,7 +26,6 @@ struct ModalView: View {
 }
 
 struct ModalMod: AnimatableModifier {
-    @EnvironmentObject var user: UserStore
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
     
     
@@ -59,16 +58,6 @@ struct ModalMod: AnimatableModifier {
     
     
     func body(content: Content) -> some View {
-        //        let refRadiusPct = flyingFromGrid ? gridRadiusPct : favRadiusPct
-        //        let refShadow = flyingFromGrid ? gridShadow : favShadow
-        
-        //        let cornerRadius = (1.0 - refRadiusPct) * pct + refRadiusPct
-        //        let shadowRadius = (2 - refShadow) * pct + refShadow
-        //        let modalRadius = (0.1 - refRadiusPct) * pct + refRadiusPct
-        //        let modalShadow = (8 - refShadow) * pct + refShadow
-        //
-        //        let textOpacity = Double((pct - 0.5) * 2)
-        //        let borderPct = flyingFromGrid ? pct : 1.0
         
         return GeometryReader { proxy in
             ZStack {
@@ -137,7 +126,6 @@ struct ModalMod: AnimatableModifier {
                                                 .padding(.bottom)
                                                 .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
                                                     AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!, showModal: self.$showEditMealModal)
-                                                        .environmentObject(self.user)
                                                         .environmentObject(self.networkingController)
                                                 }
                                         }

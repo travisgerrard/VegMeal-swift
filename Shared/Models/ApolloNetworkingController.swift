@@ -86,6 +86,40 @@ class ApolloNetworkingController: ObservableObject {
         }
     }
     
+    func updateMealWithImage(mealId: String, name: String, description: String, inputImage: UIImage) {
+        self.uploadImageError = nil
+        self.isUploadingImage = true
+        
+        let file = GraphQLFile(
+            fieldName: "mealImage",
+            originalName: name,
+            mimeType: "image/jpeg",
+            data: inputImage.jpegData(compressionQuality: 0.5)!)
+        
+        let mutation = UpdateMealWithImageMutation(name: name, description: description, id: mealId, mealImage: name)
+        
+        ApolloController.shared.apollo.upload(operation: mutation, files: [file]) { result in
+            self.isUploadingImage = false
+
+            switch result {
+            case .failure(let error):
+                self.uploadImageError = error
+            
+            case .success(let graphQLResult):
+                guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealFragment else { break }
+                
+                if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
+                    self.meals[mealToUpdateIndex].name = fragment.name
+                    self.meals[mealToUpdateIndex].description = fragment.description
+                    self.meals[mealToUpdateIndex].mealImage = fragment.mealImage
+                }
+                self.shouldCloseAddUpdateMealScreen = true
+
+            }
+            
+        }
+    }
+    
     func updateMeal(mealId: String, name: String, description: String) {
         let mutation = UpdateMealMutation(name: name, description: description, id: mealId)
         self.isUploadingImage = true
@@ -98,7 +132,6 @@ class ApolloNetworkingController: ObservableObject {
                 self.uploadImageError = error
             
             case .success(let graphQLResult):
-//                print("Success: \(graphQLResult)")
                 guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealFragment else { break }
                 
                 if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
@@ -106,8 +139,6 @@ class ApolloNetworkingController: ObservableObject {
                     self.meals[mealToUpdateIndex].description = fragment.description
                 }
                 self.shouldCloseAddUpdateMealScreen = true
-                self.shouldCloseAddUpdateMealScreen = true
-
 
             }
             

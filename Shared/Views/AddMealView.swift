@@ -23,11 +23,13 @@ struct AddMealView: View {
     @State private var inputImage: UIImage?
     @State var name = ""
     @State var description = ""
-    @EnvironmentObject var user: UserStore
     @State var isUploadingImage = false
     @EnvironmentObject var networkingController: ApolloNetworkingController
     @Binding var showModal: Bool
-
+    
+    @AppStorage("userid") var userid = ""
+    
+    
     func loadImage() {
         guard let inputImage = inputImage else { return }
         image = Image(uiImage: inputImage)
@@ -35,7 +37,7 @@ struct AddMealView: View {
     
     func addNewMeal() {
         if image != nil && name != "" && description != "" {
-            self.networkingController.addNewMeal(authorId: user.userid, inputImage: inputImage!, name: name, description: description)
+            self.networkingController.addNewMeal(authorId: userid, inputImage: inputImage!, name: name, description: description)
         } else {
             return
         }
@@ -43,6 +45,9 @@ struct AddMealView: View {
     
     func updateMeal() {
         if name != "" && description != "" {
+            if (image != nil) {
+                self.networkingController.updateMealWithImage(mealId: mealId, name: name, description: description, inputImage: inputImage!)
+            }
             self.networkingController.updateMeal(mealId: mealId, name: name, description: description)
         } else {
             return
@@ -50,18 +55,29 @@ struct AddMealView: View {
     }
     
     var body: some View {
-      VStack {
+        VStack {
             HStack {
                 Text(isEditingMeal ? "Edit \(name)" : "Add A New Meal").font(.title).padding()
                 Spacer()
             }
             
-            if isEditingMeal {
+            if image != nil {
+                image!
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: 175)
+                    .frame(height: 225)
+                    .overlay(
+                        OverLayText(name: name, description: description), alignment: .bottom)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
+                    .padding(.bottom, 20)
+            } else if isEditingMeal {
                 KFImage(url!,
                         options: [
                             .transition(.fade(0.2)),
                             .processor(
-                                DownsamplingImageProcessor(size: CGSize(width: 375, height: 375))
+                                DownsamplingImageProcessor(size: CGSize(width: 400, height: 400))
                             ),
                             .cacheOriginalImage
                         ])
@@ -77,133 +93,56 @@ struct AddMealView: View {
                     }
                     .resizable()
                     .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 300)
+                    .frame(maxWidth: 175)
+                    .frame(height: 225)
                     .overlay(
-                        VStack{
-                            HStack {
-                                Text(name)
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .minimumScaleFactor(0.5)
-                                    .padding(.leading)
-                                    .padding(.top)
-                                    .padding(.bottom, 1)
-                                
-                                Spacer()
-                            }
-                            HStack {
-                                Text(description)
-                                    .font(.subheadline)
-                                    .padding(.leading)
-                                    .padding(.bottom)
-                                
-                                Spacer()
-                            }
-                        }.background(BlurView(style: .systemMaterial))
-                        , alignment: .bottom)
+                        OverLayText(name: name, description: description), alignment: .bottom)
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                     .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
                     .padding(.horizontal, 30)
                     .padding(.bottom, 20)
             } else {
-                if image != nil {
-                    image!
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: screen.width - 60)
-                        .frame(height: 300)
-                        .overlay(
-                            VStack{
-                                HStack {
-                                    Text(name)
-                                        .font(.title3)
-                                        .fontWeight(.bold)
-                                        .minimumScaleFactor(0.5)
-                                        .padding(.leading)
-                                        .padding(.top)
-                                        .padding(.bottom, 1)
-                                    
-                                    Spacer()
-                                }
-                                HStack {
-                                    Text(description)
-                                        .font(.subheadline)
-                                        .padding(.leading)
-                                        .padding(.bottom)
-                                    
-                                    Spacer()
-                                }
-                            }.background(BlurView(style: .systemMaterial))
-                            , alignment: .bottom)
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-                        .padding(.bottom, 20)
-                } else {
-                    Rectangle()
-                        .fill(Color.secondary)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 300)
-                        .overlay(
-                            VStack{
-                                HStack {
-                                    Text(name)
-                                        .font(.title3)
-                                        .fontWeight(.bold)
-                                        .minimumScaleFactor(0.5)
-                                        .padding(.leading)
-                                        .padding(.top)
-                                        .padding(.bottom, 1)
-                                    
-                                    Spacer()
-                                }
-                                HStack {
-                                    Text(description)
-                                        .font(.subheadline)
-                                        .padding(.leading)
-                                        .padding(.bottom)
-                                    
-                                    Spacer()
-                                }
-                            }.background(BlurView(style: .systemMaterial))
-                            , alignment: .bottom)
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-                        .padding(.horizontal, 30)
-                        .padding(.bottom, 20)
-                }
+                Rectangle()
+                    .fill(Color.secondary)
+                    .frame(maxWidth: 175)
+                    .frame(height: 225)
+                        OverLayText(name: name, description: description)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 20)
             }
+            
             
             if self.networkingController.isUploadingImage {
                 Text("Uploading Image")
             }
-                        
-            if !isEditingMeal {
-                HStack {
-                    Button("Add photo", action: {
-                        self.showingActionSheet = true
-                    })
-                    .padding()
-                    .actionSheet(isPresented: $showingActionSheet) {
-                        ActionSheet(title: Text("Add Photo"), message: Text("Add photo from:"), buttons: [
-                            .default(Text("Camera")) {
-                                self.isCamera = true
-                                self.showingImagePicker = true
-                            },
-                            .default(Text("Photo Library")) {
-                                self.isCamera = false
-                                self.showingImagePicker = true
-                                
-                            },
-                            .cancel()
-                        ])
-                    }
-                    .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                        ImagePicker(image: self.$inputImage, isCamera: self.isCamera)
-                    }
-                    Spacer()
+            
+            HStack {
+                Button(isEditingMeal ? "Edit Photo" : "Add photo", action: {
+                    self.showingActionSheet = true
+                })
+                .padding()
+                .actionSheet(isPresented: $showingActionSheet) {
+                    ActionSheet(title: Text("Add Photo"), message: Text("Add photo from:"), buttons: [
+                        .default(Text("Camera")) {
+                            self.isCamera = true
+                            self.showingImagePicker = true
+                        },
+                        .default(Text("Photo Library")) {
+                            self.isCamera = false
+                            self.showingImagePicker = true
+                            
+                        },
+                        .cancel()
+                    ])
                 }
+                .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                    ImagePicker(image: self.$inputImage, isCamera: self.isCamera)
+                }
+                Spacer()
             }
+            
             
             
             VStack {
@@ -232,7 +171,7 @@ struct AddMealView: View {
                     }
                 }).padding().disabled(self.networkingController.isUploadingImage)
             }
-                        
+            
             Spacer()
             
         }
@@ -241,7 +180,8 @@ struct AddMealView: View {
 
 struct AddMealView_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealView(showModal: .constant(true))
+        AddMealView(isEditingMeal: true, url: URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg"), showModal: .constant(true))
+            .environmentObject(ApolloNetworkingController())
     }
 }
 
@@ -285,5 +225,35 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         }
         
         parent.presentationMode.wrappedValue.dismiss()
+    }
+}
+
+struct OverLayText: View {
+    let name: String!
+    let description: String!
+
+    var body: some View {
+        VStack{
+            HStack {
+                Text(name)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .minimumScaleFactor(0.5)
+                    .padding(.leading)
+                    .padding(.top)
+                    .padding(.bottom, 1)
+                
+                Spacer()
+            }
+            HStack {
+                Text(description)
+                    .font(.subheadline)
+                    .padding(.leading)
+                    .padding(.bottom)
+                
+                Spacer()
+            }
+        }.background(BlurView(style: .systemMaterial))
+        
     }
 }

@@ -12,23 +12,22 @@ import SDWebImageSwiftUI
 
 @main
 struct VegMealApp: App {
-    @StateObject var userStore = UserStore()
     @StateObject var networkingController = ApolloNetworkingController()
     @StateObject var groceryListController = GroceryListApolloController()
     @StateObject var mealListController = MealListApolloController()
     @StateObject var mealLogController = MealLogApolloController()
+    @StateObject var userController = UserApolloController()
 
     
     
     var body: some Scene {
         WindowGroup {
             Home()
-                .environmentObject(userStore)
                 .environmentObject(networkingController)
                 .environmentObject(groceryListController)
                 .environmentObject(mealListController)
                 .environmentObject(mealLogController)
-
+                .environmentObject(userController)
         }
     }
 }

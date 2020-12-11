@@ -5,6 +5,8 @@
 //  Created by Travis Gerrard on 9/30/20.
 //
 
+// Shows the options available when looking for ingredient or amount
+
 import SwiftUI
 
 struct OptionsList: View {
