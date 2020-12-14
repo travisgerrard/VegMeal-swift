@@ -34,7 +34,7 @@ class UserApolloController: ObservableObject {
     func getUserData() {
         self.getUserQueryRunning = true
         let query = CurrentUserQueryQuery()
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: isLogged ? .returnCacheDataElseFetch : .fetchIgnoringCacheCompletely) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.getUserQueryRunning = false
             
             switch result {
@@ -65,7 +65,7 @@ class UserApolloController: ObservableObject {
                 self.userid = userDetails.id
                 self.loggedInUser = userDetails
                 self.isLogged = true
-
+                self.getUsers()
             }
         }
     }
@@ -80,7 +80,7 @@ class UserApolloController: ObservableObject {
         self.getUsersQueryRunning = true
         let query = AllUsersQuery()
         
-        ApolloController.shared.apollo.fetch(query: query) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.getUsersQueryRunning = false
             
             switch result {
@@ -127,10 +127,7 @@ class UserApolloController: ObservableObject {
                     print(error)
                     return
                 }
-//                if let userToToggleFollowingIndex = self.otherUsers.firstIndex(where: {$0.id == id_to_change_following}) {
-//                    self.otherUsers[userToToggleFollowingIndex].isFollowing.toggle()
-//                    print(self.otherUsers[userToToggleFollowingIndex].isFollowing)
-//                }
+
             }
             
         }
@@ -157,11 +154,7 @@ class UserApolloController: ObservableObject {
                     print(error)
                     return
                 }
-//                if let userToToggleFollowingIndex = self.otherUsers.firstIndex(where: {$0.id == id_to_change_following}) {
-//                    self.otherUsers[userToToggleFollowingIndex].isFollowing.toggle()
-//                    print(self.otherUsers[userToToggleFollowingIndex].isFollowing)
-//                    
-//                }
+
             }
 
         }

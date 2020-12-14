@@ -141,7 +141,7 @@ struct ContentView: View {
             }
             
             if accountTap {
-                UserView()
+                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }
@@ -160,6 +160,7 @@ struct ContentView: View {
             mealIndex = nil
             favoriteTap = nil
             blur = false
+            accountTap = false
         }
     }
     
@@ -209,7 +210,6 @@ struct MealsHeaderView: View {
     
     // Add Meal Modal Showing
     @State private var showAddMealModal: Bool = false
-    @State private var showingAlert = false
     @State var showLogin = false
     @Binding var searchTap: Bool
     @Binding var accountTap: Bool
@@ -241,24 +241,7 @@ struct MealsHeaderView: View {
                         }
                         
                         // This was for when clicking user logged user out
-//                        Button(action: {self.showingAlert = true}) {
-//                            Image(systemName: "person.fill")
-//                                .font(.system(size: 16, weight: .medium))
-//                                .frame(width: 36, height: 36, alignment: .center)
-//                                .clipShape(Circle())
-//                                .padding(.leading)
-//                                .padding(.bottom)
-//                        }.alert(isPresented:$showingAlert) {
-//                            Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
-//
-//                                email = ""
-//                                userid = ""
-//                                isLogged = false
-//                                token = ""
-//
-//
-//                            }, secondaryButton: .cancel())
-//                        }
+                        
                         
                     } else {
                         Button(action: {showLogin.toggle()}) {

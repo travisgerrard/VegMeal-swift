@@ -106,8 +106,8 @@ struct AddMealView: View {
                     .fill(Color.secondary)
                     .frame(maxWidth: 175)
                     .frame(height: 225)
-                        OverLayText(name: name, description: description)
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .overlay(
+                        OverLayText(name: name, description: description), alignment: .bottom)                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                     .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
                     .padding(.horizontal, 30)
                     .padding(.bottom, 20)
@@ -180,7 +180,7 @@ struct AddMealView: View {
 
 struct AddMealView_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealView(isEditingMeal: true, url: URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg"), showModal: .constant(true))
+        AddMealView(isEditingMeal: false, url: URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg"), showModal: .constant(true))
             .environmentObject(ApolloNetworkingController())
     }
 }

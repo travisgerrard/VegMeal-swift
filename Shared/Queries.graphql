@@ -342,9 +342,9 @@ mutation UPDATE_MADE_MEAL($id: ID!, $thoughts: String, $dateMade: String) {
   }
 }
 
-query GET_MADE_MEALS($mealId: ID!, $authorId: ID!) {
+query GET_MADE_MEALS($ids: [ID!], $mealId: ID!) {
   allMadeMeals(
-    where: { author: { id: $authorId }, meal: { id: $mealId } }
+    where: { author: { id_in: $ids }, meal: { id: $mealId } }
     sortBy: dateMade_DESC
   ) {
     ...MadeMealFragment
@@ -355,6 +355,14 @@ fragment MadeMealFragment on MadeMeal {
     id
     dateMade
     thoughts
+      ingredientImage{
+        publicUrlTransformed
+      }
+      author{
+      id
+      name
+      email
+    }
 }
 
 query SINGLE_MEAL_UPDATE_QUERY($id: ID!) {

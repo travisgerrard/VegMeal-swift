@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MealLogView: View {
+    @EnvironmentObject var userController: UserApolloController
+    
     var mealId: String
     var authorId: String
     var dateFormatter: DateFormatter {
@@ -34,13 +36,15 @@ struct MealLogView: View {
                 }).padding(.trailing)
             }
             ForEach(self.mealLogController.mealLogList) { mealLog in
-                MealLog(id: mealLog.id, mealLogDate: dateFormatter.date(from: mealLog.dateMade!)!, thoughts: mealLog.thoughts ?? "Thoughts on meal and life?")
+                MealLog(mealLog: mealLog, id: mealLog.id, mealLogDate: dateFormatter.date(from: mealLog.dateMade!)!, thoughts: mealLog.thoughts ?? "Thoughts on meal and life?")
             }
             Spacer()
             
         }
         .onAppear {
-            mealLogController.getMealLogList(mealId: mealId, authorId: authorId)
+            mealLogController.getMealLogList(mealId: mealId, authorId: authorId, followers: self.userController.otherUsers.filter {
+                $0.isFollowing == true
+            })
         }
     }
 }
@@ -54,6 +58,8 @@ struct MealLog_Previews: PreviewProvider {
 
 struct MealLog: View {
     @EnvironmentObject var mealLogController: MealLogApolloController
+    let mealLog: MadeMealFragment
+    @AppStorage("userid") var userid = ""
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -79,6 +85,7 @@ struct MealLog: View {
                     
                     DatePicker(selection: $mealLogDate, in: ...Date(), displayedComponents: .date) {
                         Text("You made this meal on:")
+                        
                     }
                     Spacer()
                 }.padding()
@@ -135,18 +142,20 @@ struct MealLog: View {
         } else {
             VStack {
                 HStack {
-                    Text("You made this meal on: \(dateFormatter.string(from: mealLogDate))")
+                    Text("\((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!) made this meal on: \(dateFormatter.string(from: mealLogDate))")
                     Spacer()
                 }
                 if thoughts.count > 0 && thoughts != "Thoughts on meal and life?" {
                     VStack {
-                        HStack {
-                            Button("Edit Comment", action: {
-                                withAnimation(.spring()) {
-                                    self.isEditingMealLog.toggle()
-                                }
-                            })
-                            Spacer()
+                        if mealLog.author!.id == userid {
+                            HStack {
+                                Button("Edit Comment", action: {
+                                    withAnimation(.spring()) {
+                                        self.isEditingMealLog.toggle()
+                                    }
+                                })
+                                Spacer()
+                            }
                         }
                         VStack {
                             HStack {
@@ -168,15 +177,18 @@ struct MealLog: View {
                         .padding(.top, 5)
                     }
                 } else {
-                    HStack {
-                        Button("Write a Comment", action: {
-                            withAnimation(.spring()) {
-                                self.isEditingMealLog.toggle()
-                            }
-                        })
+                    if mealLog.author!.id == userid {
                         
-                        
-                        Spacer()
+                        HStack {
+                            Button("Write a Comment", action: {
+                                withAnimation(.spring()) {
+                                    self.isEditingMealLog.toggle()
+                                }
+                            })
+                            
+                            
+                            Spacer()
+                        }
                     }
                     
                 }

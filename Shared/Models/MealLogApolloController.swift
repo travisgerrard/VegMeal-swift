@@ -15,9 +15,16 @@ class MealLogApolloController: ObservableObject {
     @Published var mealLogListQueryRunning: Bool = false
     @Published var mealLogListQueryError: Error?
     
-    func getMealLogList(mealId: String, authorId: String) {
+    var arrayOfFollwerId: [String] = []
+    
+    func getMealLogList(mealId: String, authorId: String, followers: [OtherUser]) {
+        
+        for follower in followers {
+            arrayOfFollwerId.append(follower.id)
+        }
+        
         self.mealLogListQueryRunning = true
-        let query = GetMadeMealsQuery(mealId: mealId, authorId: authorId)
+        let query = GetMadeMealsQuery(ids: [authorId] + arrayOfFollwerId, mealId: mealId)
         ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
             self.mealLogListQueryRunning = false
             switch result {

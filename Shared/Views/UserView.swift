@@ -11,12 +11,20 @@ import SwiftUI
 
 struct UserView: View {
     @EnvironmentObject var userController: UserApolloController
+    let onClose: () -> ()
+    var pct: CGFloat
+    @State private var showingAlert = false
+    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("email") var email = ""
+    @AppStorage("userid") var userid = ""
+    @AppStorage("token") var token = ""
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Account").font(.largeTitle).fontWeight(.bold).padding()
                 Spacer()
+                CloseButton(onTap: onClose).opacity(Double(pct))
             }.background(Color.secondary).foregroundColor(.white)
             
             
@@ -36,24 +44,46 @@ struct UserView: View {
             } else {
                 ForEach(0 ..< userController.otherUsers.count) { index in
                     isFollowingToggle(otherUser: $userController.otherUsers[index], currentUser: self.userController.loggedInUser!)
-                    
-                    
                 }
                 
             }
-            
-            
-            
+
             Spacer()
             
             Button(action: {}) {
+                
+            }
+            Button(action: {self.showingAlert = true}) {
                 Text("Log Out")
                     .frame(maxWidth: .infinity).font(.title).padding()
+            }.alert(isPresented:$showingAlert) {
+                Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
+                    email = ""
+                    userid = ""
+                    isLogged = false
+                    token = ""
+                    onClose()
+                }, secondaryButton: .cancel())
             }
         }.onAppear{
-            userController.getUsersQueryRunning = true
-            userController.getUsers()
+//            userController.getUsersQueryRunning = true
+//            userController.getUsers()
         }.background(Color.white)
+
+    }
+    struct CloseButton: View {
+        var onTap: () -> Void
+        
+        var body: some View {
+            Image(systemName: "xmark.circle.fill")
+                .font(.title)
+                .foregroundColor(.secondary)
+                .padding(3)
+                .onTapGesture(perform: onTap)
+                .background(Color.white)
+                .clipShape(RectangleToCircle(cornerRadiusPercent: 20))
+                .padding(20)
+        }
     }
 }
 
@@ -64,35 +94,13 @@ struct isFollowingToggle: View {
     var currentUser: UserFragment
     
     var body: some View {
-        //        let bindingOn = Binding<Bool> (
-        //            get: { self.isToggleOn },
-        //            set: { newValue in
-        //                self.isToggleOn = newValue
-        //                if self.isToggleOn {
-        //                    userController.startFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
-        //                } else {
-        //                    userController.stopFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
-        //
-        //                }
-        //            }
-        //        )
-        
-//        return Toggle("\(otherUser.name): \(otherUser.email)", isOn: $otherUser.isFollowing)
-//            .padding()
-//            .onChange(of: otherUser.isFollowing) { value in
-//                if value {
-//                    print(value)
-//                    userController.startFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
-//                } else {
-//                    print("not printing value")
-//                    userController.stopFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
-//                }
-//            }
         Checkbox(id: otherUser.id, label: "\(otherUser.name): \(otherUser.email)", size: 22, callback: checkboxSelected, isMarked: $otherUser.isFollowing).padding()
         
     }
     
     func checkboxSelected(id: String, isMarked: Bool) {
+        // Since ismarked is bound to model, array of followers updates automatically, and below updates server with API call
+        // If there is an error in API call, that could be an issue.
         if isMarked {
             userController.startFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
         } else {
@@ -106,6 +114,8 @@ struct isFollowingToggle: View {
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
-        UserView()
+        UserView(onClose: {}, pct: 1)
+            .environmentObject(UserApolloController())
+
     }
 }

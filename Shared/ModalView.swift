@@ -153,7 +153,7 @@ struct ModalMod: AnimatableModifier {
                                 VStack {
                                     Divider().background(Color.black)
                                     MealLogView(mealId: meal.id, authorId: userId!)
-                                }.offset(y: -320).zIndex(9)
+                                }.offset(y: userId == meal.author!.id ? -320 : -9).zIndex(9)
                             }
                         }
                     }
