@@ -11,6 +11,7 @@ import Combine
 struct LoginView: View {
     @State var emailText = ""
     @State var password = ""
+    @State var nameText = ""
     @State var isFocused = false
     @State var showAlert = false
     @State var alertMessage = "Something went wrong"
@@ -20,6 +21,7 @@ struct LoginView: View {
     @State var show = false
     @State private var keyboardHeight: CGFloat = 0
     @Binding var showLogin: Bool
+    @State var isSignUp = false
     
     @AppStorage("isLogged") var isLogged = false
     @AppStorage("email") var email = ""
@@ -70,6 +72,33 @@ struct LoginView: View {
                 alertMessage = error.localizedDescription
                 print(error)
                 
+            }
+        }
+    }
+    
+    func signUp() {
+        hideKeyboard()
+        isFocused = false
+        isLoading = true
+        
+        ApolloController.shared.apollo.perform(mutation: SignupMutationMutation(email: emailText, name: nameText, password: password)) { result in
+            isLoading = false
+            
+            switch result {
+            case .success(let graphQLResult):
+                if let error = graphQLResult.errors?.first {
+                    if let message = error.message {
+                        showAlert = true
+                        alertMessage = message
+                    }
+                } else {
+                    login()
+                }
+                
+            case .failure(let error):
+                showAlert = true
+                alertMessage = error.localizedDescription
+                print(error)
             }
         }
     }
@@ -140,6 +169,30 @@ struct LoginView: View {
                                 })
                         }
                         
+                        if self.isSignUp {
+                            Divider().padding(.leading, 80)
+
+                            HStack {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
+                                    .frame(width: 44, height: 44)
+                                    .background(Color.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                    .shadow(color: Color.black.opacity(0.15), radius: 5, x: 0, y: 5 )
+                                    .padding(.leading)
+                                
+                                TextField("Your Name".uppercased(), text: $nameText)
+                                    .autocapitalization(.none)
+                                    .keyboardType(.emailAddress)
+                                    .font(.subheadline)
+                                    .padding(.leading)
+                                    .frame(height: 44)
+                                    .onTapGesture(count: 1, perform: {
+                                        isFocused = true
+                                    })
+                            }
+                        }
+                        
                         Divider().padding(.leading, 80)
                         
                         HStack {
@@ -161,7 +214,7 @@ struct LoginView: View {
                                 })
                         }
                     }
-                    .frame(height: 136)
+                    .frame(height: self.isSignUp ? 200 : 136)
                     .frame(maxWidth: 712)
                     .background(BlurView(style: .systemMaterial))
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
@@ -170,15 +223,25 @@ struct LoginView: View {
                     .offset(y: 250)
                     
                     HStack {
-                        Text("Forgot password?")
-                            .font(.subheadline)
+                        Button(action: {
+                            self.isSignUp.toggle()
+                        }, label: {
+                            Text("\(self.isSignUp ? "Log in" : "Sign up")")
+                                .font(.subheadline)
+                        })
+                       
                         
                         Spacer()
                         
                         Button(action: {
-                            login()
+                            if self.isSignUp {
+                                signUp()
+                            } else {
+                                login()
+                            }
+                            
                         }, label: {
-                            Text("Log in").foregroundColor(.black)
+                            Text(self.isSignUp ? "Sign up" : "Log in").foregroundColor(.black)
                         })
                         .padding(12)
                         .padding(.horizontal, 30)
@@ -195,7 +258,6 @@ struct LoginView: View {
             }
             .padding(.bottom, keyboardHeight)
             .onReceive(Publishers.keyboardHeight) { self.keyboardHeight = $0 }
-            
             .animation(.easeInOut)
             .onTapGesture(count: 1, perform: {
                 isFocused = false

@@ -16,8 +16,8 @@ class ApolloController {
     
     // Configure the network transport to use the singleton as the delegate.
     private lazy var networkTransport: HTTPNetworkTransport = {
-//        let transport = HTTPNetworkTransport(url: URL(string: "http://50.116.14.245:3001/admin/api")!)
-        let transport = HTTPNetworkTransport(url: URL(string: "http://localhost:3000/admin/api")!)
+        let transport = HTTPNetworkTransport(url: URL(string: "http://50.116.14.245:3001/admin/api")!)
+//        let transport = HTTPNetworkTransport(url: URL(string: "http://localhost:3000/admin/api")!)
         transport.delegate = self
         return transport
     }()
@@ -40,8 +40,8 @@ extension ApolloController: HTTPNetworkTransportPreflightDelegate {
         if UserDefaults.standard.bool(forKey: "isLogged") {
             // Get the existing headers, or create new ones if they're nil
             var headers = request.allHTTPHeaderFields ?? [String: String]()
-            print("Token!")
-            print(UserDefaults.standard.string(forKey: "token") ?? "")
+//            print("Token!")
+//            print(UserDefaults.standard.string(forKey: "token") ?? "")
 
             
             // Add any new headers you need

@@ -190,6 +190,7 @@ struct ContentView_Previews: PreviewProvider {
             .environmentObject(GroceryListApolloController())
             .environmentObject(MealListApolloController())
             .environmentObject(MealLogApolloController())
+            .environmentObject(UserApolloController())
     }
 }
 
@@ -245,12 +246,16 @@ struct MealsHeaderView: View {
                         
                     } else {
                         Button(action: {showLogin.toggle()}) {
-                            Image(systemName: "person")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(width: 36, height: 36, alignment: .center)
-                                .clipShape(Circle())
-                                .padding(.leading)
-                                .padding(.bottom)
+                            HStack(alignment: .center) {
+                                Image(systemName: "person")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(width: 26, height: 36, alignment: .center)
+                                    .clipShape(Circle())
+                                    .padding(.leading)
+                                    .padding(.bottom)
+                                Text("Login/SignUp").font(.system(size: 16, weight: .medium)).padding(.bottom)
+                            }
+                           
                         }.sheet(isPresented: $showLogin, onDismiss: {}) {
                             LoginView(showLogin: $showLogin)
                         }

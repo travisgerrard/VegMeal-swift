@@ -66,8 +66,8 @@ struct UserView: View {
                 }, secondaryButton: .cancel())
             }
         }.onAppear{
-//            userController.getUsersQueryRunning = true
-//            userController.getUsers()
+            userController.getUsersQueryRunning = true
+            userController.getUsers()
         }.background(Color.white)
 
     }
