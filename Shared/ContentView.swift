@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
@@ -44,11 +43,7 @@ struct ContentView: View {
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
     let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
     
-    func parse(object: MealFragment) -> String {
-        guard let mealImage = object.mealImage?.publicUrlTransformed else { return "" }
-        
-        return mealImage
-    }
+
     
     var body: some View {
         ZStack {
@@ -106,7 +101,8 @@ struct ContentView: View {
             //-------------------------------------------------------
             // Backdrop blurred view (zIndex = 3)
             //-------------------------------------------------------
-            BlurViewTwo(active: blur, onTap: dismissModal)
+//            BlurViewTwo(active: blur, onTap: dismissModal)
+            BlurViewTwo(active: blur, onTap: {})
                 .zIndex(3)
             
             //-------------------------------------------------------

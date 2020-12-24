@@ -10,17 +10,16 @@ import Combine
 
 struct SearchView: View {
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
+    @EnvironmentObject var searchMealController: SearchMealApolloController     //Get the networking controller from the environment objects.
 
     @AppStorage("isLogged") var isLogged = false
     @AppStorage("userid") var userid = ""
 
     @Namespace private var ns_grid // ids to match grid elements with modal
 
-    @State var searchMealList = [MealFragment]()
-    @State var searchText = ""
+    
     @Binding var shouldCloseView: Bool
     @State var isEditing: Bool = false
-    @State var searchQueryIsLoading: Bool = false
     
     @State private var shake = false
     @State private var blur: Bool = false
@@ -45,74 +44,60 @@ struct SearchView: View {
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
     let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
 
-    func searchForMeal() {
-        if isEditing && searchText.count > 0 {
-            searchQueryIsLoading = true
-
-            let query = SearchForMealsQuery(searchText: searchText)
-            
-            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
-
-                searchQueryIsLoading = false
-
-                switch result {
-                case .success(let graphQLResult):
-                    
-                    if let data = graphQLResult.data {
-                        if let allMeals = data.allMeals {
-                           
-                            searchMealList.removeAll()
-                            for meal in allMeals {
-                                searchMealList.append(meal!.fragments.mealFragment)
+    
+    var body: some View {
+        ZStack {
+            VStack {
+                HStack {
+                    SearchBar(
+                        text: self.$searchMealController.searchText,
+                        isEditing: self.$isEditing,
+                        listIsLoading: self.$searchMealController.searchQueryIsLoading,
+                        shouldCloseView: self.$shouldCloseView,
+                        placeHolder: "Search for meal"
+                    )
+                }.padding(.top)
+                ScrollView {
+                    if self.searchMealController.searchMealList.isEmpty {
+                        if self.searchMealController.searchText == "" {
+                            Text("Enter text in the search box to find a meal")
+                                .foregroundColor(.secondary).padding()
+                        } else {
+                            Text("No meals were found for \(self.searchMealController.searchText)")
+                                .foregroundColor(.secondary).padding()
+                        }
+                       
+                    } else {
+                        LazyVGrid(columns: [c], spacing: 20) {
+                            ForEach(self.searchMealController.searchMealList){ item in
+                                MealFragmentView(meal: item)
+                                    .onTapGesture(count: 1) {
+                                        hideKeyboard()
+                                        openModal(item, fromGrid: true)
+                                    }
+                                    .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
                             }
                         }
                     }
 
-                case .failure(let error):
-                    print(error)
                 }
             }
-            
-        } else {
-            searchMealList.removeAll()
-        }
-    }
-    
-    var body: some View {
-        ZStack{
-            VStack {
-                HStack {
-                    SearchBar(text: $searchText, isEditing: $isEditing, listIsLoading: $searchQueryIsLoading, shouldCloseView: $shouldCloseView, placeHolder: "Search for meal")
-                        .onChange(of: searchText, perform: { value in
-                            searchForMeal()
-                        }).background(Color.white)
-                }
-                ScrollView {
-                    LazyVGrid(columns: [c], spacing: 20) {
-                        ForEach(searchMealList){ item in
-                            MealFragmentView(meal: item)
-                                .onTapGesture(count: 1) {
-                                    hideKeyboard()
-                                    openModal(item, fromGrid: true)
-                                }
-                                .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
-                        }
-                    }
-                }
-                Spacer()
+            .toolbar {
+                
             }
+            .zIndex(11)
             
             //-------------------------------------------------------
             // Backdrop blurred view (zIndex = 3)
             //-------------------------------------------------------
             BlurViewTwo(active: blur, onTap: dismissModal)
-                .zIndex(3)
+                .zIndex(13)
             
             //-------------------------------------------------------
             // Modal View (zIndex = 4)
             //-------------------------------------------------------
             if mealTap != nil && mealIndex != nil || favoriteTap != nil {
-                ModalView(
+                 ModalView(
                     id: mealTap ?? favoriteTap!,
                     meal: self.$networkingController.meals[mealIndex!],
                     pct: flyFromGridToModal ? 1 : 0,
@@ -124,7 +109,7 @@ struct SearchView: View {
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
-                    .zIndex(4)
+                    .zIndex(14)
             }
         }
 
@@ -140,11 +125,10 @@ struct SearchView: View {
     }
     
     func openModal(_ item: MealFragment, fromGrid: Bool) {
-        
+
         if fromGrid {
             mealTap = item.id
             mealIndex = self.networkingController.meals.firstIndex(where: {$0.id == item.id})
-            
         } else {
             favoriteTap = item.id
         }

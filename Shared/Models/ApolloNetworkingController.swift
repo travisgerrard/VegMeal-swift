@@ -24,7 +24,7 @@ class ApolloNetworkingController: ObservableObject {
         self.mealsQueryRunning = true
         self.meals.removeAll()
         
-        let query = AllMealsQueryQuery(skip: 0, first: 50)
+        let query = AllMealsQueryQuery(skip: 0, first: 1000)
         ApolloController.shared.apollo.fetch(query: query) { (results) in
             self.mealsQueryRunning = false
             switch results {
@@ -86,6 +86,35 @@ class ApolloNetworkingController: ObservableObject {
         }
     }
     
+    // isUploadingImage is loader for adding meals...
+    func addNewMealWithoutImage(authorId: String, name: String, description: String) {
+        self.isUploadingImage = true
+
+        let mutation = CreateMealWithoutImageMutation(authorId: authorId, name: name, description: description)
+        ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            self.isUploadingImage = false
+
+            switch result {
+            case .failure(let error):
+                self.uploadImageError = error
+                
+            case .success(let graphQLResult):
+//                print("Success: \(graphQLResult)")
+                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
+                
+                self.meals.append(fragment)
+                self.shouldCloseAddUpdateMealScreen = true
+                self.shouldCloseAddUpdateMealScreen = true
+                
+                if let errors = graphQLResult.errors {
+                    print("Errors: \(errors)")
+                    let errorOne = errors[0]
+                    print(errorOne)
+                }
+            }
+        }
+    }
+    
     func updateMealWithImage(mealId: String, name: String, description: String, inputImage: UIImage) {
         self.uploadImageError = nil
         self.isUploadingImage = true
@@ -120,6 +149,7 @@ class ApolloNetworkingController: ObservableObject {
         }
     }
     
+
     func updateMeal(mealId: String, name: String, description: String) {
         let mutation = UpdateMealMutation(name: name, description: description, id: mealId)
         self.isUploadingImage = true
@@ -244,9 +274,9 @@ class ApolloNetworkingController: ObservableObject {
     
     @Published var addingMealToGroceryListIsLoading: Bool = false
     @Published var addingMealToGroceryListWasSuccess: Bool = false
-    
+
     // Add this function to the button press!
-    func addMealToGroceryList(mealId: String, userId: String) {
+    func addMealToGroceryList(mealId: String, userId: String, groceryListController: GroceryListApolloController, mealListController: MealListApolloController) {
         addingMealToGroceryListIsLoading = true
         
         let mutation = AddMealToGroceryListMutation(mealId: mealId, authorId: userId)
@@ -261,7 +291,8 @@ class ApolloNetworkingController: ObservableObject {
             
             case .success(let graphQLResult):
                 print("Success: \(graphQLResult)")
-                
+                groceryListController.getGroceryList(userId: userId)
+                mealListController.getMealList(userId: userId)
             }
             
         }

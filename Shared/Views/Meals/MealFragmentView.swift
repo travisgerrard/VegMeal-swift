@@ -17,7 +17,7 @@ struct MealFragmentView: View {
     //MARK: Computed Properties
     var body: some View {
         
-        KFImage(self.parse(object: self.meal),
+        KFImage(parse(object: self.meal),
                 options: [
                     .transition(.fade(0.2)),
                     .processor(
@@ -72,12 +72,11 @@ struct MealFragmentView: View {
         
     }
     
-    //MARK: Functions
-    func parse(object: MealFragment) -> URL {
-        guard let mealImage = object.mealImage?.publicUrlTransformed else { return URL(string: "")! }
-        
-        return URL(string: mealImage)!
-    }
+
 }
 
-
+//MARK: Functions
+func parse(object: MealFragment) -> URL {
+    guard let mealImage = object.mealImage?.publicUrlTransformed else { return URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1598621202/veggily/5f490612c53b900a6dcdc484.png")! }
+    return URL(string: mealImage)!
+}

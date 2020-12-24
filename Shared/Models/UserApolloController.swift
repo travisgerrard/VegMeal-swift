@@ -106,6 +106,14 @@ class UserApolloController: ObservableObject {
         }
     }
     
+    func logUserOut() {
+        email = ""
+        userid = ""
+        isLogged = false
+        token = ""
+        loggedInUser = nil
+    }
+    
     @Published var startFollowingMutationRunning: Bool = false
     @Published var startFollowingMutationError: Error?
     

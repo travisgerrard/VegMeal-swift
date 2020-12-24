@@ -23,7 +23,7 @@ struct GroceryListView: View {
     @State var groceryListIndex = 999
     
     @State var sectionName = ""
-    
+        
     var options = [
         0: "none",
         1: "produce",
@@ -44,70 +44,63 @@ struct GroceryListView: View {
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }
-//    
-//    func toCompleteListView(groceryListItem: GroceryListFragment) -> some View {
-//        
-//        return  VStack {
-//            HStack {
-//                Text("\(options[(groceryListItem.ingredient?.category)!] ?? "no value")").font(.title3)
-//            }
-//        }
-//    }
     
     var body: some View {
+
         if isLogged {
             ZStack {
                 VStack {
                     NavigationView {
                         List {
-                            ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
-                                
-//                                // Updates the section heading
-//                                if i == 0 || i > 0 && self.groceryListController.groceryList[i].ingredient?.category != self.groceryListController.groceryList[i-1].ingredient?.category {
-//
-////                                    self.toCompleteListView(groceryListItem: self.groceryListController.groceryList[i])
-//                                }
-                                
-                                Section(header: Text("\(options[(self.groceryListController.groceryList[i].ingredient?.category)!] ?? "no value")")) {
-                                    
-                                    HStack {
-                                        Button(action: {
-                                        }) {
-                                            Circle()
-                                                .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
-                                                .frame(width: 32, height: 32)
-                                                .padding(.trailing, 3)
+                            ForEach(0..<11) { index in
+                                // If the current grocery list has an ingredient with specific category, show catergory as seciton header
+                                if self.groceryListController.groceryList.contains(where: {$0.ingredient?.category == index}) {
+                                    Section(header: Text("\(options[index] ?? "no value")")) {
+                                        ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
+                                            if self.groceryListController.groceryList[i].ingredient?.category == index {
+                                                HStack {
+                                                    Button(action: {
+                                                    }) {
+                                                        Circle()
+                                                            .strokeBorder(Color.black.opacity(0.6),lineWidth: 1)
+                                                            .frame(width: 32, height: 32)
+                                                            .padding(.trailing, 3)
+                                                    }
+                                                    .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
+                                                                .onChanged { _ in
+                                                                    completeIsPressed = true
+                                                                }
+                                                                .onEnded { _ in
+                                                                    self.groceryListController.completeGroceryListItem(id: self.groceryListController.groceryList[i].id)
+                                                                    completeIsPressed = false
+                                                                }
+                                                    )
+                                                    
+                                                    Text("\(self.groceryListController.groceryList[i].ingredient?.name ?? "No ingredient") - \(self.groceryListController.groceryList[i].amount?.name ?? "No amount")")
+                                                    Spacer()
+                                                    Button(action: {
+                                                    }) {
+                                                        Image(systemName: "trash")
+                                                            .font(.system(size: 17, weight: .bold))
+                                                            .foregroundColor(.white)
+                                                            .padding(.all, 10)
+                                                            .background(Color.black.opacity(0.6))
+                                                            .clipShape(Circle())
+                                                    }
+                                                    .gesture(TapGesture()
+                                                                .onEnded {
+                                                                    self.groceryListController.deleteGroceryListItem(id: self.groceryListController.groceryList[i].id)
+                                                                }
+                                                    )
+                                                    
+                                                }
+                                            }
                                         }
-                                        .gesture(DragGesture(minimumDistance: 0.0, coordinateSpace: .global)
-                                                    .onChanged { _ in
-                                                        completeIsPressed = true
-                                                    }
-                                                    .onEnded { _ in
-                                                        self.groceryListController.completeGroceryListItem(id: self.groceryListController.groceryList[i].id)
-                                                        completeIsPressed = false
-                                                    }
-                                        )
-                                        
-                                        Text("\(self.groceryListController.groceryList[i].ingredient?.name ?? "No ingredient") - \(self.groceryListController.groceryList[i].amount?.name ?? "No amount")")
-                                        Spacer()
-                                        Button(action: {
-                                        }) {
-                                            Image(systemName: "trash")
-                                                .font(.system(size: 17, weight: .bold))
-                                                .foregroundColor(.white)
-                                                .padding(.all, 10)
-                                                .background(Color.black.opacity(0.6))
-                                                .clipShape(Circle())
-                                        }
-                                        .gesture(TapGesture()
-                                                    .onEnded {
-                                                        self.groceryListController.deleteGroceryListItem(id: self.groceryListController.groceryList[i].id)
-                                                    }
-                                        )
-                                        
                                     }
                                 }
+
                             }
+                          
                             Section(header: Text("Completed")) {
                                 ForEach(self.groceryListController.completedGroceryList) {grocery in
                                     HStack {
@@ -235,7 +228,7 @@ struct GroceryListView: View {
                 .edgesIgnoringSafeArea(.all)
             }
         } else {
-            Text("Please log in or create an account")
+            LoginInCreateAccountPromt()
         }
         
         

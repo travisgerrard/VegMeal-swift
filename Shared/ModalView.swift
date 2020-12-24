@@ -15,7 +15,7 @@ struct ModalView: View {
     var pct: CGFloat
     var flyingFromGrid: Bool
     var userId: String? = nil
-    
+        
     let onClose: () -> ()
     
     var body: some View {
@@ -27,7 +27,9 @@ struct ModalView: View {
 
 struct ModalMod: AnimatableModifier {
     @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
-    
+    @EnvironmentObject var groceryListController: GroceryListApolloController
+    @EnvironmentObject var mealListController: MealListApolloController
+
     
     @Environment(\.colorScheme) var scheme
     
@@ -44,26 +46,23 @@ struct ModalMod: AnimatableModifier {
     @State var isAddIngredientsOpen = false
     let onClose: () -> ()
     @State private var showEditMealModal: Bool = false
+    @State var showingMealAddedAlert: Bool = false
+    @State var addMealAgainAlert: Bool = false
 
     var animatableData: CGFloat {
         get { pct }
         set { pct = newValue }
     }
     
-    func parse(object: MealFragment) -> URL {
-        guard let mealImage = object.mealImage?.publicUrlTransformed else { return URL(string: "")! }
-        
-        return URL(string: mealImage)!
-    }
+
     
     
     func body(content: Content) -> some View {
-        
         return GeometryReader { proxy in
             ZStack {
                 ScrollView {
                     VStack {
-                        KFImage(self.parse(object: meal),
+                        KFImage(parse(object: meal),
                                 options: [
                                     .transition(.fade(0.2)),
                                     .processor(
@@ -108,15 +107,30 @@ struct ModalMod: AnimatableModifier {
                                     }
                                     HStack {
                                         if userId != nil {
-                                            Button("Add To Grocery List", action: {
-                                                self.networkingController.addMealToGroceryList(mealId: meal.id, userId: userId!)
-                                            })
-                                            .font(.callout)
-                                            .padding(.leading)
-                                            .padding(.bottom)
+                                            if self.mealListController.mealList.contains(where: { $0.meal.id == meal.id }) {
+                                                Button("On Grocery List", action: {
+                                                    addMealAgainAlert.toggle()
+                                                })
+                                                .font(.callout)
+                                                .padding(.leading)
+                                                .padding(.bottom)
+                                                
+
+                                            } else {
+                                                Button("Add To Grocery List", action: {
+                                                    self.networkingController.addMealToGroceryList(mealId: meal.id, userId: userId!, groceryListController: self.groceryListController, mealListController: self.mealListController)
+                                                    
+                                                })
+                                                .font(.callout)
+                                                .padding(.leading)
+                                                .padding(.bottom)
+                                                
+                                            }
                                         }
                                         if self.networkingController.addingMealToGroceryListIsLoading {
-                                            ProgressView()
+                                            ProgressView().onDisappear {
+                                                showingMealAddedAlert.toggle()
+                                            }
                                         }
                                         Spacer()
                                         if userId != nil ? userId == meal.author!.id : false {
@@ -125,7 +139,7 @@ struct ModalMod: AnimatableModifier {
                                                 .padding(.trailing)
                                                 .padding(.bottom)
                                                 .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
-                                                    AddMealView(isEditingMeal: true, url: self.parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!, showModal: self.$showEditMealModal)
+                                                    AddMealView(isEditingMeal: true, url: parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!, showModal: self.$showEditMealModal)
                                                         .environmentObject(self.networkingController)
                                                 }
                                         }
@@ -140,6 +154,10 @@ struct ModalMod: AnimatableModifier {
                         
                         
                     }
+                    .alert(isPresented: $showingMealAddedAlert) {
+                        Alert(title: Text("Meal added"), message: Text("Meal added to planner and ingredients added to grocery list"), dismissButton: .default(Text("Got it!")))
+                    }
+                    
                     
                     ListOfIngredients(ingredientList: $meal.ingredientList, didCreateMeal:  (userId != nil ? userId == meal.author!.id : false), mealId: meal.id)
                     
@@ -157,11 +175,17 @@ struct ModalMod: AnimatableModifier {
                             }
                         }
                     }
+                    .alert(isPresented: $addMealAgainAlert) {
+                        Alert(title: Text("Are you sure?"), message: Text("Are you sure you want to add thsi meal to your planner multiple times?"), primaryButton: .default(Text("Yes")) {
+                            self.networkingController.addMealToGroceryList(mealId: meal.id, userId: userId!, groceryListController: self.groceryListController, mealListController: self.mealListController)
+                        }, secondaryButton: .cancel())
+                    }
                     
                     
                 }
                 .overlay(CloseButton(onTap: onClose).opacity(Double(pct)), alignment: .topTrailing)
                 .edgesIgnoringSafeArea(.all)
+                
             }
         }
     }
@@ -221,6 +245,9 @@ struct ModalView_Previews: PreviewProvider {
                                                                                 )])), pct: 1, flyingFromGrid: true, userId: "5f4c7b0cf818ca3c74eb7d6b", onClose: {})
             .environmentObject(ApolloNetworkingController())
             .environmentObject(MealLogApolloController())
+            .environmentObject(GroceryListApolloController())
+            .environmentObject(MealListApolloController())
+
     }
 }
 

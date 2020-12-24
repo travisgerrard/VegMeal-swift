@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UIKit
-import SDWebImageSwiftUI
 
 
 @main
@@ -17,6 +16,7 @@ struct VegMealApp: App {
     @StateObject var mealListController = MealListApolloController()
     @StateObject var mealLogController = MealLogApolloController()
     @StateObject var userController = UserApolloController()
+    @StateObject var searchMealController = SearchMealApolloController()
 
     
     
@@ -28,6 +28,8 @@ struct VegMealApp: App {
                 .environmentObject(mealListController)
                 .environmentObject(mealLogController)
                 .environmentObject(userController)
+                .environmentObject(searchMealController)
+
         }
     }
 }

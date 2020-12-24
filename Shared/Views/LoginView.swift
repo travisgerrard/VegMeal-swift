@@ -27,6 +27,8 @@ struct LoginView: View {
     @AppStorage("email") var email = ""
     @AppStorage("userid") var userid = ""
     @AppStorage("token") var token = ""
+    @EnvironmentObject var userController: UserApolloController
+
     
     func login() {
         hideKeyboard()
@@ -56,6 +58,7 @@ struct LoginView: View {
                             emailText = ""
                             password = ""
                             showLogin = false
+                            self.userController.getUserData()
                         }
                         
                     }
@@ -273,7 +276,7 @@ struct LoginView: View {
                     .font(.title).bold()
                     .opacity(show ? 1 : 0)
                     .animation(Animation.linear(duration: 1).delay(0.2))
-                    .padding(.top, 30)
+                    .padding()
                     .background(BlurView(style: .systemMaterial))
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                     .shadow(color: Color.black.opacity(0.2), radius: 30, x: 0, y:30)

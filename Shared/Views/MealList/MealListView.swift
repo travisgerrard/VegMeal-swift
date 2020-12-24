@@ -43,11 +43,6 @@ struct MealListView: View {
     
     
     //MARK: Functions
-    func parse(object: MealFragment) -> URL {
-        guard let mealImage = object.mealImage?.publicUrlTransformed else { return URL(string: "")! }
-        
-        return URL(string: mealImage)!
-    }
     
     var body: some View {
         if isLogged {
@@ -75,7 +70,7 @@ struct MealListView: View {
                                         )
                                         
                                         HStack {
-                                            KFImage(self.parse(object: item.meal),
+                                            KFImage(parse(object: item.meal),
                                                     options: [
                                                         .transition(.fade(0.2)),
                                                         .processor(
@@ -147,7 +142,7 @@ struct MealListView: View {
                                         )
                                         
                                         HStack {
-                                            KFImage(self.parse(object: item.meal),
+                                            KFImage(parse(object: item.meal),
                                                     options: [
                                                         .transition(.fade(0.2)),
                                                         .processor(
@@ -260,8 +255,7 @@ struct MealListView: View {
                 }
             }
         } else {
-            Text("Please log in or create an account")
-            
+            LoginInCreateAccountPromt()
         }
         
     }

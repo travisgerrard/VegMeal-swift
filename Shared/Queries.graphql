@@ -40,6 +40,22 @@ mutation CREATE_MEAL(
   }
 }
 
+mutation CREATE_MEAL_WITHOUT_IMAGE(
+  $authorId: ID!
+  $name: String
+  $description: String
+) {
+  createMeal(
+    data: {
+      name: $name
+      description: $description
+      author: { connect: { id: $authorId } }
+    }
+  ) {
+    ...MealFragment
+  }
+}
+
 mutation UPDATE_MEAL($name: String, $description: String, $id: ID!) {
   updateMeal(id: $id, data: { name: $name, description: $description }) {
     ...MealFragment

@@ -14,78 +14,70 @@ struct UserView: View {
     let onClose: () -> ()
     var pct: CGFloat
     @State private var showingAlert = false
-    @AppStorage("isLogged") var isLogged = false
-    @AppStorage("email") var email = ""
-    @AppStorage("userid") var userid = ""
-    @AppStorage("token") var token = ""
+    
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("Account").font(.largeTitle).fontWeight(.bold).padding()
-                Spacer()
-                CloseButton(onTap: onClose).opacity(Double(pct))
-            }.background(Color.secondary).foregroundColor(.white)
-            
-            
-            Text("\(userController.loggedInUser?.name ?? "No name")").font(.largeTitle).padding(.horizontal)
-            Text("\(userController.loggedInUser?.email ?? "No email")").font(.title).padding(.horizontal).foregroundColor(.gray)
-            
-            
-            HStack {
-                Text("Following").font(.largeTitle).fontWeight(.bold).padding()
-                Spacer()
-            }.background(Color.secondary).foregroundColor(.white)
-            
-            if userController.getUsersQueryRunning {
-                ProgressView()
-                    .padding(.leading)
-                    .padding(.bottom)
-            } else {
-                ForEach(0 ..< userController.otherUsers.count) { index in
-                    isFollowingToggle(otherUser: $userController.otherUsers[index], currentUser: self.userController.loggedInUser!)
-                }
-                
-            }
 
-            Spacer()
-            
-            Button(action: {}) {
-                
-            }
-            Button(action: {self.showingAlert = true}) {
-                Text("Log Out")
-                    .frame(maxWidth: .infinity).font(.title).padding()
-            }.alert(isPresented:$showingAlert) {
-                Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
-                    email = ""
-                    userid = ""
-                    isLogged = false
-                    token = ""
-                    onClose()
-                }, secondaryButton: .cancel())
-            }
-        }.onAppear{
-            userController.getUsersQueryRunning = true
-            userController.getUsers()
-        }.background(Color.white)
-
-    }
-    struct CloseButton: View {
-        var onTap: () -> Void
         
-        var body: some View {
-            Image(systemName: "xmark.circle.fill")
-                .font(.title)
-                .foregroundColor(.secondary)
-                .padding(3)
-                .onTapGesture(perform: onTap)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Account").font(.largeTitle).fontWeight(.bold).padding()
+                        Spacer()
+                        CloseButton().onTapGesture {
+                            onClose()
+                        }.padding(.trailing)
+                    }.background(Color.secondary).foregroundColor(.white)
+        
+                    Text("\(userController.loggedInUser?.name ?? "No name")").font(.largeTitle).padding(.horizontal)
+                    Text("\(userController.loggedInUser?.email ?? "No email")").font(.title).padding(.horizontal).foregroundColor(.gray)
+        
+        
+                    HStack {
+                        Text("Following").font(.largeTitle).fontWeight(.bold).padding()
+                        Spacer()
+                    }.background(Color.secondary).foregroundColor(.white)
+        
+                    if userController.getUsersQueryRunning {
+                        ProgressView()
+                            .padding(.leading)
+                            .padding(.bottom)
+                    } else {
+                        if self.userController.loggedInUser != nil {
+        
+                            ForEach(0 ..< userController.otherUsers.count) { index in
+                                isFollowingToggle(otherUser: $userController.otherUsers[index], currentUser: self.userController.loggedInUser!)
+                            }
+                        }
+                    }
+        
+                    Spacer()
+        
+                    HStack {
+                        Button(action: {self.showingAlert.toggle()}) {
+                            Text("Log Out")
+                                .frame(maxWidth: .infinity).font(.title).padding(.bottom, 50).accentColor(.red)
+                        }
+                    }
+        
+        
+                }.onAppear{
+                    userController.getUsersQueryRunning = true
+                    userController.getUsers()
+                }
                 .background(Color.white)
-                .clipShape(RectangleToCircle(cornerRadiusPercent: 20))
-                .padding(20)
-        }
+                .alert(isPresented:$showingAlert) {
+                    Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
+        
+                        self.userController.logUserOut()
+                        onClose()
+        
+                    }, secondaryButton: .cancel())
+                }
+        
     }
+    
 }
+
 
 struct isFollowingToggle: View {
     @EnvironmentObject var userController: UserApolloController
@@ -114,8 +106,8 @@ struct isFollowingToggle: View {
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
-        UserView(onClose: {}, pct: 1)
+        UserView(onClose: {print("Huh?")}, pct: 1)
             .environmentObject(UserApolloController())
-
+        
     }
 }
