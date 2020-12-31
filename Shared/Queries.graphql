@@ -135,6 +135,7 @@ query GET_GROCERY_LIST($id: ID!) {
   }
   groceryCompleted: allGroceryLists(
     where: { author: { id: $id }, isCompleted: true }
+    sortBy: dateCompleted_DESC
   ) {
     ...GroceryListFragment
   }
@@ -160,6 +161,10 @@ fragment GroceryListFragment on GroceryList {
       category
     }
     amount {
+      id
+      name
+    }
+    meal {
       id
       name
     }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		350266F4259D18DE00818CFB /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 350266F3259D18DE00818CFB /* schema.json */; };
+		350266F5259D18DE00818CFB /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 350266F3259D18DE00818CFB /* schema.json */; };
 		3516A51B2513D30D002C97DA /* ListOfMealIngredients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */; };
 		3516A51C2513D30D002C97DA /* ListOfMealIngredients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */; };
 		351C8B43258087D000ED6DBA /* UserApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351C8B42258087D000ED6DBA /* UserApolloController.swift */; };
@@ -17,8 +19,6 @@
 		3527FEEC2583AFF5003176AA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3527FEEA2583AFF5003176AA /* Checkbox.swift */; };
 		3539132525372E7300CDFF6A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3539132425372E7300CDFF6A /* API.swift */; };
 		3539132625372E7300CDFF6A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3539132425372E7300CDFF6A /* API.swift */; };
-		3539132E25372F2200CDFF6A /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 3539132D25372F2200CDFF6A /* schema.json */; };
-		3539132F25372F2200CDFF6A /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 3539132D25372F2200CDFF6A /* schema.json */; };
 		35701D1F25032CEC005AA8C6 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D1E25032CEC005AA8C6 /* CloseButton.swift */; };
 		35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D1E25032CEC005AA8C6 /* CloseButton.swift */; };
 		35701D2825066412005AA8C6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D2725066412005AA8C6 /* LoginView.swift */; };
@@ -58,6 +58,12 @@
 		35AC560B25912B37004765A2 /* veggilyWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 35AC55FA25912B36004765A2 /* veggilyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		35AC56A52594FDBF004765A2 /* LoginInCreateAccountPromt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56A42594FDBF004765A2 /* LoginInCreateAccountPromt.swift */; };
 		35AC56A62594FDBF004765A2 /* LoginInCreateAccountPromt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56A42594FDBF004765A2 /* LoginInCreateAccountPromt.swift */; };
+		35AC56B325957A51004765A2 /* VeggilyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56B125957A51004765A2 /* VeggilyModel.xcdatamodeld */; };
+		35AC56B425957A51004765A2 /* VeggilyModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56B125957A51004765A2 /* VeggilyModel.xcdatamodeld */; };
+		35AC56B92595A0E2004765A2 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56B82595A0E2004765A2 /* DataController.swift */; };
+		35AC56BA2595A0E2004765A2 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56B82595A0E2004765A2 /* DataController.swift */; };
+		35AC56BF2595A435004765A2 /* ApolloCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56BE2595A435004765A2 /* ApolloCoreData.swift */; };
+		35AC56C02595A435004765A2 /* ApolloCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC56BE2595A435004765A2 /* ApolloCoreData.swift */; };
 		35BA386024F01A1E00489DA1 /* Queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 35BA385F24F01A1E00489DA1 /* Queries.graphql */; };
 		35BA386124F01A1E00489DA1 /* Queries.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 35BA385F24F01A1E00489DA1 /* Queries.graphql */; };
 		35BEEB1D250986B1003EAADD /* AddMealView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BEEB1C250986B1003EAADD /* AddMealView.swift */; };
@@ -130,12 +136,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		350266F3259D18DE00818CFB /* schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
 		3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfMealIngredients.swift; sourceTree = "<group>"; };
 		351C8B42258087D000ED6DBA /* UserApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApolloController.swift; sourceTree = "<group>"; };
 		351C8B4B2581497500ED6DBA /* UserFragment_Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFragment_Extention.swift; sourceTree = "<group>"; };
 		3527FEEA2583AFF5003176AA /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
 		3539132425372E7300CDFF6A /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
-		3539132D25372F2200CDFF6A /* schema.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
 		35701D1E25032CEC005AA8C6 /* CloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
 		35701D2725066412005AA8C6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		35701D2D250666D4005AA8C6 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -163,6 +169,9 @@
 		35AC560425912B37004765A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35AC560625912B37004765A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35AC56A42594FDBF004765A2 /* LoginInCreateAccountPromt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInCreateAccountPromt.swift; sourceTree = "<group>"; };
+		35AC56B225957A51004765A2 /* VeggilyModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VeggilyModel.xcdatamodel; sourceTree = "<group>"; };
+		35AC56B82595A0E2004765A2 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		35AC56BE2595A435004765A2 /* ApolloCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloCoreData.swift; sourceTree = "<group>"; };
 		35BA385F24F01A1E00489DA1 /* Queries.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = Queries.graphql; sourceTree = "<group>"; };
 		35BEEB1C250986B1003EAADD /* AddMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealView.swift; sourceTree = "<group>"; };
 		35D0A067251294E500D39895 /* ApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloController.swift; sourceTree = "<group>"; };
@@ -227,12 +236,10 @@
 				35EB46BC2514065E006230D4 /* GroceryList */,
 				35BEEB1C250986B1003EAADD /* AddMealView.swift */,
 				35701D2725066412005AA8C6 /* LoginView.swift */,
-				35701D1E25032CEC005AA8C6 /* CloseButton.swift */,
-				35F9E057250036E100F752AD /* BlurView.swift */,
+				35AC56AA2594FF4B004765A2 /* SharedViews */,
 				3516A5112513D28D002C97DA /* Meal */,
 				3516A5102513D275002C97DA /* Meals */,
 				35973330257E6B5A0028FC95 /* UserView.swift */,
-				35AC56A42594FDBF004765A2 /* LoginInCreateAccountPromt.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -291,11 +298,14 @@
 				35F62E0A252523BE00AE5274 /* AddIngredients.swift */,
 				35F62E0F2525262B00AE5274 /* OptionsList.swift */,
 				35F62DFC2524E39000AE5274 /* RectangleToCircle.swift */,
-				3539132D25372F2200CDFF6A /* schema.json */,
 				35BA385F24F01A1E00489DA1 /* Queries.graphql */,
+				350266F3259D18DE00818CFB /* schema.json */,
 				3539132425372E7300CDFF6A /* API.swift */,
 				35897EEC24F011A900397A4C /* Assets.xcassets */,
 				3527FEEA2583AFF5003176AA /* Checkbox.swift */,
+				35AC56B125957A51004765A2 /* VeggilyModel.xcdatamodeld */,
+				35AC56B82595A0E2004765A2 /* DataController.swift */,
+				35AC56BE2595A435004765A2 /* ApolloCoreData.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -360,6 +370,16 @@
 				35AC560625912B37004765A2 /* Info.plist */,
 			);
 			path = veggilyWidget;
+			sourceTree = "<group>";
+		};
+		35AC56AA2594FF4B004765A2 /* SharedViews */ = {
+			isa = PBXGroup;
+			children = (
+				35701D1E25032CEC005AA8C6 /* CloseButton.swift */,
+				35F9E057250036E100F752AD /* BlurView.swift */,
+				35AC56A42594FDBF004765A2 /* LoginInCreateAccountPromt.swift */,
+			);
+			path = SharedViews;
 			sourceTree = "<group>";
 		};
 		35D0A066251294D600D39895 /* Networking */ = {
@@ -521,8 +541,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3539132E25372F2200CDFF6A /* schema.json in Resources */,
 				35BA386024F01A1E00489DA1 /* Queries.graphql in Resources */,
+				350266F4259D18DE00818CFB /* schema.json in Resources */,
 				35897F0124F011A900397A4C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,8 +551,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3539132F25372F2200CDFF6A /* schema.json in Resources */,
 				35BA386124F01A1E00489DA1 /* Queries.graphql in Resources */,
+				350266F5259D18DE00818CFB /* schema.json in Resources */,
 				35897F0224F011A900397A4C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -575,10 +595,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35AC56B325957A51004765A2 /* VeggilyModel.xcdatamodeld in Sources */,
 				35897EFF24F011A900397A4C /* ContentView.swift in Sources */,
 				35BEEB1D250986B1003EAADD /* AddMealView.swift in Sources */,
 				35D0A07525129F3800D39895 /* ApolloNetworkingController.swift in Sources */,
 				35973331257E6B5A0028FC95 /* UserView.swift in Sources */,
+				35AC56BF2595A435004765A2 /* ApolloCoreData.swift in Sources */,
 				35EB46CC251414FC006230D4 /* AddToGroceryListView.swift in Sources */,
 				35F62E042524F01C00AE5274 /* ListOfIngredients.swift in Sources */,
 				35EB46FE251BC5ED006230D4 /* MealLogView.swift in Sources */,
@@ -617,6 +639,7 @@
 				35F62DF82524DDE300AE5274 /* EnvironmentValues.swift in Sources */,
 				35840CE32528AA7E003D4B81 /* CGSize+Random.swift in Sources */,
 				35F9E05224FFCF0C00F752AD /* AsyncImage.swift in Sources */,
+				35AC56B92595A0E2004765A2 /* DataController.swift in Sources */,
 				35F9E05424FFD35000F752AD /* ImageCache.swift in Sources */,
 				35897EFD24F011A900397A4C /* VegMealApp.swift in Sources */,
 			);
@@ -627,10 +650,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				35897F0024F011A900397A4C /* ContentView.swift in Sources */,
+				35AC56C02595A435004765A2 /* ApolloCoreData.swift in Sources */,
 				358EBA70258F932600BCD907 /* SearchMealApolloController.swift in Sources */,
 				351C8B44258087D000ED6DBA /* UserApolloController.swift in Sources */,
 				35EB46FF251BC5ED006230D4 /* MealLogView.swift in Sources */,
 				3516A51C2513D30D002C97DA /* ListOfMealIngredients.swift in Sources */,
+				35AC56BA2595A0E2004765A2 /* DataController.swift in Sources */,
 				35EB46CD251414FC006230D4 /* AddToGroceryListView.swift in Sources */,
 				357160C5252E3BB100A5305F /* SearchBar.swift in Sources */,
 				35EB46E4251B8202006230D4 /* MealListView.swift in Sources */,
@@ -659,6 +684,7 @@
 				35F62DFE2524E39000AE5274 /* RectangleToCircle.swift in Sources */,
 				35701D2F250666D4005AA8C6 /* Home.swift in Sources */,
 				359CD0B72512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */,
+				35AC56B425957A51004765A2 /* VeggilyModel.xcdatamodeld in Sources */,
 				35EB46EB251BA6FF006230D4 /* MealListApolloController.swift in Sources */,
 				35EB46F6251BA952006230D4 /* MealListFragment_Extention.swift in Sources */,
 				35897EFE24F011A900397A4C /* VegMealApp.swift in Sources */,
@@ -1018,6 +1044,19 @@
 			productName = KingfisherSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		35AC56B125957A51004765A2 /* VeggilyModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				35AC56B225957A51004765A2 /* VeggilyModel.xcdatamodel */,
+			);
+			currentVersion = 35AC56B225957A51004765A2 /* VeggilyModel.xcdatamodel */;
+			path = VeggilyModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 35897EE524F011A800397A4C /* Project object */;
 }

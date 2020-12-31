@@ -1232,7 +1232,7 @@ public final class GetGroceryListQuery: GraphQLQuery {
         __typename
         ...GroceryListFragment
       }
-      groceryCompleted: allGroceryLists(where: {author: {id: $id}, isCompleted: true}) {
+      groceryCompleted: allGroceryLists(where: {author: {id: $id}, isCompleted: true}, sortBy: dateCompleted_DESC) {
         __typename
         ...GroceryListFragment
       }
@@ -1259,7 +1259,7 @@ public final class GetGroceryListQuery: GraphQLQuery {
     public static var selections: [GraphQLSelection] {
       return [
         GraphQLField("allGroceryLists", alias: "groceryToComplete", arguments: ["where": ["author": ["id": GraphQLVariable("id")], "isCompleted": false]], type: .list(.object(GroceryToComplete.selections))),
-        GraphQLField("allGroceryLists", alias: "groceryCompleted", arguments: ["where": ["author": ["id": GraphQLVariable("id")], "isCompleted": true]], type: .list(.object(GroceryCompleted.selections))),
+        GraphQLField("allGroceryLists", alias: "groceryCompleted", arguments: ["where": ["author": ["id": GraphQLVariable("id")], "isCompleted": true], "sortBy": "dateCompleted_DESC"], type: .list(.object(GroceryCompleted.selections))),
       ]
     }
 
@@ -5366,6 +5366,11 @@ public struct GroceryListFragment: GraphQLFragment {
         id
         name
       }
+      meal {
+        __typename
+        id
+        name
+      }
       isCompleted
       dateCompleted
     }
@@ -5379,6 +5384,7 @@ public struct GroceryListFragment: GraphQLFragment {
       GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
       GraphQLField("ingredient", type: .object(Ingredient.selections)),
       GraphQLField("amount", type: .object(Amount.selections)),
+      GraphQLField("meal", type: .object(Meal.selections)),
       GraphQLField("isCompleted", type: .scalar(Bool.self)),
       GraphQLField("dateCompleted", type: .scalar(String.self)),
     ]
@@ -5390,8 +5396,8 @@ public struct GroceryListFragment: GraphQLFragment {
     self.resultMap = unsafeResultMap
   }
 
-  public init(id: GraphQLID, ingredient: Ingredient? = nil, amount: Amount? = nil, isCompleted: Bool? = nil, dateCompleted: String? = nil) {
-    self.init(unsafeResultMap: ["__typename": "GroceryList", "id": id, "ingredient": ingredient.flatMap { (value: Ingredient) -> ResultMap in value.resultMap }, "amount": amount.flatMap { (value: Amount) -> ResultMap in value.resultMap }, "isCompleted": isCompleted, "dateCompleted": dateCompleted])
+  public init(id: GraphQLID, ingredient: Ingredient? = nil, amount: Amount? = nil, meal: Meal? = nil, isCompleted: Bool? = nil, dateCompleted: String? = nil) {
+    self.init(unsafeResultMap: ["__typename": "GroceryList", "id": id, "ingredient": ingredient.flatMap { (value: Ingredient) -> ResultMap in value.resultMap }, "amount": amount.flatMap { (value: Amount) -> ResultMap in value.resultMap }, "meal": meal.flatMap { (value: Meal) -> ResultMap in value.resultMap }, "isCompleted": isCompleted, "dateCompleted": dateCompleted])
   }
 
   public var __typename: String {
@@ -5427,6 +5433,15 @@ public struct GroceryListFragment: GraphQLFragment {
     }
     set {
       resultMap.updateValue(newValue?.resultMap, forKey: "amount")
+    }
+  }
+
+  public var meal: Meal? {
+    get {
+      return (resultMap["meal"] as? ResultMap).flatMap { Meal(unsafeResultMap: $0) }
+    }
+    set {
+      resultMap.updateValue(newValue?.resultMap, forKey: "meal")
     }
   }
 
@@ -5526,6 +5541,55 @@ public struct GroceryListFragment: GraphQLFragment {
 
     public init(id: GraphQLID, name: String? = nil) {
       self.init(unsafeResultMap: ["__typename": "Amount", "id": id, "name": name])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var id: GraphQLID {
+      get {
+        return resultMap["id"]! as! GraphQLID
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "id")
+      }
+    }
+
+    public var name: String? {
+      get {
+        return resultMap["name"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "name")
+      }
+    }
+  }
+
+  public struct Meal: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Meal"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("name", type: .scalar(String.self)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(id: GraphQLID, name: String? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Meal", "id": id, "name": name])
     }
 
     public var __typename: String {
