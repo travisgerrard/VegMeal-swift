@@ -226,8 +226,10 @@ struct GroceryListCellView: View {
             
             VStack(alignment: .leading) {
                 Text("\(groceryList[i].ingredient?.name ?? "No ingredient") - \(groceryList[i].amount?.name ?? "No amount")")
-                if isCompleted {
+                if isCompleted && groceryList[i].dateCompletedFormatted != nil {
                     Text("Completed \(groceryList[i].dateCompletedFormatted!, style: .relative) ago").font(.caption)
+                } else {
+                    Text("Completed just now").font(.caption)
                 }
                 if groceryList[i].meal?.name != nil {
                     Text("\(groceryList[i].meal!.name!)").font(.footnote).italic()

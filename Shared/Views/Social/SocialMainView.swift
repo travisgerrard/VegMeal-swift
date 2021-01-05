@@ -15,7 +15,6 @@ struct SocialMainView: View {
     @AppStorage("isLogged") var isLogged = false
     @AppStorage("userid") var userid = ""
     
-    let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
     
     static let tag: String? = "SocialView"
     
@@ -34,12 +33,12 @@ struct SocialMainView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             
-                            LazyHGrid(rows: [c], spacing: 20) {
+                            HStack {
                                 ForEach(self.socialController.recentlyAddedMeals) { meal in
                                     NavigationLink(destination: ModalViewSimplified(meal: meal)) {
 
                                     RecentlyAddedSocialMealView(meal: meal)
-                                    }
+                                    }.buttonStyle(FlatLinkStyle())
                                 }
                             }
                         }
@@ -48,12 +47,12 @@ struct SocialMainView: View {
                             .padding(.leading, 15)
                             .padding(.top, 5)
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(alignment: .top, spacing: 0) {
+                            HStack {
                                 ForEach(self.socialController.recentlyAddedComments) { mealLog in
                                     NavigationLink(destination: ModalViewSimplified(meal: (mealLog.meal?.fragments.mealFragment)!)) {
 
                                     RecentlyCommentedSocialMealView(mealLog: mealLog)
-                                    }
+                                    }.buttonStyle(FlatLinkStyle())
                                 }
                             }
                         }
@@ -61,37 +60,22 @@ struct SocialMainView: View {
                     
                 }
                 .navigationTitle("Social")
-
+                .navigationBarItems(leading: LoadingSubView(queryLoading: self.socialController.getMealsForSocialQueryRunning, reload: {self.socialController.getMealsForSocial(authorId: userid, followers: self.userController.followingUsers)}))
                 .onAppear {
                     self.socialController.getMealsForSocial(authorId: userid, followers: self.userController.followingUsers)
                 }
             }
-//                VStack {
-//                    HStack {
-//                        if self.socialController.getMealsForSocialQueryRunning {
-//                            ProgressView().padding(.leading).padding(.all, 10)
-//                        } else {
-//                            Button(action: {
-//                                self.socialController.getMealsForSocial(authorId: userid, followers: self.userController.followingUsers)
-//                            }) {
-//                                Image(systemName: "arrow.triangle.2.circlepath")
-//                                    .font(.system(size: 17, weight: .bold))
-//                                    .padding(.all, 10)
-//                                    .clipShape(Circle())
-//                            }
-//                            .padding(.leading)
-//                        }
-//                        
-//                        
-//                        Spacer()
-//                        
-//                    }
-//                    Spacer()
-//                }.zIndex(1.1)
+                
             }
             
         } else {
             LoginInCreateAccountPromt()
+        }
+    }
+    
+    struct FlatLinkStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
         }
     }
 }
@@ -102,5 +86,35 @@ struct SocialMainView_Previews: PreviewProvider {
         SocialMainView()
             .environmentObject(UserApolloController())
             .environmentObject(SocialApolloController())
+    }
+}
+
+struct LoadingSubView: View {
+    @AppStorage("userid") var userid = ""
+    var queryLoading: Bool
+    let reload: () -> ()
+    
+    var body: some View {
+        VStack {
+            HStack {
+                if queryLoading {
+                    ProgressView().padding(.leading).padding(.all, 10)
+                } else {
+                    
+                    Button(action: reload) {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.system(size: 17, weight: .bold))
+                            .padding(.all, 10)
+                            .clipShape(Circle())
+                    }
+                    .padding(.leading)
+                }
+                
+                
+                Spacer()
+                
+            }
+            Spacer()
+        }.zIndex(1.1)
     }
 }
