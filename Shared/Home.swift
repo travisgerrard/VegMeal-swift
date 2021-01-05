@@ -15,7 +15,6 @@ struct Home: View {
                     .edgesIgnoringSafeArea(.all)
                 ContentView()
             }
-
     }
 }
 
@@ -28,7 +27,7 @@ struct Home_Previews: PreviewProvider {
             .environmentObject(GroceryListApolloController())
             .environmentObject(MealListApolloController())
             .environmentObject(MealLogApolloController())
-
+            .environmentObject(SocialApolloController())
     }
 }
 

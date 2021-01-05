@@ -41,6 +41,8 @@ struct MealListView: View {
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
     let c = GridItem(.adaptive(minimum: 200, maximum: 400), spacing: 20)
     
+    static let tag: String? = "MealListView"
+
     
     //MARK: Functions
     

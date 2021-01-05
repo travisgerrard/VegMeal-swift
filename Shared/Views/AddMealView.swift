@@ -37,8 +37,11 @@ struct AddMealView: View {
     
     func addNewMeal() {
         if image != nil && name != "" && description != "" {
+            print("Add meal, w/ image")
+
             self.networkingController.addNewMeal(authorId: userid, inputImage: inputImage!, name: name, description: description)
         } else if name != "" && description != "" {
+            print("Add meal, w/o image")
             self.networkingController.addNewMealWithoutImage(authorId: userid, name: name, description: description)
         } else {
             return

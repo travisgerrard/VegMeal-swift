@@ -42,9 +42,7 @@ struct MealLogView: View {
             
         }
         .onAppear {
-            mealLogController.getMealLogList(mealId: mealId, authorId: authorId, followers: self.userController.otherUsers.filter {
-                $0.isFollowing == true
-            })
+            mealLogController.getMealLogList(mealId: mealId, authorId: authorId, followers: self.userController.followingUsers)
         }
     }
 }

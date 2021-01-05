@@ -3,6 +3,7 @@ fragment MealFragment on Meal {
   id
   name
   description
+  createdAt
   mealImage {
     publicUrlTransformed
   }
@@ -376,13 +377,16 @@ fragment MadeMealFragment on MadeMeal {
     id
     dateMade
     thoughts
-      ingredientImage{
+    ingredientImage{
         publicUrlTransformed
-      }
-      author{
-      id
-      name
-      email
+    }
+    author{
+        id
+        name
+        email
+    }
+    meal{
+        ...MealFragment
     }
 }
 
@@ -463,5 +467,14 @@ mutation START_FOLLOWING($id_to_change_following: ID!, $current_user: ID!) {
       data: { follows: { disconnect: { id: $id_to_change_following } } }
     ) {
       ...UserFragment
+  }
+}
+
+query ALL_MEALS_QUERY_SOCIAL($ids:[ID!]) {
+  allMeals(where:{author:{id_in:$ids}} sortBy:createdAt_DESC) {
+    ...MealFragment
+  }
+  allMadeMeals(where: { author: { id_in: $ids } }, sortBy: dateMade_DESC) {
+    ...MadeMealFragment
   }
 }

@@ -37,12 +37,12 @@ struct MealFragmentView: View {
             }
             .resizable()
             .scaledToFill()
-            .frame(maxWidth: 175)
-            .frame(height: 225)
+            .frame(width: 175, height: 225)
             .overlay(
                 VStack{
                     HStack {
                         Text(meal.name ?? "No name")
+                            .foregroundColor(.primary)
                             .font(.body)
                             .fontWeight(.bold)
                             .minimumScaleFactor(0.5)
@@ -55,6 +55,7 @@ struct MealFragmentView: View {
                     }
                     HStack {
                         Text(meal.description ?? "No description")
+                            .foregroundColor(.primary)
                             .font(.footnote)
                             .minimumScaleFactor(0.5)
                             .padding(.leading)

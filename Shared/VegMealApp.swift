@@ -17,6 +17,7 @@ struct VegMealApp: App {
     @StateObject var mealLogController = MealLogApolloController()
     @StateObject var userController = UserApolloController()
     @StateObject var searchMealController = SearchMealApolloController()
+    @StateObject var socialController = SocialApolloController()
 
     
     
@@ -29,7 +30,7 @@ struct VegMealApp: App {
                 .environmentObject(mealLogController)
                 .environmentObject(userController)
                 .environmentObject(searchMealController)
-
+                .environmentObject(socialController)
         }
     }
 }

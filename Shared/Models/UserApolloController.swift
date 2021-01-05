@@ -170,3 +170,11 @@ class UserApolloController: ObservableObject {
 
 }
 
+extension UserApolloController {
+    var followingUsers: [OtherUser] {
+        otherUsers.filter {
+            $0.isFollowing == true
+        }
+        
+    }
+}

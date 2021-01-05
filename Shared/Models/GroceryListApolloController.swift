@@ -143,18 +143,3 @@ class GroceryListApolloController: ObservableObject {
     }
     
 }
-
-extension GroceryListFragment {
-    var dateCompletedFormatted: Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        if dateCompleted != nil {
-            let dateCompletedStr = dateCompleted
-            let dateCompletedDate = dateFormatter.date(from: dateCompletedStr!)
-            return dateCompletedDate
-        } else {
-            return nil
-        }
-        
-    }
-}

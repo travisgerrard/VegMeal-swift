@@ -43,6 +43,7 @@ struct ContentView: View {
     func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
     let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
     
+    @SceneStorage("selectedView") var selectedView: String?
 
     
     var body: some View {
@@ -52,48 +53,33 @@ struct ContentView: View {
             // Headerview: Add meal button, Meal Plan (zIndex = 2)
             //-------------------------------------------------------
             VStack {
-                TabView {
+                TabView(selection: $selectedView) {
                     
-                    ZStack {
-                        MealsHeaderView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search).zIndex(2)
-                        VStack {
-                            NavigationView {
-                                ScrollView {
-                                    //Ensure we have a internet connection with data.
-                                    if self.networkingController.mealsQueryError != nil {
-                                        Text("There was an error making the request: \(self.networkingController.mealsQueryError?.localizedDescription ?? "Unknown error")").multilineTextAlignment(.center).padding()
-                                        Spacer()
-                                    } else {
-                                        LazyVGrid(columns: [c], spacing: 20) {
-                                            ForEach(self.networkingController.meals){ item in
-                                                MealFragmentView(meal: item)
-                                                    //                                        .onTapGesture(count: 2) { toggleFavoriteStatus(item) }
-                                                    .onTapGesture(count: 1) { openModal(item, fromGrid: true) }
-                                                    .matchedGeometryEffect(id: item.id, in: ns_grid, isSource: true)
-                                            }
-                                        }
-                                    }
-                                }
-                                .navigationBarTitle("Veggily")
-                            }.zIndex(1)
-                        }
-                    }
+                    AllMealsView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search, ns_grid: ns_grid, openModal: openModal(_:fromGrid:))
                     .tabItem {
                         Image(systemName: "rectangle.stack")
                         Text("All Meals")
-                    }.tag(0)
+                    }.tag(AllMealsView.tag)
                     
                     GroceryListView()
                         .tabItem {
                             Image(systemName: "bag")
                             Text("Grocery List")
-                        }.tag(1)
+                        }.tag(GroceryListView.tag)
                     
                     MealListView()
                         .tabItem {
                             Image(systemName: "text.book.closed")
                             Text("Meal Planner")
-                        }.tag(2)
+                        }.tag(MealListView.tag)
+                    
+                    SocialMainView()
+                        .tabItem {
+                            Image(systemName: "rectangle.stack.person.crop")
+                            Text("Social")
+                        }
+                        .tag(SocialMainView.tag)
+
                     
                 }
             }

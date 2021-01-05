@@ -22,6 +22,9 @@ struct GroceryListView: View {
     @State var groceryListIndex = 999
     
     @State var sectionName = ""
+    
+    static let tag: String? = "GroceryListView"
+
       
     var body: some View {
 

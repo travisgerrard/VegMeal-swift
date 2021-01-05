@@ -96,21 +96,25 @@ class ApolloNetworkingController: ObservableObject {
 
             switch result {
             case .failure(let error):
+                print(error)
                 self.uploadImageError = error
                 
             case .success(let graphQLResult):
-//                print("Success: \(graphQLResult)")
+                if let errors = graphQLResult.errors {
+                    print("Errors: \(errors)")
+                    let errorOne = errors[0]
+                    print(errorOne)
+                    break
+                }
+                
+                print("Success: \(graphQLResult)")
                 guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
                 
                 self.meals.append(fragment)
                 self.shouldCloseAddUpdateMealScreen = true
                 self.shouldCloseAddUpdateMealScreen = true
                 
-                if let errors = graphQLResult.errors {
-                    print("Errors: \(errors)")
-                    let errorOne = errors[0]
-                    print(errorOne)
-                }
+                
             }
         }
     }
@@ -299,3 +303,13 @@ class ApolloNetworkingController: ObservableObject {
     }
 }
 
+extension ApolloNetworkingController {
+    var mealsSortedByDateCreated: [MealFragment] {
+        if meals.count > 2 {
+            return meals.sorted(by: {$0.createdAt! > $1.createdAt! })
+        } else {
+            return meals
+        }
+       
+    }
+}
