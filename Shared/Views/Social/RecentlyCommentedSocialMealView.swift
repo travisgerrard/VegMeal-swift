@@ -21,44 +21,51 @@ struct RecentlyCommentedSocialMealView: View {
     var body: some View {
         VStack {
             
+            
             if mealLog.meal?.fragments.mealFragment != nil {
-                MealFragmentView(meal: mealLog.meal!.fragments.mealFragment)
+                MealFragmentView(meal: mealLog.meal!.fragments.mealFragment, wideView: true)
                 
             }
             VStack {
-                
                 VStack {
-                    VStack {
+                    VStack{
+                        
                         HStack {
-                            Text("\((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!) made this meal on: \(dateFormatter.string(from: dateFormatter.date(from: mealLog.dateMade!)!))")
-                                .foregroundColor(.primary)
+                            Text("Made on: \(dateFormatter.string(from: dateFormatter.date(from: mealLog.dateMade!)!))")
+                                .foregroundColor(.primary).font(.headline)
                             Spacer()
                         }
+                        HStack {
+                            Text("By: \((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!)")
+                                .foregroundColor(.primary).font(.headline)
+                            Spacer()
+                        }.padding(.bottom, 5)
+                        Divider()
                         
                         HStack {
                             Text(mealLog.thoughts ?? "No thoughts on this meal yet?")
                                 .foregroundColor(.primary)
                                 .fixedSize(horizontal: false, vertical: true)
-                                .padding(.leading)
+                                .padding(.leading, 5)
                             Spacer()
                             
                         }
                         
-                        .padding()
-                        .background(BlurView(style: .systemMaterial))
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-                        
-                        
-                        Spacer()
                     }
-                    .padding(.top, 5)
+                    .padding()
+                    .frame(width: screen.width - 100)
+                    .background(BlurViewTwo(active: true, onTap: {}))
+                    .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
+                    .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
+                    
+                    
+                    Spacer()
                 }
-            }.padding().offset(y:-50)
-            
-            
+                .padding(.top, 5)
+                
+            }.padding().offset(y:-60)
         }
-        .frame(width: 250).padding()
+        .padding(.bottom, -70).frame(maxWidth: screen.width)
     }
 }
 
@@ -66,5 +73,23 @@ struct RecentlyCommentedSocialMealView: View {
 struct RecentlyCommentedSocialMealView_Previews: PreviewProvider {
     static var previews: some View {
         RecentlyCommentedSocialMealView(mealLog: MadeMealFragment.example)
+    }
+}
+
+// Making it so we can have half rounded corners
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+struct RoundedCorner: Shape {
+    
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
     }
 }

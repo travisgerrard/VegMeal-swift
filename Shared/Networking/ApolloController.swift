@@ -16,8 +16,8 @@ class ApolloController {
     
     // Configure the network transport to use the singleton as the delegate.
     private lazy var networkTransport: HTTPNetworkTransport = {
-//        let transport = HTTPNetworkTransport(url: URL(string: "https://api.veggily.app/admin/api")!)
-        let transport = HTTPNetworkTransport(url: URL(string: "http://localhost:3000/admin/api")!)
+        let transport = HTTPNetworkTransport(url: URL(string: "https://api.veggily.app/admin/api")!)
+//        let transport = HTTPNetworkTransport(url: URL(string: "http://localhost:3000/admin/api")!)
         transport.delegate = self
         return transport
     }()

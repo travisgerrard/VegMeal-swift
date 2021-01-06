@@ -46,8 +46,8 @@ struct SocialMainView: View {
                             .font(.headline)
                             .padding(.leading, 15)
                             .padding(.top, 5)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(alignment: .center) {
                                 ForEach(self.socialController.recentlyAddedComments) { mealLog in
                                     NavigationLink(destination: ModalViewSimplified(meal: (mealLog.meal?.fragments.mealFragment)!)) {
 
@@ -107,7 +107,6 @@ struct LoadingSubView: View {
                             .padding(.all, 10)
                             .clipShape(Circle())
                     }
-                    .padding(.leading)
                 }
                 
                 
@@ -115,6 +114,6 @@ struct LoadingSubView: View {
                 
             }
             Spacer()
-        }.zIndex(1.1)
+        }
     }
 }

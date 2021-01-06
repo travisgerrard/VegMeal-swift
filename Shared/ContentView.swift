@@ -67,7 +67,7 @@ struct ContentView: View {
                             Text("Grocery List")
                         }.tag(GroceryListView.tag)
                     
-                    MealListView()
+                    NavigationView { MealListView() }
                         .tabItem {
                             Image(systemName: "text.book.closed")
                             Text("Meal Planner")

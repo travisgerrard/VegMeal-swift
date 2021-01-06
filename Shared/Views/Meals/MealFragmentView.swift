@@ -13,6 +13,7 @@ struct MealFragmentView: View {
     //MARK: Properties
     @EnvironmentObject var networkingController: ApolloNetworkingController
     let meal: MealFragment
+    var wideView = false
     
     //MARK: Computed Properties
     var body: some View {
@@ -37,7 +38,7 @@ struct MealFragmentView: View {
             }
             .resizable()
             .scaledToFill()
-            .frame(width: 175, height: 225)
+            .frame(width: wideView ? screen.width - 100 : 175, height: wideView ? screen.width - 100 :225)
             .overlay(
                 VStack{
                     HStack {
@@ -66,7 +67,7 @@ struct MealFragmentView: View {
                     }
                 }.background(BlurView(style: .systemMaterial))
                 , alignment: .bottom)
-            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .cornerRadius(30, corners: wideView ? [.topLeft, .topRight] : [.topLeft, .topRight, .bottomLeft, .bottomRight])
             .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
             .padding(.horizontal, 30)
             .padding(.bottom, 30)
