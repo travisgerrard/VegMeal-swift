@@ -55,7 +55,8 @@ struct ContentView: View {
             VStack {
                 TabView(selection: $selectedView) {
                     
-                    AllMealsView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search, ns_grid: ns_grid, openModal: openModal(_:fromGrid:))
+//                    AllMealsView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search, ns_grid: ns_grid, openModal: openModal(_:fromGrid:))
+                    AllMealsCoreDataWrapperView(searchTap: $searchTap)
                     .tabItem {
                         Image(systemName: "rectangle.stack")
                         Text("All Meals")
@@ -67,7 +68,7 @@ struct ContentView: View {
                             Text("Grocery List")
                         }.tag(GroceryListView.tag)
                     
-                    NavigationView { MealListView() }
+                    MealListView()
                         .tabItem {
                             Image(systemName: "text.book.closed")
                             Text("Meal Planner")
@@ -123,7 +124,7 @@ struct ContentView: View {
             }
             
             if accountTap {
-                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0)
+                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0, showModal: $accountTap)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }

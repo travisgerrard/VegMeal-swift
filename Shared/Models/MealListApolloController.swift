@@ -14,6 +14,7 @@ struct MealListItem: Identifiable {
     var isCompleted: Bool
     var dateCompleted: String
     var meal: MealFragment
+    
 }
 
 class  MealListApolloController: ObservableObject {

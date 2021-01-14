@@ -21,6 +21,8 @@ struct Home: View {
 let screen = UIScreen.main.bounds
 
 struct Home_Previews: PreviewProvider {
+    static var dataController = DataController.preview
+
     static var previews: some View {
         Home()
             .environmentObject(ApolloNetworkingController())
@@ -28,6 +30,8 @@ struct Home_Previews: PreviewProvider {
             .environmentObject(MealListApolloController())
             .environmentObject(MealLogApolloController())
             .environmentObject(SocialApolloController())
+            .environment(\.managedObjectContext, dataController.container.viewContext)
+            .environmentObject(dataController)
     }
 }
 

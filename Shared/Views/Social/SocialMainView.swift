@@ -98,7 +98,7 @@ struct LoadingSubView: View {
         VStack {
             HStack {
                 if queryLoading {
-                    ProgressView().padding(.leading).padding(.all, 10)
+                    ProgressView().padding(.leading)
                 } else {
                     
                     Button(action: reload) {

@@ -18,7 +18,12 @@ struct VegMealApp: App {
     @StateObject var userController = UserApolloController()
     @StateObject var searchMealController = SearchMealApolloController()
     @StateObject var socialController = SocialApolloController()
+    @StateObject var dataController: DataController
 
+    init() {
+        let dataController = DataController()
+        _dataController = StateObject(wrappedValue: dataController)
+    }
     
     
     var body: some Scene {
@@ -31,6 +36,13 @@ struct VegMealApp: App {
                 .environmentObject(userController)
                 .environmentObject(searchMealController)
                 .environmentObject(socialController)
+                .environment(\.managedObjectContext, dataController.container.viewContext) //For swift ui to read coredata values
+                .environmentObject(dataController) //For our own code
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification), perform: save)
         }
+    }
+    
+    func save(_ note: Notification) {
+        dataController.save()
     }
 }

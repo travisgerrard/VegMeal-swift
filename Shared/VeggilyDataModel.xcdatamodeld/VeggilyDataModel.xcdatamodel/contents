@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Amount" representedClassName=".Amount" syncable="YES" codeGenerationType="category">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="meal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="amount" inverseEntity="Meal"/>
+        <relationship name="mealIngredientList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientList" inverseName="amount" inverseEntity="MealIngredientList"/>
+    </entity>
+    <entity name="AmountDemo" representedClassName=".AmountDemo" syncable="YES">
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="amountDemo" inverseEntity="MealIngredientListDemo"/>
+    </entity>
+    <entity name="Ingredient" representedClassName=".Ingredient" syncable="YES" codeGenerationType="category">
+        <attribute name="category" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="ingredientImage" optional="YES" attributeType="URI"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="meal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="ingredient" inverseEntity="Meal"/>
+        <relationship name="mealIngredientList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientList" inverseName="ingredient" inverseEntity="MealIngredientList"/>
+    </entity>
+    <entity name="IngredientDemo" representedClassName=".IngredientDemo" syncable="YES">
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="ingredientDemo" inverseEntity="MealIngredientListDemo"/>
+    </entity>
+    <entity name="Meal" representedClassName=".Meal" syncable="YES" codeGenerationType="category">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="detail" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="mealImageUrl" optional="YES" attributeType="URI"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="amount" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Amount" inverseName="meal" inverseEntity="Amount"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="meals" inverseEntity="User"/>
+        <relationship name="ingredient" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Ingredient" inverseName="meal" inverseEntity="Ingredient"/>
+        <relationship name="ingredientList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientList" inverseName="meal" inverseEntity="MealIngredientList"/>
+    </entity>
+    <entity name="MealDemo" representedClassName=".MealDemo" syncable="YES">
+        <attribute name="detail" optional="YES" attributeType="String"/>
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="imageUrl" optional="YES" attributeType="URI"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="mealDemo" inverseEntity="MealIngredientListDemo"/>
+    </entity>
+    <entity name="MealIngredientList" representedClassName=".MealIngredientList" syncable="YES" codeGenerationType="category">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="amount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Amount" inverseName="mealIngredientList" inverseEntity="Amount"/>
+        <relationship name="ingredient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Ingredient" inverseName="mealIngredientList" inverseEntity="Ingredient"/>
+        <relationship name="meal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="ingredientList" inverseEntity="Meal"/>
+    </entity>
+    <entity name="MealIngredientListDemo" representedClassName=".MealIngredientListDemo" syncable="YES">
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <relationship name="amountDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AmountDemo" inverseName="mealIngredientListDemo" inverseEntity="AmountDemo"/>
+        <relationship name="ingredientDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientDemo" inverseName="mealIngredientListDemo" inverseEntity="IngredientDemo"/>
+        <relationship name="mealDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="mealIngredientListDemo" inverseEntity="MealDemo"/>
+    </entity>
+    <entity name="User" representedClassName=".User" syncable="YES" codeGenerationType="category">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="author" inverseEntity="Meal"/>
+    </entity>
+    <elements>
+        <element name="Amount" positionX="281.24609375" positionY="107.546875" width="128" height="89"/>
+        <element name="Ingredient" positionX="-270.0546875" positionY="-47.94921875" width="128" height="119"/>
+        <element name="Meal" positionX="-44.59765625" positionY="117.27734375" width="128" height="164"/>
+        <element name="MealDemo" positionX="-63" positionY="-9" width="128" height="104"/>
+        <element name="MealIngredientList" positionX="190.1484375" positionY="-168.84765625" width="128" height="89"/>
+        <element name="User" positionX="-6.9609375" positionY="363.55078125" width="128" height="89"/>
+        <element name="MealIngredientListDemo" positionX="-63" positionY="-9" width="128" height="89"/>
+        <element name="IngredientDemo" positionX="-54" positionY="0" width="128" height="14"/>
+        <element name="AmountDemo" positionX="-45" positionY="18" width="128" height="14"/>
+    </elements>
+</model>

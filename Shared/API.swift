@@ -49,6 +49,319 @@ public enum UserPermissionType: RawRepresentable, Equatable, Hashable, CaseItera
   }
 }
 
+public final class AllMealIngredientListsQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query ALL_MEAL_INGREDIENT_LISTS {
+      allMealIngredientLists {
+        __typename
+        ...MealIngredientListFragment
+      }
+    }
+    """
+
+  public let operationName: String = "ALL_MEAL_INGREDIENT_LISTS"
+
+  public var queryDocument: String { return operationDefinition.appending("\n" + MealIngredientListFragment.fragmentDefinition).appending("\n" + IngredientFragment.fragmentDefinition).appending("\n" + AmountFragment.fragmentDefinition) }
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("allMealIngredientLists", type: .list(.object(AllMealIngredientList.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(allMealIngredientLists: [AllMealIngredientList?]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "allMealIngredientLists": allMealIngredientLists.flatMap { (value: [AllMealIngredientList?]) -> [ResultMap?] in value.map { (value: AllMealIngredientList?) -> ResultMap? in value.flatMap { (value: AllMealIngredientList) -> ResultMap in value.resultMap } } }])
+    }
+
+    /// Search for all MealIngredientList items which match the where clause.
+    public var allMealIngredientLists: [AllMealIngredientList?]? {
+      get {
+        return (resultMap["allMealIngredientLists"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [AllMealIngredientList?] in value.map { (value: ResultMap?) -> AllMealIngredientList? in value.flatMap { (value: ResultMap) -> AllMealIngredientList in AllMealIngredientList(unsafeResultMap: value) } } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [AllMealIngredientList?]) -> [ResultMap?] in value.map { (value: AllMealIngredientList?) -> ResultMap? in value.flatMap { (value: AllMealIngredientList) -> ResultMap in value.resultMap } } }, forKey: "allMealIngredientLists")
+      }
+    }
+
+    public struct AllMealIngredientList: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["MealIngredientList"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLFragmentSpread(MealIngredientListFragment.self),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var mealIngredientListFragment: MealIngredientListFragment {
+          get {
+            return MealIngredientListFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class MealDemoQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query MealDemo($id: ID!) {
+      Meal(where: {id: $id}) {
+        __typename
+        ...MealDemoFragment
+      }
+    }
+    """
+
+  public let operationName: String = "MealDemo"
+
+  public var queryDocument: String { return operationDefinition.appending("\n" + MealDemoFragment.fragmentDefinition).appending("\n" + MealIngredientListFragment.fragmentDefinition).appending("\n" + IngredientFragment.fragmentDefinition).appending("\n" + AmountFragment.fragmentDefinition) }
+
+  public var id: GraphQLID
+
+  public init(id: GraphQLID) {
+    self.id = id
+  }
+
+  public var variables: GraphQLMap? {
+    return ["id": id]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("Meal", arguments: ["where": ["id": GraphQLVariable("id")]], type: .object(Meal.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(meal: Meal? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "Meal": meal.flatMap { (value: Meal) -> ResultMap in value.resultMap }])
+    }
+
+    /// Search for the Meal item with the matching ID.
+    public var meal: Meal? {
+      get {
+        return (resultMap["Meal"] as? ResultMap).flatMap { Meal(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "Meal")
+      }
+    }
+
+    public struct Meal: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Meal"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLFragmentSpread(MealDemoFragment.self),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var mealDemoFragment: MealDemoFragment {
+          get {
+            return MealDemoFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class AllMealsDemoQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query AllMealsDemo {
+      allMeals {
+        __typename
+        ...MealDemoFragment
+      }
+    }
+    """
+
+  public let operationName: String = "AllMealsDemo"
+
+  public var queryDocument: String { return operationDefinition.appending("\n" + MealDemoFragment.fragmentDefinition).appending("\n" + MealIngredientListFragment.fragmentDefinition).appending("\n" + IngredientFragment.fragmentDefinition).appending("\n" + AmountFragment.fragmentDefinition) }
+
+  public init() {
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("allMeals", type: .list(.object(AllMeal.selections))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(allMeals: [AllMeal?]? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "allMeals": allMeals.flatMap { (value: [AllMeal?]) -> [ResultMap?] in value.map { (value: AllMeal?) -> ResultMap? in value.flatMap { (value: AllMeal) -> ResultMap in value.resultMap } } }])
+    }
+
+    /// Search for all Meal items which match the where clause.
+    public var allMeals: [AllMeal?]? {
+      get {
+        return (resultMap["allMeals"] as? [ResultMap?]).flatMap { (value: [ResultMap?]) -> [AllMeal?] in value.map { (value: ResultMap?) -> AllMeal? in value.flatMap { (value: ResultMap) -> AllMeal in AllMeal(unsafeResultMap: value) } } }
+      }
+      set {
+        resultMap.updateValue(newValue.flatMap { (value: [AllMeal?]) -> [ResultMap?] in value.map { (value: AllMeal?) -> ResultMap? in value.flatMap { (value: AllMeal) -> ResultMap in value.resultMap } } }, forKey: "allMeals")
+      }
+    }
+
+    public struct AllMeal: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Meal"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLFragmentSpread(MealDemoFragment.self),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+
+      public struct Fragments {
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public var mealDemoFragment: MealDemoFragment {
+          get {
+            return MealDemoFragment(unsafeResultMap: resultMap)
+          }
+          set {
+            resultMap += newValue.resultMap
+          }
+        }
+      }
+    }
+  }
+}
+
 public final class CreateMealMutation: GraphQLMutation {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
@@ -5529,6 +5842,383 @@ public struct MealFragment: GraphQLFragment {
         }
         set {
           resultMap.updateValue(newValue, forKey: "name")
+        }
+      }
+    }
+  }
+}
+
+public struct MealIngredientListFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment MealIngredientListFragment on MealIngredientList {
+      __typename
+      id
+      ingredient {
+        __typename
+        ...IngredientFragment
+      }
+      amount {
+        __typename
+        ...AmountFragment
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["MealIngredientList"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("ingredient", type: .object(Ingredient.selections)),
+      GraphQLField("amount", type: .object(Amount.selections)),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(id: GraphQLID, ingredient: Ingredient? = nil, amount: Amount? = nil) {
+    self.init(unsafeResultMap: ["__typename": "MealIngredientList", "id": id, "ingredient": ingredient.flatMap { (value: Ingredient) -> ResultMap in value.resultMap }, "amount": amount.flatMap { (value: Amount) -> ResultMap in value.resultMap }])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  public var id: GraphQLID {
+    get {
+      return resultMap["id"]! as! GraphQLID
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var ingredient: Ingredient? {
+    get {
+      return (resultMap["ingredient"] as? ResultMap).flatMap { Ingredient(unsafeResultMap: $0) }
+    }
+    set {
+      resultMap.updateValue(newValue?.resultMap, forKey: "ingredient")
+    }
+  }
+
+  public var amount: Amount? {
+    get {
+      return (resultMap["amount"] as? ResultMap).flatMap { Amount(unsafeResultMap: $0) }
+    }
+    set {
+      resultMap.updateValue(newValue?.resultMap, forKey: "amount")
+    }
+  }
+
+  public struct Ingredient: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Ingredient"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(IngredientFragment.self),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(id: GraphQLID, name: String? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Ingredient", "id": id, "name": name])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var ingredientFragment: IngredientFragment {
+        get {
+          return IngredientFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+
+  public struct Amount: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Amount"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(AmountFragment.self),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(id: GraphQLID, name: String? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Amount", "id": id, "name": name])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var amountFragment: AmountFragment {
+        get {
+          return AmountFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
+        }
+      }
+    }
+  }
+}
+
+public struct MealDemoFragment: GraphQLFragment {
+  /// The raw GraphQL definition of this fragment.
+  public static let fragmentDefinition: String =
+    """
+    fragment MealDemoFragment on Meal {
+      __typename
+      id
+      name
+      description
+      mealImage {
+        __typename
+        publicUrlTransformed
+      }
+      ingredientList {
+        __typename
+        ...MealIngredientListFragment
+      }
+    }
+    """
+
+  public static let possibleTypes: [String] = ["Meal"]
+
+  public static var selections: [GraphQLSelection] {
+    return [
+      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+      GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+      GraphQLField("name", type: .scalar(String.self)),
+      GraphQLField("description", type: .scalar(String.self)),
+      GraphQLField("mealImage", type: .object(MealImage.selections)),
+      GraphQLField("ingredientList", type: .nonNull(.list(.nonNull(.object(IngredientList.selections))))),
+    ]
+  }
+
+  public private(set) var resultMap: ResultMap
+
+  public init(unsafeResultMap: ResultMap) {
+    self.resultMap = unsafeResultMap
+  }
+
+  public init(id: GraphQLID, name: String? = nil, description: String? = nil, mealImage: MealImage? = nil, ingredientList: [IngredientList]) {
+    self.init(unsafeResultMap: ["__typename": "Meal", "id": id, "name": name, "description": description, "mealImage": mealImage.flatMap { (value: MealImage) -> ResultMap in value.resultMap }, "ingredientList": ingredientList.map { (value: IngredientList) -> ResultMap in value.resultMap }])
+  }
+
+  public var __typename: String {
+    get {
+      return resultMap["__typename"]! as! String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "__typename")
+    }
+  }
+
+  public var id: GraphQLID {
+    get {
+      return resultMap["id"]! as! GraphQLID
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var name: String? {
+    get {
+      return resultMap["name"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "name")
+    }
+  }
+
+  public var description: String? {
+    get {
+      return resultMap["description"] as? String
+    }
+    set {
+      resultMap.updateValue(newValue, forKey: "description")
+    }
+  }
+
+  public var mealImage: MealImage? {
+    get {
+      return (resultMap["mealImage"] as? ResultMap).flatMap { MealImage(unsafeResultMap: $0) }
+    }
+    set {
+      resultMap.updateValue(newValue?.resultMap, forKey: "mealImage")
+    }
+  }
+
+  public var ingredientList: [IngredientList] {
+    get {
+      return (resultMap["ingredientList"] as! [ResultMap]).map { (value: ResultMap) -> IngredientList in IngredientList(unsafeResultMap: value) }
+    }
+    set {
+      resultMap.updateValue(newValue.map { (value: IngredientList) -> ResultMap in value.resultMap }, forKey: "ingredientList")
+    }
+  }
+
+  public struct MealImage: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["CloudinaryImage_File"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("publicUrlTransformed", type: .scalar(String.self)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(publicUrlTransformed: String? = nil) {
+      self.init(unsafeResultMap: ["__typename": "CloudinaryImage_File", "publicUrlTransformed": publicUrlTransformed])
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var publicUrlTransformed: String? {
+      get {
+        return resultMap["publicUrlTransformed"] as? String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "publicUrlTransformed")
+      }
+    }
+  }
+
+  public struct IngredientList: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["MealIngredientList"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLFragmentSpread(MealIngredientListFragment.self),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public var __typename: String {
+      get {
+        return resultMap["__typename"]! as! String
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "__typename")
+      }
+    }
+
+    public var fragments: Fragments {
+      get {
+        return Fragments(unsafeResultMap: resultMap)
+      }
+      set {
+        resultMap += newValue.resultMap
+      }
+    }
+
+    public struct Fragments {
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public var mealIngredientListFragment: MealIngredientListFragment {
+        get {
+          return MealIngredientListFragment(unsafeResultMap: resultMap)
+        }
+        set {
+          resultMap += newValue.resultMap
         }
       }
     }

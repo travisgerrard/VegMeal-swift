@@ -14,7 +14,8 @@ struct UserView: View {
     let onClose: () -> ()
     var pct: CGFloat
     @State private var showingAlert = false
-    
+    @Binding var showModal: Bool
+
     
     var body: some View {
 
@@ -53,7 +54,9 @@ struct UserView: View {
                     Spacer()
         
                     HStack {
-                        Button(action: {self.showingAlert.toggle()}) {
+                        Button(action: {
+                            self.showingAlert.toggle()
+                        }) {
                             Text("Log Out")
                                 .frame(maxWidth: .infinity).font(.title).padding(.bottom, 50).accentColor(.red)
                         }
@@ -67,8 +70,8 @@ struct UserView: View {
                 .background(Color.white)
                 .alert(isPresented:$showingAlert) {
                     Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
-        
                         self.userController.logUserOut()
+                        self.showModal.toggle()
                         onClose()
         
                     }, secondaryButton: .cancel())
@@ -106,7 +109,7 @@ struct isFollowingToggle: View {
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
-        UserView(onClose: {print("Huh?")}, pct: 1)
+        UserView(onClose: {print("Huh?")}, pct: 1, showModal: .constant(true))
             .environmentObject(UserApolloController())
         
     }

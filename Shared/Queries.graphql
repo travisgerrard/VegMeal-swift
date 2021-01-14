@@ -23,6 +23,49 @@ fragment MealFragment on Meal {
   }
 }
 
+fragment MealIngredientListFragment on MealIngredientList {
+    id
+    ingredient {
+        ...IngredientFragment
+    }
+    amount {
+        ...AmountFragment
+    }
+}
+
+query ALL_MEAL_INGREDIENT_LISTS {
+  allMealIngredientLists {
+    ...MealIngredientListFragment
+  }
+}
+
+
+
+fragment MealDemoFragment on Meal {
+    id
+    name
+    description
+    mealImage {
+        publicUrlTransformed
+    }
+    ingredientList {
+        ...MealIngredientListFragment
+    }
+}
+
+query MealDemo($id: ID!) {
+    Meal(where: {id: $id}) {
+        ...MealDemoFragment
+    }
+}
+
+query AllMealsDemo {
+    allMeals {
+        ...MealDemoFragment
+    }
+}
+
+
 mutation CREATE_MEAL(
   $authorId: ID!
   $name: String

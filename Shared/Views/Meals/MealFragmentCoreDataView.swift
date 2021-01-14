@@ -1,24 +1,20 @@
 //
-//  MealFragmentView.swift
+//  MealFragmentCoreDataView.swift
 //  VegMeal
 //
-//  Created by Travis Gerrard on 9/16/20.
+//  Created by Travis Gerrard on 1/6/21.
 //
 
 import SwiftUI
 import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
 
-struct MealFragmentView: View {
-    //MARK: Properties
-    @EnvironmentObject var networkingController: ApolloNetworkingController
-    let meal: MealFragment
+struct MealFragmentCoreDataView: View {
+    var meal: MealDemo
     var wideView = false
     
-    //MARK: Computed Properties
     var body: some View {
-        
-        KFImage(parse(object: self.meal),
+        KFImage(meal.mealImageUrl,
                 options: [
                     .transition(.fade(0.2)),
                     .processor(
@@ -42,7 +38,7 @@ struct MealFragmentView: View {
             .overlay(
                 VStack{
                     HStack {
-                        Text(meal.name ?? "No name")
+                        Text(meal.mealName)
                             .foregroundColor(.primary)
                             .font(.body)
                             .fontWeight(.bold)
@@ -55,7 +51,7 @@ struct MealFragmentView: View {
                         Spacer()
                     }
                     HStack {
-                        Text(meal.description ?? "No description")
+                        Text(meal.mealDetail)
                             .foregroundColor(.primary)
                             .font(.footnote)
                             .minimumScaleFactor(0.5)
@@ -71,16 +67,15 @@ struct MealFragmentView: View {
             .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
             .padding(.horizontal, 30)
             .padding(.bottom, 30)
-        
     }
-    
-
 }
 
-//MARK: Functions
-func parse(object: MealFragment) -> URL {
-    guard let mealImage = object.mealImage?.publicUrlTransformed else { return URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1598621202/veggily/5f490612c53b900a6dcdc484.png")! }
-    return URL(string: mealImage)!
-}
-
-
+//struct MealFragmentCoreDataView_Previews: PreviewProvider {
+//    static var dataController = DataController.preview
+//
+//    static var previews: some View {
+//        MealFragmentCoreDataView(meal: Meal.example)
+////            .environment(\.managedObjectContext, dataController.container.viewContext)
+////            .environmentObject(dataController)
+//    }
+//}
