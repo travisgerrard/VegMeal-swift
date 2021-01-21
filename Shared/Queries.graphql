@@ -51,6 +51,9 @@ fragment MealDemoFragment on Meal {
     ingredientList {
         ...MealIngredientListFragment
     }
+    author {
+        id
+    }
 }
 
 query MealDemo($id: ID!) {
@@ -185,6 +188,14 @@ query GET_GROCERY_LIST($id: ID!) {
   }
 }
 
+query GET_ALL_GROCERY_LIST_ITEMS_FOR_USER($id: ID!) {
+  allGroceryLists(
+    where: { author: { id: $id } }
+  ) {
+    ...GroceryListFragment
+  }
+}
+
 query GET_GROCERY_LIST_ITEM($id:ID!){
   allGroceryLists(where:{id:$id}){
     ...GroceryListFragment
@@ -199,18 +210,17 @@ mutation DELETE_GROCERY_LIST_ITEM($id:ID!){
 
 fragment GroceryListFragment on GroceryList {
     id
+    author {
+        id
+    }
     ingredient {
-      id
-      name
-      category
+      ...IngredientFragment
     }
     amount {
-      id
-      name
+      ...AmountFragment
     }
     meal {
-      id
-      name
+      ...MealDemoFragment
     }
     isCompleted
     dateCompleted
@@ -244,6 +254,7 @@ query SEARCH_FOR_MEALS($searchText:String){
 fragment IngredientFragment on Ingredient {
     id
     name
+    category
 }
 
 fragment AmountFragment on Amount {
@@ -270,16 +281,21 @@ query MY_MEALS_QUERY($authorId: ID!) {
   }
 }
 
+query GET_All_MEAL_LISTS_FOR($id: ID!) {
+  allMealLists(where: { author: { id: $id } } ) {
+    ...MealListFragment
+  }
+}
+
 fragment MealListFragment on MealList {
     id
-    isCompleted
-    meal {
+    author {
       id
-      name
-      description
-      mealImage {
-        publicUrlTransformed
-      }
+    }
+    isCompleted
+    dateCompleted
+    meal {
+      ...MealDemoFragment
     }
 }
 
@@ -372,7 +388,7 @@ mutation DELETE_MEAL_INGREDIENT_LIST(
 
 mutation ADD_MEAL_TO_GROCERY_LIST($mealId: ID!, $authorId: ID!) {
   addMealToGroceryList(mealId:$mealId){
-    id
+    ...GroceryListFragment
   }
   addMealToMealList: createMealList(
     data: {
@@ -380,7 +396,7 @@ mutation ADD_MEAL_TO_GROCERY_LIST($mealId: ID!, $authorId: ID!) {
       author: { connect: { id: $authorId } }
     }
   ) {
-    id
+    ...MealListFragment
   }
 }
 mutation MADE_MEAL($mealId: ID!, $authorId: ID!, $dateMade: String) {

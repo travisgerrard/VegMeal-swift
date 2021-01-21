@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension MadeMealFragment: Identifiable {
+extension MadeMealFragment {
     
     static var example: MadeMealFragment {
         MadeMealFragment(id: "5fef2297a1f6b64ab554267e", dateMade: "2021-01-01", thoughts: "Great start to the new year with these waffles ", ingredientImage: nil, author: Author(id: "5fc47e0cc7e85239fda135ff", name: "test", email: "test@test.com"), meal: nil)

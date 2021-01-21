@@ -34,7 +34,7 @@ class UserApolloController: ObservableObject {
     func getUserData() {
         self.getUserQueryRunning = true
         let query = CurrentUserQueryQuery()
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
             self.getUserQueryRunning = false
             
             switch result {
@@ -65,6 +65,7 @@ class UserApolloController: ObservableObject {
                 self.userid = userDetails.id
                 self.loggedInUser = userDetails
                 self.isLogged = true
+                print("Is an authenticated user")
                 self.getUsers()
             }
         }
@@ -107,11 +108,11 @@ class UserApolloController: ObservableObject {
     }
     
     func logUserOut() {
-        email = ""
-        userid = ""
-        isLogged = false
-        token = ""
-        loggedInUser = nil
+        self.email = ""
+        self.userid = ""
+        self.isLogged = false
+        self.token = ""
+        self.loggedInUser = nil
     }
     
     @Published var startFollowingMutationRunning: Bool = false

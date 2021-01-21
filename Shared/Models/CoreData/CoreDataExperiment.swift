@@ -79,6 +79,10 @@ class MealDemo: ManagedObject, Identifiable {
     @NSManaged var detail: String?
     @NSManaged var imageUrl: URL?
     @NSManaged var mealIngredientListDemo: NSSet?
+    @NSManaged var groceryList: NSSet?
+    @NSManaged var madeMeal: NSSet?
+    @NSManaged var mealList: NSSet?
+    @NSManaged var author: String?
 }
 
 extension MealDemoFragment: Identifiable {}
@@ -91,6 +95,9 @@ extension MealDemo: FragmentUpdatable {
         self.detail = fragment.description
         if let urlString = fragment.mealImage?.publicUrlTransformed {
             self.imageUrl =  URL(string: urlString)
+        }
+        if let author = fragment.author?.id {
+            self.author = author
         }
     }
 }
@@ -115,6 +122,7 @@ extension MealIngredientListDemo: FragmentUpdatable {
 
 class IngredientDemo: ManagedObject, Identifiable {
     @NSManaged var name: String?
+    @NSManaged var category: Int16
     @NSManaged var mealIngredientListDemo: NSSet?
 }
 
@@ -125,6 +133,9 @@ extension IngredientDemo: FragmentUpdatable {
     
     func update(with fragment: Fragment) {
         self.name = fragment.name
+        if let category = fragment.category {
+            self.category = Int16(category)
+        }
     }
 }
 
@@ -141,4 +152,94 @@ extension AmountDemo: FragmentUpdatable {
     func update(with fragment: Fragment) {
         self.name = fragment.name
     }
+}
+
+class MadeMeal: ManagedObject, Identifiable {
+    @NSManaged var thoughts: String?
+    @NSManaged var author: String?
+    @NSManaged var dateMade: Date?
+    @NSManaged var meal: MealDemo?
+}
+
+extension MadeMealFragment : Identifiable {}
+
+extension MadeMeal: FragmentUpdatable {
+    typealias Fragment = MadeMealFragment
+    
+    func update(with fragment: Fragment) {
+        self.thoughts = fragment.thoughts
+        if let author = fragment.author?.id {
+            self.author = author
+        }
+        if let dateMade = fragment.dateMade {
+            var dateFormatter: DateFormatter {
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+                formatter.dateFormat = "yyyy-MM-dd"
+                return formatter
+            }
+            
+            self.dateMade = dateFormatter.date(from: dateMade)
+        }
+    }
+    
+}
+
+class GroceryList: ManagedObject, Identifiable {
+    @NSManaged var dateCompleted: Date?
+    @NSManaged var isCompleted: Bool
+    @NSManaged var author: String?
+    @NSManaged var amount: AmountDemo?
+    @NSManaged var ingredient: IngredientDemo?
+    @NSManaged var meal: MealDemo?
+    @NSManaged var category: Int16
+}
+
+extension GroceryListFragment : Identifiable {}
+
+extension GroceryList: FragmentUpdatable {
+    typealias Fragment = GroceryListFragment
+    
+    func update(with fragment: Fragment) {
+        self.isCompleted = fragment.isCompleted!
+        if let author = fragment.author?.id {
+            self.author = author
+        }
+        if let dateCompleted = fragment.dateCompleted {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+           
+            self.dateCompleted = dateFormatter.date(from: dateCompleted)
+        }
+    }
+    
+}
+
+class MealList: ManagedObject, Identifiable {
+    @NSManaged var dateCompleted: Date?
+    @NSManaged var isCompleted: Bool
+    @NSManaged var author: String?
+    @NSManaged var meal: MealDemo?
+    }
+
+extension MealListFragment : Identifiable {}
+
+extension MealList: FragmentUpdatable {
+    typealias Fragment = MealListFragment
+    
+    func update(with fragment: Fragment) {
+        self.isCompleted = fragment.isCompleted!
+        if let author = fragment.author?.id {
+            self.author = author
+        }
+        if let dateCompleted = fragment.dateCompleted {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+           
+            self.dateCompleted = dateFormatter.date(from: dateCompleted)
+        }
+    }
+    
 }

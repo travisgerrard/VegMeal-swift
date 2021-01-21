@@ -72,8 +72,9 @@ class ApolloNetworkingController: ObservableObject {
         self.mealsQueryRunning = true
         self.meals.removeAll()
         
+        
         let query = AllMealsQueryQuery(skip: 0, first: 1000)
-        ApolloController.shared.apollo.fetch(query: query) { (results) in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { (results) in
             self.mealsQueryRunning = false
             switch results {
             case .failure(let error):

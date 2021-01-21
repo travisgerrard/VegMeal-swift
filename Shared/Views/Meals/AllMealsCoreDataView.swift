@@ -25,7 +25,7 @@ struct AllMealsCoreDataView: View {
     
     func loadMealDemo() {
         let query = AllMealsDemoQuery()
-        ApolloController.shared.apollo.fetch(query: query) { result in
+        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -82,10 +82,6 @@ struct AllMealsCoreDataView: View {
                                 label: {
                                     MealFragmentCoreDataView(meal: meal)
                                 })
-//                            Text("\(meal.mealName)")
-//                            ForEach(meal.mealIngredientListDemoArray, id: \.self) {mealIngredientListDemo in
-//                                Text("\(mealIngredientListDemo.amountDemo?.name ?? "No Amount Name") - \(mealIngredientListDemo.ingredientDemo?.name ?? "No Ingredient Name")")
-//                            }
                         }
                     }
                 }

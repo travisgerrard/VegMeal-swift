@@ -29,7 +29,7 @@ class SearchMealApolloController: ObservableObject {
 
             let query = SearchForMealsQuery(searchText: searchText)
             
-            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
+            ApolloController.shared.apollo.fetch(query: query) { result in
 
                 self.searchQueryIsLoading = false
 

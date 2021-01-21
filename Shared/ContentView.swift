@@ -62,15 +62,17 @@ struct ContentView: View {
                         Text("All Meals")
                     }.tag(AllMealsView.tag)
                     
-                    GroceryListView()
+//                    GroceryListView()
+                    GroceryListCoreDataView()
                         .tabItem {
-                            Image(systemName: "bag")
+                            Image(systemName: "cart")
                             Text("Grocery List")
                         }.tag(GroceryListView.tag)
                     
-                    MealListView()
+//                    MealListView()
+                    MealListCoreDataView()
                         .tabItem {
-                            Image(systemName: "text.book.closed")
+                            Image(systemName: "folder")
                             Text("Meal Planner")
                         }.tag(MealListView.tag)
                     
@@ -124,7 +126,8 @@ struct ContentView: View {
             }
             
             if accountTap {
-                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0, showModal: $accountTap)
+//                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0, showModal: $accountTap)
+                    UserView(showModal: $accountTap)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
                     .onDisappear { flyFromGridToModal = false }

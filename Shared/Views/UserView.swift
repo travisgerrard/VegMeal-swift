@@ -11,8 +11,6 @@ import SwiftUI
 
 struct UserView: View {
     @EnvironmentObject var userController: UserApolloController
-    let onClose: () -> ()
-    var pct: CGFloat
     @State private var showingAlert = false
     @Binding var showModal: Bool
 
@@ -24,9 +22,6 @@ struct UserView: View {
                     HStack {
                         Text("Account").font(.largeTitle).fontWeight(.bold).padding()
                         Spacer()
-                        CloseButton().onTapGesture {
-                            onClose()
-                        }.padding(.trailing)
                     }.background(Color.secondary).foregroundColor(.white)
         
                     Text("\(userController.loggedInUser?.name ?? "No name")").font(.largeTitle).padding(.horizontal)
@@ -72,7 +67,6 @@ struct UserView: View {
                     Alert(title: Text("Are you sure you want to logout?"), message: Text("Logout?"), primaryButton: .destructive(Text("Logout")) {
                         self.userController.logUserOut()
                         self.showModal.toggle()
-                        onClose()
         
                     }, secondaryButton: .cancel())
                 }
@@ -109,7 +103,7 @@ struct isFollowingToggle: View {
 
 struct UserView_Previews: PreviewProvider {
     static var previews: some View {
-        UserView(onClose: {print("Huh?")}, pct: 1, showModal: .constant(true))
+        UserView(showModal: .constant(true))
             .environmentObject(UserApolloController())
         
     }

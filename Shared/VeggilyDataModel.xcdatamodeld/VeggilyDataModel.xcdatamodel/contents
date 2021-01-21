@@ -9,7 +9,18 @@
     <entity name="AmountDemo" representedClassName=".AmountDemo" syncable="YES">
         <attribute name="idString" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="groceryList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GroceryList" inverseName="amount" inverseEntity="GroceryList"/>
         <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="amountDemo" inverseEntity="MealIngredientListDemo"/>
+    </entity>
+    <entity name="GroceryList" representedClassName=".GroceryList" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="category" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dateCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="amount" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AmountDemo" inverseName="groceryList" inverseEntity="AmountDemo"/>
+        <relationship name="ingredient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientDemo" inverseName="groceryList" inverseEntity="IngredientDemo"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="groceryList" inverseEntity="MealDemo"/>
     </entity>
     <entity name="Ingredient" representedClassName=".Ingredient" syncable="YES" codeGenerationType="category">
         <attribute name="category" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -20,9 +31,18 @@
         <relationship name="mealIngredientList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientList" inverseName="ingredient" inverseEntity="MealIngredientList"/>
     </entity>
     <entity name="IngredientDemo" representedClassName=".IngredientDemo" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="idString" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="groceryList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GroceryList" inverseName="ingredient" inverseEntity="GroceryList"/>
         <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="ingredientDemo" inverseEntity="MealIngredientListDemo"/>
+    </entity>
+    <entity name="MadeMeal" representedClassName=".MadeMeal" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="dateMade" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="thoughts" optional="YES" attributeType="String"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="madeMeal" inverseEntity="MealDemo"/>
     </entity>
     <entity name="Meal" representedClassName=".Meal" syncable="YES" codeGenerationType="category">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -36,11 +56,15 @@
         <relationship name="ingredientList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientList" inverseName="meal" inverseEntity="MealIngredientList"/>
     </entity>
     <entity name="MealDemo" representedClassName=".MealDemo" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String"/>
         <attribute name="detail" optional="YES" attributeType="String"/>
         <attribute name="idString" optional="YES" attributeType="String"/>
         <attribute name="imageUrl" optional="YES" attributeType="URI"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="groceryList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GroceryList" inverseName="meal" inverseEntity="GroceryList"/>
+        <relationship name="madeMeal" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MadeMeal" inverseName="meal" inverseEntity="MadeMeal"/>
         <relationship name="mealIngredientListDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealIngredientListDemo" inverseName="mealDemo" inverseEntity="MealIngredientListDemo"/>
+        <relationship name="mealList" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealList" inverseName="meal" inverseEntity="MealList"/>
     </entity>
     <entity name="MealIngredientList" representedClassName=".MealIngredientList" syncable="YES" codeGenerationType="category">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -54,6 +78,13 @@
         <relationship name="ingredientDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientDemo" inverseName="mealIngredientListDemo" inverseEntity="IngredientDemo"/>
         <relationship name="mealDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="mealIngredientListDemo" inverseEntity="MealDemo"/>
     </entity>
+    <entity name="MealList" representedClassName=".MealList" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="dateCompleted" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="idString" optional="YES" attributeType="String"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="meal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="mealList" inverseEntity="MealDemo"/>
+    </entity>
     <entity name="User" representedClassName=".User" syncable="YES" codeGenerationType="category">
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -61,14 +92,17 @@
         <relationship name="meals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Meal" inverseName="author" inverseEntity="Meal"/>
     </entity>
     <elements>
-        <element name="Amount" positionX="281.24609375" positionY="107.546875" width="128" height="89"/>
-        <element name="Ingredient" positionX="-270.0546875" positionY="-47.94921875" width="128" height="119"/>
-        <element name="Meal" positionX="-44.59765625" positionY="117.27734375" width="128" height="164"/>
-        <element name="MealDemo" positionX="-63" positionY="-9" width="128" height="104"/>
-        <element name="MealIngredientList" positionX="190.1484375" positionY="-168.84765625" width="128" height="89"/>
-        <element name="User" positionX="-6.9609375" positionY="363.55078125" width="128" height="89"/>
-        <element name="MealIngredientListDemo" positionX="-63" positionY="-9" width="128" height="89"/>
-        <element name="IngredientDemo" positionX="-54" positionY="0" width="128" height="14"/>
+        <element name="Amount" positionX="281.24609375" positionY="107.546875" width="128" height="14"/>
         <element name="AmountDemo" positionX="-45" positionY="18" width="128" height="14"/>
+        <element name="GroceryList" positionX="-63" positionY="-9" width="128" height="149"/>
+        <element name="Ingredient" positionX="-270.0546875" positionY="-47.94921875" width="128" height="119"/>
+        <element name="IngredientDemo" positionX="-54" positionY="0" width="128" height="104"/>
+        <element name="MadeMeal" positionX="-63" positionY="-9" width="128" height="104"/>
+        <element name="Meal" positionX="-44.59765625" positionY="117.27734375" width="128" height="164"/>
+        <element name="MealDemo" positionX="-63" positionY="-9" width="128" height="164"/>
+        <element name="MealIngredientList" positionX="190.1484375" positionY="-168.84765625" width="128" height="89"/>
+        <element name="MealIngredientListDemo" positionX="-63" positionY="-9" width="128" height="89"/>
+        <element name="User" positionX="-6.9609375" positionY="363.55078125" width="128" height="89"/>
+        <element name="MealList" positionX="-63" positionY="-9" width="128" height="104"/>
     </elements>
 </model>

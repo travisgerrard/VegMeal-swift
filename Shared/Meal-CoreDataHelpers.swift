@@ -7,6 +7,16 @@
 
 import Foundation
 
+extension MadeMeal {
+    var mealThoughts: String {
+        thoughts ?? ""
+    }
+    
+    var mealDateMade: Date {
+        dateMade ?? Date()
+    }
+}
+
 extension MealDemo {
     var mealName: String {
         name ?? "No Name"
@@ -20,8 +30,13 @@ extension MealDemo {
         imageUrl ?? URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg")!
     }
     
+    var mealAuthor: String {
+        author ?? "No author..."
+    }
+    
     // Helper so that you can use mealIngredientList set in swiftui
     // https://www.hackingwithswift.com/books/ios-swiftui/one-to-many-relationships-with-core-data-swiftui-and-fetchrequest
+    
     var mealIngredientListDemoArray: [MealIngredientListDemo] {
         let set = mealIngredientListDemo as? Set<MealIngredientListDemo> ?? []
         return set.sorted {

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		350266F4259D18DE00818CFB /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 350266F3259D18DE00818CFB /* schema.json */; };
 		350266F5259D18DE00818CFB /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 350266F3259D18DE00818CFB /* schema.json */; };
+		3504CA3825B2959B00296AA3 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 3504CA3725B2959B00296AA3 /* Apollo */; };
+		3504CA3A25B2959B00296AA3 /* ApolloSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 3504CA3925B2959B00296AA3 /* ApolloSQLite */; };
 		3511D1B525A428650006B352 /* ModalViewSimplified.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3511D1B425A428650006B352 /* ModalViewSimplified.swift */; };
 		3511D1B625A428650006B352 /* ModalViewSimplified.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3511D1B425A428650006B352 /* ModalViewSimplified.swift */; };
 		3516A51B2513D30D002C97DA /* ListOfMealIngredients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */; };
@@ -46,6 +48,8 @@
 		35649CAC25A6844100AC719C /* AllMealsCoreDataWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35649CAA25A6844100AC719C /* AllMealsCoreDataWrapperView.swift */; };
 		356B350625B00A69003F2B67 /* MealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B350525B00A69003F2B67 /* MealCoreDataView.swift */; };
 		356B350725B00A69003F2B67 /* MealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B350525B00A69003F2B67 /* MealCoreDataView.swift */; };
+		356B350C25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */; };
+		356B350D25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */; };
 		35701D1F25032CEC005AA8C6 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D1E25032CEC005AA8C6 /* CloseButton.swift */; };
 		35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D1E25032CEC005AA8C6 /* CloseButton.swift */; };
 		35701D2825066412005AA8C6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35701D2725066412005AA8C6 /* LoginView.swift */; };
@@ -66,7 +70,6 @@
 		35897F0024F011A900397A4C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35897EEB24F011A800397A4C /* ContentView.swift */; };
 		35897F0124F011A900397A4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35897EEC24F011A900397A4C /* Assets.xcassets */; };
 		35897F0224F011A900397A4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35897EEC24F011A900397A4C /* Assets.xcassets */; };
-		35897F0D24F0125400397A4C /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 35897F0C24F0125400397A4C /* Apollo */; };
 		358D798C25ADD95600F783B2 /* CoreDataExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358D798B25ADD95600F783B2 /* CoreDataExperiment.swift */; };
 		358D798D25ADD95600F783B2 /* CoreDataExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358D798B25ADD95600F783B2 /* CoreDataExperiment.swift */; };
 		358EBA6F258F932600BCD907 /* SearchMealApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 358EBA6E258F932600BCD907 /* SearchMealApolloController.swift */; };
@@ -78,6 +81,8 @@
 		359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0AD2512AFF200D425F4 /* MealFragmentView.swift */; };
 		359CD0B62512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0B52512B42C00D425F4 /* MealFragment_Extentions.swift */; };
 		359CD0B72512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359CD0B52512B42C00D425F4 /* MealFragment_Extentions.swift */; };
+		35A49DC725B3B08700C11C04 /* MealLogCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */; };
+		35A49DC825B3B08700C11C04 /* MealLogCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */; };
 		35A9BD712524BA7E0073941B /* AnimationExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A9BD702524BA7E0073941B /* AnimationExtention.swift */; };
 		35A9BD722524BA7E0073941B /* AnimationExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A9BD702524BA7E0073941B /* AnimationExtention.swift */; };
 		35AC55FD25912B36004765A2 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35AC55FC25912B36004765A2 /* WidgetKit.framework */; };
@@ -97,6 +102,12 @@
 		35D0A06D251294F900D39895 /* ApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D0A067251294E500D39895 /* ApolloController.swift */; };
 		35D0A07525129F3800D39895 /* ApolloNetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D0A07425129F3800D39895 /* ApolloNetworkingController.swift */; };
 		35D0A07625129F3800D39895 /* ApolloNetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D0A07425129F3800D39895 /* ApolloNetworkingController.swift */; };
+		35EA323825B88B6400598985 /* GroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA323725B88B6300598985 /* GroceryListCoreDataView.swift */; };
+		35EA323925B88B6400598985 /* GroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA323725B88B6300598985 /* GroceryListCoreDataView.swift */; };
+		35EA324525B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA324425B8AD5600598985 /* GroceryList-CoreDataHelper.swift */; };
+		35EA324625B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA324425B8AD5600598985 /* GroceryList-CoreDataHelper.swift */; };
+		35EA325425B8C58F00598985 /* MealListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA325325B8C58F00598985 /* MealListCoreDataView.swift */; };
+		35EA325525B8C58F00598985 /* MealListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EA325325B8C58F00598985 /* MealListCoreDataView.swift */; };
 		35EB46BE2514067B006230D4 /* GroceryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46BD2514067B006230D4 /* GroceryListView.swift */; };
 		35EB46BF2514067B006230D4 /* GroceryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46BD2514067B006230D4 /* GroceryListView.swift */; };
 		35EB46C725140C6B006230D4 /* GroceryListFragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46C625140C6B006230D4 /* GroceryListFragment.swift */; };
@@ -109,8 +120,6 @@
 		35EB46E4251B8202006230D4 /* MealListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46E2251B8201006230D4 /* MealListView.swift */; };
 		35EB46EA251BA6FF006230D4 /* MealListApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46E9251BA6FF006230D4 /* MealListApolloController.swift */; };
 		35EB46EB251BA6FF006230D4 /* MealListApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46E9251BA6FF006230D4 /* MealListApolloController.swift */; };
-		35EB46F5251BA952006230D4 /* MealListFragment_Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46F4251BA952006230D4 /* MealListFragment_Extention.swift */; };
-		35EB46F6251BA952006230D4 /* MealListFragment_Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46F4251BA952006230D4 /* MealListFragment_Extention.swift */; };
 		35EB46FE251BC5ED006230D4 /* MealLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46FD251BC5ED006230D4 /* MealLogView.swift */; };
 		35EB46FF251BC5ED006230D4 /* MealLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB46FD251BC5ED006230D4 /* MealLogView.swift */; };
 		35EB4703251BC655006230D4 /* MealLogApolloController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB4702251BC655006230D4 /* MealLogApolloController.swift */; };
@@ -147,6 +156,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		3504CA0725B293A100296AA3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		35AC560C25912B37004765A2 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -182,6 +201,7 @@
 		35649CA425A676C600AC719C /* AllMealsCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMealsCoreDataView.swift; sourceTree = "<group>"; };
 		35649CAA25A6844100AC719C /* AllMealsCoreDataWrapperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMealsCoreDataWrapperView.swift; sourceTree = "<group>"; };
 		356B350525B00A69003F2B67 /* MealCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCoreDataView.swift; sourceTree = "<group>"; };
+		356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfMealIngredientsCoreDataView.swift; sourceTree = "<group>"; };
 		35701D1E25032CEC005AA8C6 /* CloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
 		35701D2725066412005AA8C6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		35701D2D250666D4005AA8C6 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
@@ -202,6 +222,7 @@
 		35973330257E6B5A0028FC95 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		359CD0AD2512AFF200D425F4 /* MealFragmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealFragmentView.swift; sourceTree = "<group>"; };
 		359CD0B52512B42C00D425F4 /* MealFragment_Extentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealFragment_Extentions.swift; sourceTree = "<group>"; };
+		35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLogCoreDataView.swift; sourceTree = "<group>"; };
 		35A9BD702524BA7E0073941B /* AnimationExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationExtention.swift; sourceTree = "<group>"; };
 		35AC55FA25912B36004765A2 /* veggilyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = veggilyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		35AC55FC25912B36004765A2 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -215,13 +236,15 @@
 		35BEEB1C250986B1003EAADD /* AddMealView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealView.swift; sourceTree = "<group>"; };
 		35D0A067251294E500D39895 /* ApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloController.swift; sourceTree = "<group>"; };
 		35D0A07425129F3800D39895 /* ApolloNetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApolloNetworkingController.swift; sourceTree = "<group>"; };
+		35EA323725B88B6300598985 /* GroceryListCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListCoreDataView.swift; sourceTree = "<group>"; };
+		35EA324425B8AD5600598985 /* GroceryList-CoreDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GroceryList-CoreDataHelper.swift"; sourceTree = "<group>"; };
+		35EA325325B8C58F00598985 /* MealListCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListCoreDataView.swift; sourceTree = "<group>"; };
 		35EB46BD2514067B006230D4 /* GroceryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListView.swift; sourceTree = "<group>"; };
 		35EB46C625140C6B006230D4 /* GroceryListFragment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListFragment.swift; sourceTree = "<group>"; };
 		35EB46CB251414FC006230D4 /* AddToGroceryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToGroceryListView.swift; sourceTree = "<group>"; };
 		35EB46D025142286006230D4 /* GroceryListApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroceryListApolloController.swift; sourceTree = "<group>"; };
 		35EB46E2251B8201006230D4 /* MealListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListView.swift; sourceTree = "<group>"; };
 		35EB46E9251BA6FF006230D4 /* MealListApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListApolloController.swift; sourceTree = "<group>"; };
-		35EB46F4251BA952006230D4 /* MealListFragment_Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealListFragment_Extention.swift; sourceTree = "<group>"; };
 		35EB46FD251BC5ED006230D4 /* MealLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLogView.swift; sourceTree = "<group>"; };
 		35EB4702251BC655006230D4 /* MealLogApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLogApolloController.swift; sourceTree = "<group>"; };
 		35EB470D251BC9F6006230D4 /* MadeMealFragment_Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MadeMealFragment_Extention.swift; sourceTree = "<group>"; };
@@ -244,8 +267,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				35649CA025A66E9200AC719C /* CloudKit.framework in Frameworks */,
+				3504CA3A25B2959B00296AA3 /* ApolloSQLite in Frameworks */,
+				3504CA3825B2959B00296AA3 /* Apollo in Frameworks */,
 				3590F93C256EE4E8003E90D3 /* KingfisherSwiftUI in Frameworks */,
-				35897F0D24F0125400397A4C /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +327,8 @@
 				3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */,
 				35EB46FD251BC5ED006230D4 /* MealLogView.swift */,
 				356B350525B00A69003F2B67 /* MealCoreDataView.swift */,
+				356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */,
+				35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */,
 			);
 			path = Meal;
 			sourceTree = "<group>";
@@ -373,6 +399,7 @@
 				35649C8225A64C4E00AC719C /* VeggilyDataModel.xcdatamodeld */,
 				35649C8925A6503200AC719C /* DataController.swift */,
 				35649C9525A6650400AC719C /* Meal-CoreDataHelpers.swift */,
+				35EA324425B8AD5600598985 /* GroceryList-CoreDataHelper.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -409,7 +436,6 @@
 			children = (
 				359CD0B52512B42C00D425F4 /* MealFragment_Extentions.swift */,
 				35EB46C625140C6B006230D4 /* GroceryListFragment.swift */,
-				35EB46F4251BA952006230D4 /* MealListFragment_Extention.swift */,
 				35EB470D251BC9F6006230D4 /* MadeMealFragment_Extention.swift */,
 				35A9BD702524BA7E0073941B /* AnimationExtention.swift */,
 				35F62DF72524DDE300AE5274 /* EnvironmentValues.swift */,
@@ -463,6 +489,7 @@
 			children = (
 				35EB46BD2514067B006230D4 /* GroceryListView.swift */,
 				35EB46CB251414FC006230D4 /* AddToGroceryListView.swift */,
+				35EA323725B88B6300598985 /* GroceryListCoreDataView.swift */,
 			);
 			path = GroceryList;
 			sourceTree = "<group>";
@@ -471,6 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				35EB46E2251B8201006230D4 /* MealListView.swift */,
+				35EA325325B8C58F00598985 /* MealListCoreDataView.swift */,
 			);
 			path = MealList;
 			sourceTree = "<group>";
@@ -513,6 +541,7 @@
 				35897EEE24F011A900397A4C /* Frameworks */,
 				35897EEF24F011A900397A4C /* Resources */,
 				35AC560C25912B37004765A2 /* Embed App Extensions */,
+				3504CA0725B293A100296AA3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -521,8 +550,9 @@
 			);
 			name = "VegMeal (iOS)";
 			packageProductDependencies = (
-				35897F0C24F0125400397A4C /* Apollo */,
 				3590F93B256EE4E8003E90D3 /* KingfisherSwiftUI */,
+				3504CA3725B2959B00296AA3 /* Apollo */,
+				3504CA3925B2959B00296AA3 /* ApolloSQLite */,
 			);
 			productName = "VegMeal (iOS)";
 			productReference = 35897EF124F011A900397A4C /* VegMeal.app */;
@@ -592,8 +622,8 @@
 			);
 			mainGroup = 35897EE424F011A800397A4C;
 			packageReferences = (
-				35897F0B24F0125400397A4C /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				3590F93A256EE4E8003E90D3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				3504CA3625B2959B00296AA3 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 			);
 			productRefGroup = 35897EF224F011A900397A4C /* Products */;
 			projectDirPath = "";
@@ -673,6 +703,7 @@
 				35973331257E6B5A0028FC95 /* UserView.swift in Sources */,
 				354586E525A2D2B70003BAB9 /* AllMealsView.swift in Sources */,
 				35EB46CC251414FC006230D4 /* AddToGroceryListView.swift in Sources */,
+				356B350C25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift in Sources */,
 				35F62E042524F01C00AE5274 /* ListOfIngredients.swift in Sources */,
 				3511D1B525A428650006B352 /* ModalViewSimplified.swift in Sources */,
 				35EB46FE251BC5ED006230D4 /* MealLogView.swift in Sources */,
@@ -696,6 +727,7 @@
 				3572C204252CA18A00FB9DD2 /* SearchView.swift in Sources */,
 				351C8B43258087D000ED6DBA /* UserApolloController.swift in Sources */,
 				35F9E05024FFCE7A00F752AD /* ImageLoader.swift in Sources */,
+				35EA325425B8C58F00598985 /* MealListCoreDataView.swift in Sources */,
 				3575C4FE25A8A2380024B3AB /* CoreDataCodable.swift in Sources */,
 				35F62DF12524DBF700AE5274 /* ModalView.swift in Sources */,
 				35649C8425A64C4E00AC719C /* VeggilyDataModel.xcdatamodeld in Sources */,
@@ -706,9 +738,9 @@
 				35D0A068251294E500D39895 /* ApolloController.swift in Sources */,
 				35F9E05624FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift in Sources */,
 				35F9E058250036E100F752AD /* BlurView.swift in Sources */,
-				35EB46F5251BA952006230D4 /* MealListFragment_Extention.swift in Sources */,
 				35649C8A25A6503200AC719C /* DataController.swift in Sources */,
 				35F62DFD2524E39000AE5274 /* RectangleToCircle.swift in Sources */,
+				35A49DC725B3B08700C11C04 /* MealLogCoreDataView.swift in Sources */,
 				35F62E102525262B00AE5274 /* OptionsList.swift in Sources */,
 				3527FEEB2583AFF5003176AA /* Checkbox.swift in Sources */,
 				35EB46E3251B8201006230D4 /* MealListView.swift in Sources */,
@@ -720,10 +752,12 @@
 				35AC56A52594FDBF004765A2 /* LoginInCreateAccountPromt.swift in Sources */,
 				357160C4252E3BB100A5305F /* SearchBar.swift in Sources */,
 				35F62DF82524DDE300AE5274 /* EnvironmentValues.swift in Sources */,
+				35EA323825B88B6400598985 /* GroceryListCoreDataView.swift in Sources */,
 				35840CE32528AA7E003D4B81 /* CGSize+Random.swift in Sources */,
 				35F9E05224FFCF0C00F752AD /* AsyncImage.swift in Sources */,
 				35F9E05424FFD35000F752AD /* ImageCache.swift in Sources */,
 				35897EFD24F011A900397A4C /* VegMealApp.swift in Sources */,
+				35EA324525B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,6 +778,7 @@
 				35EB46E4251B8202006230D4 /* MealListView.swift in Sources */,
 				3539132625372E7300CDFF6A /* API.swift in Sources */,
 				35649CAC25A6844100AC719C /* AllMealsCoreDataWrapperView.swift in Sources */,
+				35EA323925B88B6400598985 /* GroceryListCoreDataView.swift in Sources */,
 				354586D425A0B7E80003BAB9 /* RecentlyAddedSocialMealView.swift in Sources */,
 				351C8B4D2581497500ED6DBA /* UserFragment_Extention.swift in Sources */,
 				35649C8525A64C4E00AC719C /* VeggilyDataModel.xcdatamodeld in Sources */,
@@ -751,6 +786,9 @@
 				35EB46D225142286006230D4 /* GroceryListApolloController.swift in Sources */,
 				35F62E052524F01C00AE5274 /* ListOfIngredients.swift in Sources */,
 				3572C205252CA18A00FB9DD2 /* SearchView.swift in Sources */,
+				356B350D25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift in Sources */,
+				35A49DC825B3B08700C11C04 /* MealLogCoreDataView.swift in Sources */,
+				35EA324625B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */,
 				359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
 				354586B6259F69640003BAB9 /* SocialApolloController.swift in Sources */,
 				35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */,
@@ -762,6 +800,7 @@
 				35F62DF22524DBF700AE5274 /* ModalView.swift in Sources */,
 				3527FEEC2583AFF5003176AA /* Checkbox.swift in Sources */,
 				354586E625A2D2B70003BAB9 /* AllMealsView.swift in Sources */,
+				35EA325525B8C58F00598985 /* MealListCoreDataView.swift in Sources */,
 				35F62E0C252523BE00AE5274 /* AddIngredients.swift in Sources */,
 				35AC56A62594FDBF004765A2 /* LoginInCreateAccountPromt.swift in Sources */,
 				35EB4704251BC655006230D4 /* MealLogApolloController.swift in Sources */,
@@ -778,7 +817,6 @@
 				35649C9725A6650400AC719C /* Meal-CoreDataHelpers.swift in Sources */,
 				359CD0B72512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */,
 				35EB46EB251BA6FF006230D4 /* MealListApolloController.swift in Sources */,
-				35EB46F6251BA952006230D4 /* MealListFragment_Extention.swift in Sources */,
 				35897EFE24F011A900397A4C /* VegMealApp.swift in Sources */,
 				354586DD25A192C20003BAB9 /* RecentlyCommentedSocialMealView.swift in Sources */,
 				35649C8B25A6503200AC719C /* DataController.swift in Sources */,
@@ -1114,12 +1152,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		35897F0B24F0125400397A4C /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+		3504CA3625B2959B00296AA3 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.31.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.40.0;
 			};
 		};
 		3590F93A256EE4E8003E90D3 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -1133,10 +1171,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		35897F0C24F0125400397A4C /* Apollo */ = {
+		3504CA3725B2959B00296AA3 /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 35897F0B24F0125400397A4C /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			package = 3504CA3625B2959B00296AA3 /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		3504CA3925B2959B00296AA3 /* ApolloSQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3504CA3625B2959B00296AA3 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = ApolloSQLite;
 		};
 		3590F93B256EE4E8003E90D3 /* KingfisherSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;

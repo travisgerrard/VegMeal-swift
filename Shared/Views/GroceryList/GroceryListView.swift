@@ -154,39 +154,40 @@ struct GroceryListSubView: View {
 
     var body: some View {
         List {
-            ForEach(0..<11) { index in
-                // If the current grocery list has an ingredient with specific category, show catergory as seciton header
-                if self.groceryListController.groceryList.contains(where: {$0.ingredient?.category == index}) {
-                    Section(header: Text("\(self.groceryListController.groceryList[0].options[index] ?? "no value")")) {
-                        ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
-                            if self.groceryListController.groceryList[i].ingredient?.category == index {
-                
-                                GroceryListCellView(
-                                    groceryListController: groceryListController,
-                                    groceryList: self.groceryListController.groceryList,
-                                    i: i,
-                                    isCompleted: false
-                                )
-                            
-                            }
-                        }
-                    }
-                }
-                
-            }
-            
-            Section(header: Text("Completed")) {
-                ForEach(0..<self.groceryListController.completedGroceryList.count, id: \.self) {i in
-                    
-                    GroceryListCellView(
-                        groceryListController: groceryListController,
-                        groceryList: self.groceryListController.completedGroceryList,
-                        i: i,
-                        isCompleted: true
-                    )
-                
-                }
-            }
+            Text("Temp")
+//            ForEach(0..<11) { index in
+////                // If the current grocery list has an ingredient with specific category, show catergory as seciton header
+//                if self.groceryListController.groceryList.contains(where: {$0.ingredient?.category == index}) {
+//                    Section(header: Text("\(self.groceryListController.groceryList[0].options[index] ?? "no value")")) {
+//                        ForEach(0..<self.groceryListController.groceryList.count, id: \.self) {i in
+//                            if self.groceryListController.groceryList[i].ingredient?.category == index {
+//
+//                                GroceryListCellView(
+//                                    groceryListController: groceryListController,
+//                                    groceryList: self.groceryListController.groceryList,
+//                                    i: i,
+//                                    isCompleted: false
+//                                )
+//
+//                            }
+//                        }
+//                    }
+//                }
+//
+////            }
+//
+//            Section(header: Text("Completed")) {
+//                ForEach(0..<self.groceryListController.completedGroceryList.count, id: \.self) {i in
+//
+//                    GroceryListCellView(
+//                        groceryListController: groceryListController,
+//                        groceryList: self.groceryListController.completedGroceryList,
+//                        i: i,
+//                        isCompleted: true
+//                    )
+//
+//                }
+//            }
         }
         
         .navigationBarTitle("Grocery List")
@@ -225,14 +226,14 @@ struct GroceryListCellView: View {
             )
             
             VStack(alignment: .leading) {
-                Text("\(groceryList[i].ingredient?.name ?? "No ingredient") - \(groceryList[i].amount?.name ?? "No amount")")
+                Text("\(groceryList[i].ingredient?.fragments.ingredientFragment.name ?? "No ingredient") - \(groceryList[i].amount?.fragments.amountFragment.name ?? "No amount")")
                 if isCompleted && groceryList[i].dateCompletedFormatted != nil {
                     Text("Completed \(groceryList[i].dateCompletedFormatted!, style: .relative) ago").font(.caption)
                 } else {
                     Text("Completed just now").font(.caption)
                 }
-                if groceryList[i].meal?.name != nil {
-                    Text("\(groceryList[i].meal!.name!)").font(.footnote).italic()
+                if groceryList[i].meal?.fragments.mealDemoFragment.name != nil {
+                    Text("\((groceryList[i].meal?.fragments.mealDemoFragment.name)!)").font(.footnote).italic()
                 }
             }.foregroundColor(isCompleted ? .gray : .black)
             

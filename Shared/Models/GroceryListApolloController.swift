@@ -32,7 +32,7 @@ class GroceryListApolloController: ObservableObject {
                 for grocery in returnedGroceryList {
                     self.groceryList.append(grocery!.fragments.groceryListFragment)
                 }
-                self.groceryList = self.groceryList.sorted(by: { $0.ingredient!.category! > $1.ingredient!.category! }) // Sorts by category
+                self.groceryList = self.groceryList.sorted(by: { ($0.ingredient?.fragments.ingredientFragment.category)! > ($1.ingredient?.fragments.ingredientFragment.category)! }) // Sorts by category
                 
                 guard let returnedCompleteGroceryList = graphQLResults.data?.groceryCompleted else { break }
                 self.completedGroceryList.removeAll()

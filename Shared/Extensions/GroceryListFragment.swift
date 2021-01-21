@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension GroceryListFragment: Identifiable {
+extension GroceryListFragment {
     var options: [Int: String] {
         [
             0: "none",
