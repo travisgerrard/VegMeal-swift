@@ -121,31 +121,32 @@ struct GroceryListView_Previews: PreviewProvider {
     }
 }
 
-struct BottomCardView: View {
-    @Binding var show: Bool
-    @Binding var bottomState: CGSize
-    
-    var body: some View {
-        
-        VStack(spacing: 20) {
-            Rectangle()
-                .frame(width: 40, height: 5)
-                .cornerRadius(3.0)
-                .opacity(0.1)
-            AddToGroceryListView()
-            Spacer()
-        }
-        .padding(.top, 8)
-        .padding(.horizontal, 20)
-        .frame(maxWidth: 712)
-        .frame(height: 750)
-        .background(BlurView(style: .systemThinMaterial))
-        .cornerRadius(30)
-        .shadow(radius: 20)
-        .frame(maxWidth: .infinity)
-        
-    }
-}
+//struct BottomCardView: View {
+//    @Binding var show: Bool
+//    @Binding var bottomState: CGSize
+//    
+//    var body: some View {
+//        
+//        VStack(spacing: 20) {
+//            Rectangle()
+//                .frame(width: 40, height: 5)
+//                .cornerRadius(3.0)
+//                .opacity(0.1)
+////            AddToGroceryListView()
+//            AddToGroceryListCoreDataView()
+//            Spacer()
+//        }
+//        .padding(.top, 8)
+//        .padding(.horizontal, 20)
+//        .frame(maxWidth: 712)
+//        .frame(height: 750)
+//        .background(BlurView(style: .systemThinMaterial))
+//        .cornerRadius(30)
+//        .shadow(radius: 20)
+//        .frame(maxWidth: .infinity)
+//        
+//    }
+//}
 
 struct GroceryListSubView: View {
     var groceryListController: GroceryListApolloController

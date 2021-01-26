@@ -61,9 +61,49 @@ struct MealListCoreDataView: View {
                     }
                 }
             }
+        }
+    }
+    
+    func toggleMealComplete(mealListItem: MealList) {
+        mealListItem.isCompleted = !mealListItem.isCompleted
+
+        let today = Date()
+
+        mealListItem.dateCompleted = today
+        
+        let iso8601DateFormatter = ISO8601DateFormatter()
+        iso8601DateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let formatter3 = iso8601DateFormatter.string(from: today)
+        
+        let mutation = CompleteMyMealMutation(id: mealListItem.idString, dateCompleted: formatter3, isCompleted: mealListItem.isCompleted)
+        
+        ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            
+            case .success(let graphQLResults):
+                print("success: \(graphQLResults)")
+            }
             
         }
-        
+    }
+    
+    func removeItemFromMealList(mealListItem: MealList) {
+                let mutation = DeleteMyMealListItemMutation(id: mealListItem.idString)
+
+        managedObjectContext.delete(mealListItem)
+
+        ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+                
+            case .success(let graphQLResults):
+                print("Success: \(graphQLResults)")
+
+            }
+        }
     }
     
     var body: some View {
@@ -85,10 +125,13 @@ struct MealListCoreDataView: View {
                                             }
                                             .onEnded { _ in
                                                 // Do when button is clicked
+                                                toggleMealComplete(mealListItem: item)
+                                                
                                             }
+                                         
                                 )
                                 NavigationLink(
-                                    destination: MealCoreDataView(meal: item.meal!),
+                                    destination: MealCoreDataView(meal: item.meal! /* ?? MealDemo.object(in: managedObjectContext, withFragment: MealDemoFragment(id: "123", name: "demo", description: "demo desc", mealImage: nil ,ingredientList: [], author: nil)))!*/),
                                     label: {
                                         
                                         HStack {
@@ -133,6 +176,7 @@ struct MealListCoreDataView: View {
                                 .gesture(TapGesture()
                                             .onEnded {
                                                 // To do when trash button is pressed
+                                                removeItemFromMealList(mealListItem: item)
                                             }
                                 )
                             }
@@ -154,8 +198,12 @@ struct MealListCoreDataView: View {
                                             }
                                             .onEnded { _ in
                                                 // Do when button is clicked
+                                                toggleMealComplete(mealListItem: item)
+                                                
+                                                
                                             }
                                 )
+                                .animation(.easeInOut)
                                 NavigationLink(
                                     destination: MealCoreDataView(meal: item.meal!),
                                     label: {
@@ -207,6 +255,8 @@ struct MealListCoreDataView: View {
                                 .gesture(TapGesture()
                                             .onEnded {
                                                 // Do when trash is clicked
+                                                removeItemFromMealList(mealListItem: item)
+
                                             }
                                 )
                             }

@@ -71,8 +71,8 @@ class CustomInterceptor: ApolloInterceptor {
         if isLogged {
             request.addHeader(name: "Authorization", value: "Bearer \(token)")
         }
-        print("request :\(request)")
-        print("response :\(String(describing: response))")
+//        print("request :\(request)")
+//        print("response :\(String(describing: response))")
         
         chain.proceedAsync(request: request,
                            response: response,

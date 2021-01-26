@@ -17,7 +17,12 @@ struct AllMealsCoreDataWrapperView: View {
                 AllMealsCoreDataView()
             }
             .navigationBarTitle("Veggily")
-            .navigationBarItems(leading: AccountButton())
+            .navigationBarItems(leading: AccountButton(), trailing:
+                HStack {
+                    SearchButton()
+                    AddNewMealButton()
+                }
+            )
             .onAppear{
                 userController.getUserQueryRunning = true
                 userController.getUserData()
@@ -38,6 +43,7 @@ struct AccountButton:View {
             if userController.getUserQueryRunning {
                 ProgressView()
             } else {
+                
                 if isLogged {
                     Button(action: {
                         self.accountTap.toggle()
@@ -47,11 +53,6 @@ struct AccountButton:View {
                         UserView(showModal: $accountTap)
                             .environmentObject(self.userController)
                     }
-                    
-                    
-                    // This was for when clicking user logged user out
-                    
-                    
                 } else {
                     Button(action: {showLogin.toggle()}) {
                         Label("Login/SignUp", systemImage: "person")
@@ -63,13 +64,40 @@ struct AccountButton:View {
         }
         
     }
-    
 }
 
-struct AllMealsCoreDataWrapperView_Previews: PreviewProvider {
-    static var previews: some View {
-        AllMealsCoreDataWrapperView(searchTap: .constant(false))
-            .environmentObject(UserApolloController())
-            .environmentObject(ApolloNetworkingController())
+struct AddNewMealButton:View {
+    @State private var showAddMealModal: Bool = false
+    @AppStorage("isLogged") var isLogged = false
+    
+    var body: some View {
+        if isLogged {
+            Button(action: {showAddMealModal = true}) {
+                Image(systemName: "rectangle.stack.badge.plus")
+               
+            }.sheet(isPresented: $showAddMealModal, onDismiss: {}) {
+                AddMealView(showModal: self.$showAddMealModal)
+            }
+        }
     }
 }
+
+struct SearchButton: View {
+    @State private var searchTap: Bool = false
+
+    var body: some View {
+        NavigationLink(destination: SearchCoreDataView(), label: {
+            Image(systemName: "magnifyingglass")
+                .padding(.trailing)
+        })
+
+    }
+}
+
+//struct AllMealsCoreDataWrapperView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AllMealsCoreDataWrapperView(searchTap: .constant(false))
+//            .environmentObject(UserApolloController())
+//            .environmentObject(ApolloNetworkingController())
+//    }
+//}

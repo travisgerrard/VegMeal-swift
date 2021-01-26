@@ -21,6 +21,8 @@
 		351C8B4D2581497500ED6DBA /* UserFragment_Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 351C8B4B2581497500ED6DBA /* UserFragment_Extention.swift */; };
 		3527FEEB2583AFF5003176AA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3527FEEA2583AFF5003176AA /* Checkbox.swift */; };
 		3527FEEC2583AFF5003176AA /* Checkbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3527FEEA2583AFF5003176AA /* Checkbox.swift */; };
+		3528712925BB85F900246BE6 /* AddMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3528712825BB85F900246BE6 /* AddMealCoreDataView.swift */; };
+		3528712A25BB85F900246BE6 /* AddMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3528712825BB85F900246BE6 /* AddMealCoreDataView.swift */; };
 		3539132525372E7300CDFF6A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3539132425372E7300CDFF6A /* API.swift */; };
 		3539132625372E7300CDFF6A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3539132425372E7300CDFF6A /* API.swift */; };
 		354586AC259F5DA80003BAB9 /* SocialMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354586AB259F5DA80003BAB9 /* SocialMainView.swift */; };
@@ -64,6 +66,8 @@
 		3575C4FF25A8A2380024B3AB /* CoreDataCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3575C4FD25A8A2380024B3AB /* CoreDataCodable.swift */; };
 		35840CE32528AA7E003D4B81 /* CGSize+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35840CE22528AA7E003D4B81 /* CGSize+Random.swift */; };
 		35840CE42528AA7E003D4B81 /* CGSize+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35840CE22528AA7E003D4B81 /* CGSize+Random.swift */; };
+		3585DA0E25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3585DA0D25BD22AD00BDD59F /* SearchCoreDataView.swift */; };
+		3585DA0F25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3585DA0D25BD22AD00BDD59F /* SearchCoreDataView.swift */; };
 		35897EFD24F011A900397A4C /* VegMealApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35897EEA24F011A800397A4C /* VegMealApp.swift */; };
 		35897EFE24F011A900397A4C /* VegMealApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35897EEA24F011A800397A4C /* VegMealApp.swift */; };
 		35897EFF24F011A900397A4C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35897EEB24F011A800397A4C /* ContentView.swift */; };
@@ -186,6 +190,7 @@
 		351C8B42258087D000ED6DBA /* UserApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserApolloController.swift; sourceTree = "<group>"; };
 		351C8B4B2581497500ED6DBA /* UserFragment_Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFragment_Extention.swift; sourceTree = "<group>"; };
 		3527FEEA2583AFF5003176AA /* Checkbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checkbox.swift; sourceTree = "<group>"; };
+		3528712825BB85F900246BE6 /* AddMealCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMealCoreDataView.swift; sourceTree = "<group>"; };
 		3539132425372E7300CDFF6A /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		354586AB259F5DA80003BAB9 /* SocialMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMainView.swift; sourceTree = "<group>"; };
 		354586B4259F69640003BAB9 /* SocialApolloController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialApolloController.swift; sourceTree = "<group>"; };
@@ -209,6 +214,7 @@
 		3572C203252CA18A00FB9DD2 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		3575C4FD25A8A2380024B3AB /* CoreDataCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCodable.swift; sourceTree = "<group>"; };
 		35840CE22528AA7E003D4B81 /* CGSize+Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+Random.swift"; sourceTree = "<group>"; };
+		3585DA0D25BD22AD00BDD59F /* SearchCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoreDataView.swift; sourceTree = "<group>"; };
 		35897EEA24F011A800397A4C /* VegMealApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VegMealApp.swift; sourceTree = "<group>"; };
 		35897EEB24F011A800397A4C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		35897EEC24F011A900397A4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -300,6 +306,7 @@
 				35EB46E1251B81A9006230D4 /* MealList */,
 				35EB46BC2514065E006230D4 /* GroceryList */,
 				35BEEB1C250986B1003EAADD /* AddMealView.swift */,
+				3528712825BB85F900246BE6 /* AddMealCoreDataView.swift */,
 				35701D2725066412005AA8C6 /* LoginView.swift */,
 				35AC56AA2594FF4B004765A2 /* SharedViews */,
 				3516A5112513D28D002C97DA /* Meal */,
@@ -312,9 +319,9 @@
 		3516A5102513D275002C97DA /* Meals */ = {
 			isa = PBXGroup;
 			children = (
-				35649C8F25A6645700AC719C /* MealFragmentCoreDataView.swift */,
 				359CD0AD2512AFF200D425F4 /* MealFragmentView.swift */,
 				354586E425A2D2B70003BAB9 /* AllMealsView.swift */,
+				35649C8F25A6645700AC719C /* MealFragmentCoreDataView.swift */,
 				35649CA425A676C600AC719C /* AllMealsCoreDataView.swift */,
 				35649CAA25A6844100AC719C /* AllMealsCoreDataWrapperView.swift */,
 			);
@@ -338,6 +345,7 @@
 			children = (
 				3572C203252CA18A00FB9DD2 /* SearchView.swift */,
 				357160C3252E3BB100A5305F /* SearchBar.swift */,
+				3585DA0D25BD22AD00BDD59F /* SearchCoreDataView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -721,8 +729,10 @@
 				35EB46EA251BA6FF006230D4 /* MealListApolloController.swift in Sources */,
 				35701D1F25032CEC005AA8C6 /* CloseButton.swift in Sources */,
 				35EB46C725140C6B006230D4 /* GroceryListFragment.swift in Sources */,
+				3528712925BB85F900246BE6 /* AddMealCoreDataView.swift in Sources */,
 				358EBA6F258F932600BCD907 /* SearchMealApolloController.swift in Sources */,
 				359CD0AE2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
+				3585DA0E25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */,
 				35701D2E250666D4005AA8C6 /* Home.swift in Sources */,
 				3572C204252CA18A00FB9DD2 /* SearchView.swift in Sources */,
 				351C8B43258087D000ED6DBA /* UserApolloController.swift in Sources */,
@@ -790,6 +800,7 @@
 				35A49DC825B3B08700C11C04 /* MealLogCoreDataView.swift in Sources */,
 				35EA324625B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */,
 				359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
+				3585DA0F25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */,
 				354586B6259F69640003BAB9 /* SocialApolloController.swift in Sources */,
 				35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */,
 				35D0A06D251294F900D39895 /* ApolloController.swift in Sources */,
@@ -807,6 +818,7 @@
 				35F62E112525262B00AE5274 /* OptionsList.swift in Sources */,
 				35701D2925066412005AA8C6 /* LoginView.swift in Sources */,
 				356B350725B00A69003F2B67 /* MealCoreDataView.swift in Sources */,
+				3528712A25BB85F900246BE6 /* AddMealCoreDataView.swift in Sources */,
 				35973332257E6B5A0028FC95 /* UserView.swift in Sources */,
 				3511D1B625A428650006B352 /* ModalViewSimplified.swift in Sources */,
 				35D0A07625129F3800D39895 /* ApolloNetworkingController.swift in Sources */,

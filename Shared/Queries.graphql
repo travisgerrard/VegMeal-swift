@@ -83,7 +83,7 @@ mutation CREATE_MEAL(
       author: { connect: { id: $authorId } }
     }
   ) {
-    ...MealFragment
+    ...MealDemoFragment
   }
 }
 
@@ -99,7 +99,7 @@ mutation CREATE_MEAL_WITHOUT_IMAGE(
       author: { connect: { id: $authorId } }
     }
   ) {
-    ...MealFragment
+    ...MealDemoFragment
   }
 }
 
@@ -119,13 +119,15 @@ mutation UPDATE_MEAL_WITH_IMAGE(
     id: $id
     data: { name: $name, description: $description, mealImage: $mealImage }
   ) {
-    ...MealFragment
+    ...MealDemoFragment
   }
 }
 
+
+
 mutation ADD_GROCERY_LIST($ingredient: String!, $amount: String!) {
   addGroceryList(ingredient: $ingredient, amount: $amount) {
-    id
+    ...GroceryListFragment
   }
 }
 
@@ -304,7 +306,7 @@ mutation COMPLETE_MY_MEAL($id: ID!, $dateCompleted: DateTime, $isCompleted: Bool
     id: $id
     data: { isCompleted: $isCompleted, dateCompleted: $dateCompleted }
   ) {
-    id
+    ...MealListFragment
   }
 }
 
@@ -535,5 +537,45 @@ query ALL_MEALS_QUERY_SOCIAL($ids:[ID!]) {
   }
   allMadeMeals(where: { author: { id_in: $ids } }, sortBy: dateMade_DESC) {
     ...MadeMealFragment
+  }
+}
+
+mutation CREATE_AMOUNT($name: String) {
+  createAmount(data: { name: $name }) {
+    ...AmountFragment
+  }
+}
+
+mutation CREATE_INGREDIENT($name: String) {
+  createIngredient(data: { name: $name }) {
+    ...IngredientFragment
+  }
+}
+
+mutation CREATE_INGREDIENT_AND_AMOUNT(
+  $ingredientName: String
+  $amountName: String
+) {
+  createIngredient(data: { name: $ingredientName }) {
+    ...IngredientFragment
+  }
+  createAmount(data: { name: $amountName }) {
+    ...AmountFragment
+  }
+}
+
+mutation CREATE_GROCERYLIST_ITEM(
+  $ingredientId: ID!
+  $amountId: ID!
+  $userId: ID!
+) {
+  createGroceryList(
+    data: {
+      ingredient: { connect: { id: $ingredientId } }
+      amount: { connect: { id: $amountId } }
+      author: { connect: { id: $userId } }
+    }
+  ) {
+    ...GroceryListFragment
   }
 }

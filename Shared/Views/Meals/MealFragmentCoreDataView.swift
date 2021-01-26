@@ -12,7 +12,8 @@ import struct Kingfisher.DownsamplingImageProcessor
 struct MealFragmentCoreDataView: View {
     var meal: MealDemo
     var wideView = false
-    
+    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: []) var meals: FetchedResults<MealDemo> // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
+
     var body: some View {
         KFImage(meal.mealImageUrl,
                 options: [

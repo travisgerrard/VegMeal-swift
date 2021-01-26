@@ -16,6 +16,8 @@ struct MealCoreDataView: View {
     
     @Environment(\.managedObjectContext) var managedObjectContext
     
+    @State private var showEditMealModal: Bool = false
+    
     func addMealToGroceryList() {
         let mutation = AddMealToGroceryListMutation(mealId: meal.idString, authorId: userId)
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
@@ -103,16 +105,13 @@ struct MealCoreDataView: View {
                                         }
                                         Spacer()
                                         if userId == meal.mealAuthor {
-                                            Button("Edit", action: {}
-                                                   //                                            {showEditMealModal.toggle()}
-                                            )
-                                            .font(.callout)
-                                            .padding(.trailing)
-                                            .padding(.bottom)
-                                            //                                        .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
-                                            //                                            AddMealView(isEditingMeal: true, url: parse(object: meal), mealId: meal.id, name: meal.name!, description: meal.description!, showModal: self.$showEditMealModal)
-                                            //                                                .environmentObject(self.networkingController)
-                                            //                                        }
+                                            Button("Edit", action: {showEditMealModal.toggle()})
+                                                .font(.callout)
+                                                .padding(.trailing)
+                                                .padding(.bottom)
+                                                .sheet(isPresented: $showEditMealModal, onDismiss: {}) {
+                                                    AddMealCoreDataView(isEditingMeal: true, showModal: self.$showEditMealModal, meal: meal)
+                                                }
                                         }
                                     }
                                 }.background(BlurView(style: .systemMaterial))

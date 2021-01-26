@@ -63,7 +63,7 @@ class GroceryListApolloController: ObservableObject {
 //                print("Success: \(graphQLResults)")
                 guard let groceryListId = graphQLResults.data?.addGroceryList else { break }
                 
-                let query = GetGroceryListItemQuery(id: groceryListId.id)
+                let query = GetGroceryListItemQuery(id: groceryListId.fragments.groceryListFragment.id)
                 ApolloController.shared.apollo.fetch(query: query) { result in
                     switch result {
                     case .failure(let error):

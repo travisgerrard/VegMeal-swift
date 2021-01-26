@@ -7,9 +7,21 @@
 
 import Foundation
 
+extension AmountDemo {
+    var amountName: String {
+        name ?? "No amount name"
+    }
+}
+
+extension IngredientDemo {
+    var ingredientName: String {
+        name ?? "No ingredient name"
+    }
+}
+
 extension MadeMeal {
     var mealThoughts: String {
-        thoughts ?? ""
+        thoughts ?? "Thoughts on meal and life?"
     }
     
     var mealDateMade: Date {
@@ -27,7 +39,7 @@ extension MealDemo {
     }
     
     var mealImageUrl: URL {
-        imageUrl ?? URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg")!
+        imageUrl ?? URL(string: "https://res.cloudinary.com/dehixvgdv/image/upload/v1598621202/veggily/5f490612c53b900a6dcdc484.png")!
     }
     
     var mealAuthor: String {

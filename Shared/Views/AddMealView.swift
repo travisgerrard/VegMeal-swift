@@ -189,76 +189,76 @@ struct AddMealView_Previews: PreviewProvider {
             .environmentObject(ApolloNetworkingController())
     }
 }
-
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    var isCamera: Bool = false
-    var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @Environment(\.presentationMode) var presentationMode
-    
-    
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        if UIImagePickerController.isSourceTypeAvailable(.camera) && isCamera {
-            picker.sourceType = .camera
-        } else {
-            picker.sourceType = .photoLibrary
-        }
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
-        
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-}
-
-class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    let parent: ImagePicker
-    
-    init(_ parent: ImagePicker) {
-        self.parent = parent
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        if let uiImage = info[.originalImage] as? UIImage {
-            parent.image = uiImage
-        }
-        
-        parent.presentationMode.wrappedValue.dismiss()
-    }
-}
-
-struct OverLayText: View {
-    let name: String!
-    let description: String!
-
-    var body: some View {
-        VStack{
-            HStack {
-                Text(name)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .minimumScaleFactor(0.5)
-                    .padding(.leading)
-                    .padding(.top)
-                    .padding(.bottom, 1)
-                
-                Spacer()
-            }
-            HStack {
-                Text(description)
-                    .font(.subheadline)
-                    .padding(.leading)
-                    .padding(.bottom)
-                
-                Spacer()
-            }
-        }.background(BlurView(style: .systemMaterial))
-        
-    }
-}
+//
+//struct ImagePicker: UIViewControllerRepresentable {
+//    @Binding var image: UIImage?
+//    var isCamera: Bool = false
+//    var sourceType: UIImagePickerController.SourceType = .photoLibrary
+//    @Environment(\.presentationMode) var presentationMode
+//
+//
+//    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
+//        let picker = UIImagePickerController()
+//        picker.delegate = context.coordinator
+//        if UIImagePickerController.isSourceTypeAvailable(.camera) && isCamera {
+//            picker.sourceType = .camera
+//        } else {
+//            picker.sourceType = .photoLibrary
+//        }
+//        return picker
+//    }
+//
+//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
+//
+//    }
+//
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator(self)
+//    }
+//}
+//
+//class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+//    let parent: ImagePicker
+//
+//    init(_ parent: ImagePicker) {
+//        self.parent = parent
+//    }
+//
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+//        if let uiImage = info[.originalImage] as? UIImage {
+//            parent.image = uiImage
+//        }
+//
+//        parent.presentationMode.wrappedValue.dismiss()
+//    }
+//}
+//
+//struct OverLayText: View {
+//    let name: String!
+//    let description: String!
+//
+//    var body: some View {
+//        VStack{
+//            HStack {
+//                Text(name)
+//                    .font(.title3)
+//                    .fontWeight(.bold)
+//                    .minimumScaleFactor(0.5)
+//                    .padding(.leading)
+//                    .padding(.top)
+//                    .padding(.bottom, 1)
+//
+//                Spacer()
+//            }
+//            HStack {
+//                Text(description)
+//                    .font(.subheadline)
+//                    .padding(.leading)
+//                    .padding(.bottom)
+//
+//                Spacer()
+//            }
+//        }.background(BlurView(style: .systemMaterial))
+//
+//    }
+//}

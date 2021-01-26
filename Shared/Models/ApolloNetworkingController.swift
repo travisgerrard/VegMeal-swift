@@ -123,9 +123,9 @@ class ApolloNetworkingController: ObservableObject {
                 
             case .success(let graphQLResult):
                 //                print("Success: \(graphQLResult)")
-                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
-                
-                self.meals.append(fragment)
+//                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
+//
+//                self.meals.append(fragment)
                 self.shouldCloseAddUpdateMealScreen = true
                 self.shouldCloseAddUpdateMealScreen = true
                 
@@ -161,9 +161,9 @@ class ApolloNetworkingController: ObservableObject {
                 }
                 
                 print("Success: \(graphQLResult)")
-                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
-                
-                self.meals.append(fragment)
+//                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
+//                
+//                self.meals.append(fragment)
                 self.shouldCloseAddUpdateMealScreen = true
                 self.shouldCloseAddUpdateMealScreen = true
                 
@@ -192,12 +192,12 @@ class ApolloNetworkingController: ObservableObject {
                 self.uploadImageError = error
                 
             case .success(let graphQLResult):
-                guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealFragment else { break }
+                guard let fragment = graphQLResult.data?.updateMeal?.fragments.mealDemoFragment else { break }
                 
                 if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
                     self.meals[mealToUpdateIndex].name = fragment.name
                     self.meals[mealToUpdateIndex].description = fragment.description
-                    self.meals[mealToUpdateIndex].mealImage = fragment.mealImage
+//                    self.meals[mealToUpdateIndex].mealImage = fragment.mealImage
                 }
                 self.shouldCloseAddUpdateMealScreen = true
                 
