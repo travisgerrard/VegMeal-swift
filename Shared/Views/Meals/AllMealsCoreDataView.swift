@@ -50,7 +50,8 @@ struct AllMealsCoreDataView: View {
                                     let mealIngredientListFragment =  MealIngredientListDemo.object(in:managedObjectContext, withFragment: $0.fragments.mealIngredientListFragment)
                                     
                                     // Connects mealIngredientList to the meal
-                                    mealForDB?.mutableSetValue(forKey: "mealIngredientListDemo").add(mealIngredientListFragment!)
+//                                    mealForDB?.mutableSetValue(forKey: "mealIngredientListDemo").add(mealIngredientListFragment!)
+                                    mealIngredientListFragment?.mealDemo = mealForDB
                                     
                                     // Loads ingredients and amounts into DB and links them to mealIngredientList
                                     if let ingredientFragment = $0.fragments.mealIngredientListFragment.ingredient?.fragments.ingredientFragment {
@@ -65,6 +66,34 @@ struct AllMealsCoreDataView: View {
                             }
                         }
 //                        try? managedObjectContext.save()
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadIngredientsAandAmounts() {
+        let query = AllAmountsAndIngredientsQuery()
+        ApolloController.shared.apollo.fetch(query: query) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+                
+            case .success(let graphQLResult):
+                if let data = graphQLResult.data {
+                    if let allAmounts = data.allAmounts {
+                        for amount in allAmounts {
+                            if let amountFragment = amount?.fragments.amountFragment {
+                                _ = AmountDemo.object(in: managedObjectContext, withFragment: amountFragment)
+                            }
+                        }
+                    }
+                    if let allIngredients = data.allIngredients {
+                        for ingredient in allIngredients {
+                            if let ingredientFragment = ingredient?.fragments.ingredientFragment {
+                                _ = IngredientDemo.object(in: managedObjectContext, withFragment: ingredientFragment)
+                            }
+                        }
                     }
                 }
             }
@@ -129,6 +158,7 @@ struct AllMealsCoreDataView: View {
             }
         }.onAppear {
             self.loadMealDemo()
+            self.loadIngredientsAandAmounts()
         }
         
         

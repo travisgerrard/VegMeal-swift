@@ -147,6 +147,10 @@
 		35F9E05424FFD35000F752AD /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E05324FFD35000F752AD /* ImageCache.swift */; };
 		35F9E05624FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E05524FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift */; };
 		35F9E058250036E100F752AD /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E057250036E100F752AD /* BlurView.swift */; };
+		35FEB9AC25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */; };
+		35FEB9AD25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */; };
+		35FEB9B325C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */; };
+		35FEB9B425C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -265,6 +269,8 @@
 		35F9E05324FFD35000F752AD /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		35F9E05524FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
 		35F9E057250036E100F752AD /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientToMealCoreDataView.swift; sourceTree = "<group>"; };
+		35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToGroceryListCoreDataView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,9 +339,10 @@
 			children = (
 				3516A51A2513D30D002C97DA /* ListOfMealIngredients.swift */,
 				35EB46FD251BC5ED006230D4 /* MealLogView.swift */,
-				356B350525B00A69003F2B67 /* MealCoreDataView.swift */,
 				356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */,
+				356B350525B00A69003F2B67 /* MealCoreDataView.swift */,
 				35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */,
+				35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */,
 			);
 			path = Meal;
 			sourceTree = "<group>";
@@ -498,6 +505,7 @@
 				35EB46BD2514067B006230D4 /* GroceryListView.swift */,
 				35EB46CB251414FC006230D4 /* AddToGroceryListView.swift */,
 				35EA323725B88B6300598985 /* GroceryListCoreDataView.swift */,
+				35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */,
 			);
 			path = GroceryList;
 			sourceTree = "<group>";
@@ -706,6 +714,7 @@
 				35649CA525A676C600AC719C /* AllMealsCoreDataView.swift in Sources */,
 				35897EFF24F011A900397A4C /* ContentView.swift in Sources */,
 				35BEEB1D250986B1003EAADD /* AddMealView.swift in Sources */,
+				35FEB9B325C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */,
 				354586DC25A192C20003BAB9 /* RecentlyCommentedSocialMealView.swift in Sources */,
 				35D0A07525129F3800D39895 /* ApolloNetworkingController.swift in Sources */,
 				35973331257E6B5A0028FC95 /* UserView.swift in Sources */,
@@ -741,6 +750,7 @@
 				3575C4FE25A8A2380024B3AB /* CoreDataCodable.swift in Sources */,
 				35F62DF12524DBF700AE5274 /* ModalView.swift in Sources */,
 				35649C8425A64C4E00AC719C /* VeggilyDataModel.xcdatamodeld in Sources */,
+				35FEB9AC25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */,
 				35A9BD712524BA7E0073941B /* AnimationExtention.swift in Sources */,
 				351C8B4C2581497500ED6DBA /* UserFragment_Extention.swift in Sources */,
 				35649CAB25A6844100AC719C /* AllMealsCoreDataWrapperView.swift in Sources */,
@@ -801,6 +811,7 @@
 				35EA324625B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */,
 				359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
 				3585DA0F25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */,
+				35FEB9AD25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */,
 				354586B6259F69640003BAB9 /* SocialApolloController.swift in Sources */,
 				35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */,
 				35D0A06D251294F900D39895 /* ApolloController.swift in Sources */,
@@ -830,6 +841,7 @@
 				359CD0B72512B42C00D425F4 /* MealFragment_Extentions.swift in Sources */,
 				35EB46EB251BA6FF006230D4 /* MealListApolloController.swift in Sources */,
 				35897EFE24F011A900397A4C /* VegMealApp.swift in Sources */,
+				35FEB9B425C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */,
 				354586DD25A192C20003BAB9 /* RecentlyCommentedSocialMealView.swift in Sources */,
 				35649C8B25A6503200AC719C /* DataController.swift in Sources */,
 				35EB470F251BC9F6006230D4 /* MadeMealFragment_Extention.swift in Sources */,

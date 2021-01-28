@@ -579,3 +579,29 @@ mutation CREATE_GROCERYLIST_ITEM(
     ...GroceryListFragment
   }
 }
+
+query ALL_AMOUNTS_AND_INGREDIENTS {
+  allAmounts {
+    ...AmountFragment
+  }
+  allIngredients {
+    ...IngredientFragment
+  }
+}
+
+
+mutation CREATE_MEAL_INGREDIENT_LIST(
+  $mealId: ID!
+  $ingredientId: ID!
+  $amountId: ID!
+) {
+  createMealIngredientList(
+    data: {
+      meal: { connect: { id: $mealId } }
+      ingredient: { connect: { id: $ingredientId } }
+      amount: { connect: { id: $amountId } }
+    }
+  ) {
+    ...MealIngredientListFragment
+  }
+}

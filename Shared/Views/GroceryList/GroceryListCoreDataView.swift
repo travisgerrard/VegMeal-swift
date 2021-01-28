@@ -71,6 +71,7 @@ struct GroceryListCoreDataView: View {
                                 
                                 groceryItemDB?.amount = groceryListAmount
                                 groceryItemDB?.meal = groceryListMeal
+                                try? managedObjectContext.save()
                                 
                             }
                         }
@@ -236,7 +237,9 @@ struct GroceryListCoreDataCellView: View {
             // Perhaps this takes picture or resetting contexts, then showing alert.
             
             case .success(let graphQLResults):
-                print("success: \(graphQLResults)")
+                _ = graphQLResults
+                //                print("success: \(graphQLResults)")
+                try? managedObjectContext.save()
             // Don't need to do anything as coredata as local core data already reflects
             // Perhaps this would be a good place to save the context
             }
@@ -255,7 +258,8 @@ struct GroceryListCoreDataCellView: View {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+                _ = graphQLResults
+//                print("Success: \(graphQLResults)")
                 try? managedObjectContext.save()
             }
         }

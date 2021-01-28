@@ -8,7 +8,52 @@
 import SwiftUI
 
 struct ListOfMealIngredientsCoreDataView: View {
-    let ingredientList: [MealIngredientListDemo]
+    let ingredientList: FetchRequest<MealIngredientListDemo>
+    let didCreateMeal: Bool
+    let meal: MealDemo
+
+    @Environment(\.managedObjectContext) var managedObjectContext
+
+
+
+    init(meal: MealDemo, didCreateMeal: Bool) {
+        self.meal = meal
+        self.didCreateMeal = didCreateMeal
+    
+        ingredientList = FetchRequest<MealIngredientListDemo>(
+            entity: MealIngredientListDemo.entity(), sortDescriptors: [
+                NSSortDescriptor(keyPath: \MealIngredientListDemo.idString, ascending: false)
+            ],
+            predicate: NSPredicate(format: "mealDemo = %@", meal))
+    }
+    
+    func deleteMealIngredientList(mealIngredientList: MealIngredientListDemo) {
+        let mutation = DeleteMealIngredientListMutation(mealIngredientListId: mealIngredientList.idString, ingredientId: mealIngredientList.ingredientDemo!.idString, mealId: meal.idString)
+
+        mealIngredientList.mealDemo = nil
+        meal.mutableSetValue(forKey: "mealIngredientListDemo").remove(mealIngredientList)
+
+        
+        ApolloController.shared.apollo.perform(mutation: mutation) { result in
+            switch result {
+            
+            case .failure(let error):
+                print(error)
+
+                
+            case .success:
+                print("Success!")
+                // By putting the below here, it deletes...
+                // For somereason, after this code runes, the laodMealDemo runs in AllMealsCoreDataView...?
+                meal.mutableSetValue(forKey: "mealIngredientListDemo").remove(mealIngredientList)
+                managedObjectContext.delete(mealIngredientList)
+                try? managedObjectContext.save()
+
+            }
+            
+        }
+
+    }
     
     var body: some View {
         VStack {
@@ -19,27 +64,28 @@ struct ListOfMealIngredientsCoreDataView: View {
                     .padding(.horizontal).padding(.bottom)
                 Spacer()
             }
-            if ingredientList.count > 0 {
-                ForEach(ingredientList) { ingredient in
+            if ingredientList.wrappedValue.count > 0 {
+                ForEach(ingredientList.wrappedValue) { ingredient in
                     HStack(spacing: 1) {
                         Text("\(ingredient.amountDemo?.name ?? "No amount") - \(ingredient.ingredientDemo?.name ?? "No ingredient")")
                             .padding()
                         Spacer()
                         
-//                        if didCreateMeal {
-//                            Button(action: {
-//                                withAnimation(.spring()) {
-//                                    self.networkingController.deleteMealIngredientList(mealIngredientListId: ingredient.id, ingredientId: ingredient.ingredient!.id, mealId: mealId)
-//                                }
-//                            }) {
-//                                Image(systemName: "trash")
-//                                    .font(.system(size: 17, weight: .bold))
-//                                    .foregroundColor(.white)
-//                                    .padding(.all, 10)
-//                                    .background(Color.black.opacity(0.6))
-//                                    .clipShape(Circle())
-//                            }.padding(.trailing)
-//                        }
+                        if didCreateMeal {
+                            Button(action: {
+                                withAnimation(.spring()) {
+                                   // Trash ingredient...
+                                    deleteMealIngredientList(mealIngredientList: ingredient)
+                                }
+                            }) {
+                                Image(systemName: "trash")
+                                    .font(.system(size: 17, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(.all, 10)
+                                    .background(Color.black.opacity(0.6))
+                                    .clipShape(Circle())
+                            }.padding(.trailing)
+                        }
                         
                     }
                     Divider()

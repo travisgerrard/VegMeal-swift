@@ -76,7 +76,7 @@
         <attribute name="idString" optional="YES" attributeType="String"/>
         <relationship name="amountDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AmountDemo" inverseName="mealIngredientListDemo" inverseEntity="AmountDemo"/>
         <relationship name="ingredientDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="IngredientDemo" inverseName="mealIngredientListDemo" inverseEntity="IngredientDemo"/>
-        <relationship name="mealDemo" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="mealIngredientListDemo" inverseEntity="MealDemo"/>
+        <relationship name="mealDemo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MealDemo" inverseName="mealIngredientListDemo" inverseEntity="MealDemo"/>
     </entity>
     <entity name="MealList" representedClassName=".MealList" syncable="YES">
         <attribute name="author" optional="YES" attributeType="String"/>
@@ -102,7 +102,7 @@
         <element name="MealDemo" positionX="-63" positionY="-9" width="128" height="164"/>
         <element name="MealIngredientList" positionX="190.1484375" positionY="-168.84765625" width="128" height="89"/>
         <element name="MealIngredientListDemo" positionX="-63" positionY="-9" width="128" height="89"/>
-        <element name="User" positionX="-6.9609375" positionY="363.55078125" width="128" height="89"/>
         <element name="MealList" positionX="-63" positionY="-9" width="128" height="104"/>
+        <element name="User" positionX="-6.9609375" positionY="363.55078125" width="128" height="89"/>
     </elements>
 </model>

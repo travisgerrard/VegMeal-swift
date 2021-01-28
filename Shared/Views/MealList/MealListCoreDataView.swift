@@ -83,7 +83,9 @@ struct MealListCoreDataView: View {
                 print(error)
             
             case .success(let graphQLResults):
-                print("success: \(graphQLResults)")
+//                print("success: \(graphQLResults)")
+                _ = graphQLResults
+                try? managedObjectContext.save()
             }
             
         }
@@ -100,7 +102,9 @@ struct MealListCoreDataView: View {
                 print(error)
                 
             case .success(let graphQLResults):
-                print("Success: \(graphQLResults)")
+//                print("Success: \(graphQLResults)")
+                _ = graphQLResults
+                try? managedObjectContext.save()
 
             }
         }

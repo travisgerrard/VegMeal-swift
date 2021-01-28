@@ -121,12 +121,19 @@ struct MealCoreDataView: View {
                             .frame(width: (pictureSize.width - proxy.size.width) + proxy.size.width,
                                    height: (pictureSize.height - proxy.size.height/10))
                         
-                        ListOfMealIngredientsCoreDataView(ingredientList: meal.mealIngredientListDemoArray)
+                        ListOfMealIngredientsCoreDataView(meal: meal, didCreateMeal: userId == meal.mealAuthor)
+                      
                         if userId != "" {
-                            VStack {
-                                //                                Divider().background(Color.black)
-                                MealLogCoreDataView(meal: meal)
+                            if userId == meal.mealAuthor {
+                                AddToGroceryListCoreDataView(meal: meal)
+                                    
                             }
+                            VStack {
+                                if userId == meal.mealAuthor {
+                                Divider().background(Color.black)
+                                }
+                                MealLogCoreDataView(meal: meal)
+                            }.padding(.bottom, 150).padding(.top, userId == meal.mealAuthor ? 80 : 0)
                         }
                     }
                 }

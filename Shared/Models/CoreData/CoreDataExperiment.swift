@@ -105,7 +105,7 @@ extension MealDemo: FragmentUpdatable {
 class MealIngredientListDemo: ManagedObject, Identifiable {
     @NSManaged var ingredientDemo: IngredientDemo?
     @NSManaged var amountDemo: AmountDemo?
-    @NSManaged var mealDemo: NSSet?
+    @NSManaged var mealDemo: MealDemo?
 }
 
 extension MealIngredientListFragment : Identifiable {}
