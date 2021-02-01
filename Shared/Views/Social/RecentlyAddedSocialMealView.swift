@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct RecentlyAddedSocialMealView: View {
-    @State var meal: MealFragment
+    @State var meal: MealDemo
 
     var body: some View {
             VStack {
-                MealFragmentView(meal: meal)
-                if meal.dateCreated != nil {
-                    Text("Added: \(meal.dateCreated!, style: .date)").font(.footnote).offset(y:-15)
+                MealFragmentCoreDataView(meal: meal)
+                if meal.createdAt != nil {
+                    Text("Added: \(meal.createdAt!, style: .date)").font(.footnote).offset(y:-15)
                 } else {
                     Text("Added: N/A").font(.footnote).offset(y:-15)
                 }

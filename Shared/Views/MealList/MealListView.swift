@@ -240,20 +240,20 @@ struct MealListView: View {
                 // Modal View (zIndex = 4)
                 //-------------------------------------------------------
                 if mealTap != nil && mealIndex != nil || favoriteTap != nil {
-                    ModalView(
-                        id: mealTap ?? favoriteTap!,
-                        meal: self.$networkingController.meals[mealIndex!],
-                        pct: flyFromGridToModal ? 1 : 0,
-                        flyingFromGrid: mealTap != nil,
-                        userId: isLogged ? userid : nil,
-                        onClose: dismissModal)
-                        .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
-                        .matchedGeometryEffect(id: matchFavoriteToModal ? favoriteTap! : "0", in: ns_favorites, isSource: false)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
-                        .onDisappear { flyFromGridToModal = false }
-                        .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
-                        .zIndex(4)
+//                    ModalView(
+//                        id: mealTap ?? favoriteTap!,
+//                        meal: self.$networkingController.meals[mealIndex!],
+//                        pct: flyFromGridToModal ? 1 : 0,
+//                        flyingFromGrid: mealTap != nil,
+//                        userId: isLogged ? userid : nil,
+//                        onClose: dismissModal)
+//                        .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
+//                        .matchedGeometryEffect(id: matchFavoriteToModal ? favoriteTap! : "0", in: ns_favorites, isSource: false)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                        .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
+//                        .onDisappear { flyFromGridToModal = false }
+//                        .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
+//                        .zIndex(4)
                 }
             }
         } else {

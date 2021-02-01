@@ -147,10 +147,10 @@
 		35F9E05424FFD35000F752AD /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E05324FFD35000F752AD /* ImageCache.swift */; };
 		35F9E05624FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E05524FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift */; };
 		35F9E058250036E100F752AD /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F9E057250036E100F752AD /* BlurView.swift */; };
-		35FEB9AC25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */; };
-		35FEB9AD25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */; };
 		35FEB9B325C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */; };
 		35FEB9B425C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */; };
+		35FEB9C425C2823F00BEAAE5 /* SocialMainCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9C325C2823F00BEAAE5 /* SocialMainCoreDataView.swift */; };
+		35FEB9C525C2823F00BEAAE5 /* SocialMainCoreDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FEB9C325C2823F00BEAAE5 /* SocialMainCoreDataView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -269,8 +269,8 @@
 		35F9E05324FFD35000F752AD /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		35F9E05524FFD4EF00F752AD /* EnvironmentValues+ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+ImageCache.swift"; sourceTree = "<group>"; };
 		35F9E057250036E100F752AD /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
-		35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientToMealCoreDataView.swift; sourceTree = "<group>"; };
 		35FEB9B225C1E7C100BEAAE5 /* AddToGroceryListCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToGroceryListCoreDataView.swift; sourceTree = "<group>"; };
+		35FEB9C325C2823F00BEAAE5 /* SocialMainCoreDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMainCoreDataView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -342,7 +342,6 @@
 				356B350B25B08498003F2B67 /* ListOfMealIngredientsCoreDataView.swift */,
 				356B350525B00A69003F2B67 /* MealCoreDataView.swift */,
 				35A49DC625B3B08700C11C04 /* MealLogCoreDataView.swift */,
-				35FEB9AB25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift */,
 			);
 			path = Meal;
 			sourceTree = "<group>";
@@ -363,6 +362,7 @@
 				354586AB259F5DA80003BAB9 /* SocialMainView.swift */,
 				354586D225A0B7E80003BAB9 /* RecentlyAddedSocialMealView.swift */,
 				354586DB25A192C10003BAB9 /* RecentlyCommentedSocialMealView.swift */,
+				35FEB9C325C2823F00BEAAE5 /* SocialMainCoreDataView.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -740,6 +740,7 @@
 				35EB46C725140C6B006230D4 /* GroceryListFragment.swift in Sources */,
 				3528712925BB85F900246BE6 /* AddMealCoreDataView.swift in Sources */,
 				358EBA6F258F932600BCD907 /* SearchMealApolloController.swift in Sources */,
+				35FEB9C425C2823F00BEAAE5 /* SocialMainCoreDataView.swift in Sources */,
 				359CD0AE2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
 				3585DA0E25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */,
 				35701D2E250666D4005AA8C6 /* Home.swift in Sources */,
@@ -750,7 +751,6 @@
 				3575C4FE25A8A2380024B3AB /* CoreDataCodable.swift in Sources */,
 				35F62DF12524DBF700AE5274 /* ModalView.swift in Sources */,
 				35649C8425A64C4E00AC719C /* VeggilyDataModel.xcdatamodeld in Sources */,
-				35FEB9AC25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */,
 				35A9BD712524BA7E0073941B /* AnimationExtention.swift in Sources */,
 				351C8B4C2581497500ED6DBA /* UserFragment_Extention.swift in Sources */,
 				35649CAB25A6844100AC719C /* AllMealsCoreDataWrapperView.swift in Sources */,
@@ -811,7 +811,6 @@
 				35EA324625B8AD5600598985 /* GroceryList-CoreDataHelper.swift in Sources */,
 				359CD0AF2512AFF200D425F4 /* MealFragmentView.swift in Sources */,
 				3585DA0F25BD22AD00BDD59F /* SearchCoreDataView.swift in Sources */,
-				35FEB9AD25C1E79000BEAAE5 /* AddIngredientToMealCoreDataView.swift in Sources */,
 				354586B6259F69640003BAB9 /* SocialApolloController.swift in Sources */,
 				35701D2025032CEC005AA8C6 /* CloseButton.swift in Sources */,
 				35D0A06D251294F900D39895 /* ApolloController.swift in Sources */,
@@ -834,6 +833,7 @@
 				3511D1B625A428650006B352 /* ModalViewSimplified.swift in Sources */,
 				35D0A07625129F3800D39895 /* ApolloNetworkingController.swift in Sources */,
 				35EB46C825140C6B006230D4 /* GroceryListFragment.swift in Sources */,
+				35FEB9C525C2823F00BEAAE5 /* SocialMainCoreDataView.swift in Sources */,
 				35F62DFE2524E39000AE5274 /* RectangleToCircle.swift in Sources */,
 				35649CA625A676C600AC719C /* AllMealsCoreDataView.swift in Sources */,
 				35701D2F250666D4005AA8C6 /* Home.swift in Sources */,
@@ -998,7 +998,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal;
 				PRODUCT_NAME = VegMeal;
 				SDKROOT = iphoneos;
@@ -1023,7 +1023,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal;
 				PRODUCT_NAME = VegMeal;
 				SDKROOT = iphoneos;
@@ -1051,7 +1051,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal;
 				PRODUCT_NAME = VegMeal;
 				SDKROOT = macosx;
@@ -1077,7 +1077,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal;
 				PRODUCT_NAME = VegMeal;
 				SDKROOT = macosx;
@@ -1099,7 +1099,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal.veggilyWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1123,7 +1123,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.0431;
 				PRODUCT_BUNDLE_IDENTIFIER = gerrardApps.VegMeal.veggilyWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

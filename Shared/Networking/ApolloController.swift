@@ -21,7 +21,8 @@ class ApolloController {
         let cache = InMemoryNormalizedCache()
         let store = ApolloStore(cache: cache)
         let provider = NetworkInterceptorProvider(client: client, store: store)
-        let url = URL(string: "http://localhost:3000/admin/api")!
+//        let url = URL(string: "http://localhost:3000/admin/api")!
+        let url = URL(string: "https://api.veggily.app/admin/api")!
         let transport = RequestChainNetworkTransport(interceptorProvider: provider,
                                                      endpointURL: url)
         return ApolloClient(networkTransport: transport, store: store)

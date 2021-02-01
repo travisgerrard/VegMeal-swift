@@ -24,8 +24,8 @@ struct AllMealsCoreDataWrapperView: View {
                 }
             )
             .onAppear{
-                userController.getUserQueryRunning = true
-                userController.getUserData()
+//                userController.getUserQueryRunning = true
+//                userController.getUserData()
             }
         }
         

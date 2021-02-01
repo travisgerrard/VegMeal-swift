@@ -20,6 +20,14 @@ extension IngredientDemo {
 }
 
 extension MadeMeal {
+    var thoughtsAuthorId: String {
+        author?.idString ?? "No author..."
+    }
+    
+    var thoughtsAuthorName: String {
+        author?.name ?? "No name"
+    }
+    
     var mealThoughts: String {
         thoughts ?? "Thoughts on meal and life?"
     }
@@ -43,7 +51,7 @@ extension MealDemo {
     }
     
     var mealAuthor: String {
-        author ?? "No author..."
+        author?.idString ?? "No author..."
     }
     
     // Helper so that you can use mealIngredientList set in swiftui
@@ -51,6 +59,19 @@ extension MealDemo {
     
     var mealIngredientListDemoArray: [MealIngredientListDemo] {
         let set = mealIngredientListDemo as? Set<MealIngredientListDemo> ?? []
+        return set.sorted {
+            $0.idString < $1.idString
+        }
+    }
+}
+
+extension UserDemo {
+    var userName: String {
+        name ?? "No name"
+    }
+    
+    var followsArray: [UserDemo] {
+        let set = follows as? Set<UserDemo> ?? []
         return set.sorted {
             $0.idString < $1.idString
         }

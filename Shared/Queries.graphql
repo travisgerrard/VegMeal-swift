@@ -45,6 +45,7 @@ fragment MealDemoFragment on Meal {
     id
     name
     description
+    createdAt
     mealImage {
         publicUrlTransformed
     }
@@ -52,7 +53,7 @@ fragment MealDemoFragment on Meal {
         ...MealIngredientListFragment
     }
     author {
-        id
+        ...UserDemoFragment
     }
 }
 
@@ -190,6 +191,12 @@ query GET_GROCERY_LIST($id: ID!) {
   }
 }
 
+query GROCERY_LIST_FOR_MEAL($mealId:ID!, $authorId:ID!){
+  allGroceryLists(where:{meal:{id:$mealId}, author:{id:$authorId}}){
+    ...GroceryListFragment
+  }
+}
+
 query GET_ALL_GROCERY_LIST_ITEMS_FOR_USER($id: ID!) {
   allGroceryLists(
     where: { author: { id: $id } }
@@ -213,7 +220,7 @@ mutation DELETE_GROCERY_LIST_ITEM($id:ID!){
 fragment GroceryListFragment on GroceryList {
     id
     author {
-        id
+      ...UserDemoFragment
     }
     ingredient {
       ...IngredientFragment
@@ -292,7 +299,7 @@ query GET_All_MEAL_LISTS_FOR($id: ID!) {
 fragment MealListFragment on MealList {
     id
     author {
-      id
+      ...UserDemoFragment
     }
     isCompleted
     dateCompleted
@@ -442,12 +449,10 @@ fragment MadeMealFragment on MadeMeal {
         publicUrlTransformed
     }
     author{
-        id
-        name
-        email
+      ...UserDemoFragment
     }
     meal{
-        ...MealFragment
+        ...MealDemoFragment
     }
 }
 
@@ -472,7 +477,6 @@ fragment UserFragment on User {
     name
     id
   }
-    
 }
 
 query CURRENT_USER_QUERY {
@@ -604,4 +608,61 @@ mutation CREATE_MEAL_INGREDIENT_LIST(
   ) {
     ...MealIngredientListFragment
   }
+}
+
+fragment UserDemoFragment on User {
+  id
+  name
+}
+
+query GET_ALL_USERS_WITH_FOLLOWERS {
+  allUsers {
+    ...UserDemoFragment
+    follows {
+      ...UserDemoFragment
+    }
+    followers {
+      ...UserDemoFragment
+    }
+  }
+}
+
+query GET_LOGGEDIN_USER_WITH_FOLLOWERS($id:ID!) {
+  allUsers(where:{id:$id}) {
+    ...UserDemoFragment
+    follows {
+      ...UserDemoFragment
+    }
+    followers {
+      ...UserDemoFragment
+    }
+  }
+}
+
+query UPDATE_ALL_ON_LAUNCH($userId: ID!) {
+    allMeals {
+        ...MealDemoFragment
+    }
+    allGroceryLists(where: { author: { id: $userId } }
+    ) {
+        ...GroceryListFragment
+    }
+    allMealLists(where: { author: { id: $userId } } ) {
+        ...MealListFragment
+    }
+    allUsers(where:{id:$userId}) {
+        ...UserDemoFragment
+        follows {
+          ...UserDemoFragment
+        }
+        followers {
+          ...UserDemoFragment
+        }
+    }
+    allAmounts {
+        ...AmountFragment
+    }
+    allIngredients {
+        ...IngredientFragment
+    }
 }

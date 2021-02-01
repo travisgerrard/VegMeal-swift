@@ -11,61 +11,39 @@ import CoreData
 struct AllMealsCoreDataView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var dataController: DataController
+    @AppStorage("userid") var userid = ""
 
-//    let meals: FetchRequest<MealDemo>
-    
     let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
 
-    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \MealDemo.name, ascending: true)]) var meals: FetchedResults<MealDemo> // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
-
+    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \MealDemo.name, ascending: true)]) var meals: FetchedResults<MealDemo> // Even though we
     
-//    init() {
-//        meals = FetchRequest<MealDemo>(
-//            entity: MealDemo.entity(), sortDescriptors: [
-//                NSSortDescriptor(keyPath: \MealDemo.name, ascending: false)
-//            ])
-//
-//        managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-//    }
+ 
     
-    func loadMealDemo() {
-        let query = AllMealsDemoQuery()
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
+    func loadUser() {
+        let query = GetLoggedinUserWithFollowersQuery(id: userid)
+        
+        ApolloController.shared.apollo.fetch(query: query) { result in
             switch result {
             case .failure(let error):
                 print(error)
-
+                
             case .success(let graphQLResult):
-                print("!!!!")
                 if let data = graphQLResult.data {
-                    if let allMeals = data.allMeals {
-                        for meal in allMeals {
-                            if let mealDemoFragment = meal?.fragments.mealDemoFragment {
+                    if let allUsers = data.allUsers {
+                        if allUsers.count > 0 {
+                            if let currentUser = allUsers[0]?.fragments.userDemoFragment {
+                                let currentUserDB = UserDemo.object(in: managedObjectContext, withFragment: currentUser)
                                 
-                                // Loads all meals into DB
-                                let mealForDB = MealDemo.object(in:managedObjectContext, withFragment: mealDemoFragment)
-                                mealDemoFragment.ingredientList.forEach {
+                                allUsers[0]?.follows.forEach {
+                                    let followsUserDB = UserDemo.object(in: managedObjectContext, withFragment: $0.fragments.userDemoFragment)
                                     
-                                    // Loads the mealIngredientList in the DB
-                                    let mealIngredientListFragment =  MealIngredientListDemo.object(in:managedObjectContext, withFragment: $0.fragments.mealIngredientListFragment)
+                                    currentUserDB?.mutableSetValue(forKey: "follows").add(followsUserDB!)
                                     
-                                    // Connects mealIngredientList to the meal
-//                                    mealForDB?.mutableSetValue(forKey: "mealIngredientListDemo").add(mealIngredientListFragment!)
-                                    mealIngredientListFragment?.mealDemo = mealForDB
-                                    
-                                    // Loads ingredients and amounts into DB and links them to mealIngredientList
-                                    if let ingredientFragment = $0.fragments.mealIngredientListFragment.ingredient?.fragments.ingredientFragment {
-                                        let ID = IngredientDemo.object(in:managedObjectContext, withFragment: ingredientFragment)
-                                        mealIngredientListFragment?.ingredientDemo = ID
-                                    }
-                                    if let amountFragment = $0.fragments.mealIngredientListFragment.amount?.fragments.amountFragment {
-                                        let AD = AmountDemo.object(in:managedObjectContext, withFragment: amountFragment)
-                                        mealIngredientListFragment?.amountDemo = AD
-                                    }
                                 }
+                                try? managedObjectContext.save()
                             }
+                            
                         }
-//                        try? managedObjectContext.save()
                     }
                 }
             }
@@ -100,6 +78,11 @@ struct AllMealsCoreDataView: View {
         }
     }
 
+    struct FlatLinkStyle: ButtonStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+        }
+    }
     
     var body: some View {
         VStack {
@@ -115,50 +98,50 @@ struct AllMealsCoreDataView: View {
                                 destination: MealCoreDataView(meal: meal),
                                 label: {
                                     MealFragmentCoreDataView(meal: meal)
-                                })
+                                }).buttonStyle(FlatLinkStyle())
                         }
                     }
                 }
-                Button("Delete Meals", action: {
-                    let fetchRequest1: NSFetchRequest<NSFetchRequestResult> = IngredientDemo.fetchRequest()
-                    let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest1)
-                    
-                    let fetchRequest2: NSFetchRequest<NSFetchRequestResult> = AmountDemo.fetchRequest()
-                    let batchDeleteRequest2 = NSBatchDeleteRequest(fetchRequest: fetchRequest2)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest2)
-                    
-                    let fetchRequest3: NSFetchRequest<NSFetchRequestResult> = GroceryList.fetchRequest()
-                    let batchDeleteRequest3 = NSBatchDeleteRequest(fetchRequest: fetchRequest3)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest3)
-                    
-                    let fetchRequest4: NSFetchRequest<NSFetchRequestResult> = MadeMeal.fetchRequest()
-                    let batchDeleteRequest4 = NSBatchDeleteRequest(fetchRequest: fetchRequest4)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest4)
-                    
-                    let fetchRequest5: NSFetchRequest<NSFetchRequestResult> = MealIngredientListDemo.fetchRequest()
-                    let batchDeleteRequest5 = NSBatchDeleteRequest(fetchRequest: fetchRequest5)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest5)
-                    
-                    
-                    let fetchRequest6: NSFetchRequest<NSFetchRequestResult> = MealList.fetchRequest()
-                    let batchDeleteRequest6 = NSBatchDeleteRequest(fetchRequest: fetchRequest6)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest6)
-                    
-                    let fetchRequest7: NSFetchRequest<NSFetchRequestResult> = MealDemo.fetchRequest()
-                    let batchDeleteRequest7 = NSBatchDeleteRequest(fetchRequest: fetchRequest7)
-                    _ = try? managedObjectContext.execute(batchDeleteRequest7)
-                    
-                    
-                    try? managedObjectContext.save()
-                    dataController.save()
-
-                    print("Deleted?")
-                }).padding()
+//                Button("Delete Meals", action: {
+//                    let fetchRequest1: NSFetchRequest<NSFetchRequestResult> = IngredientDemo.fetchRequest()
+//                    let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest1)
+//
+//                    let fetchRequest2: NSFetchRequest<NSFetchRequestResult> = AmountDemo.fetchRequest()
+//                    let batchDeleteRequest2 = NSBatchDeleteRequest(fetchRequest: fetchRequest2)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest2)
+//
+//                    let fetchRequest3: NSFetchRequest<NSFetchRequestResult> = GroceryList.fetchRequest()
+//                    let batchDeleteRequest3 = NSBatchDeleteRequest(fetchRequest: fetchRequest3)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest3)
+//
+//                    let fetchRequest4: NSFetchRequest<NSFetchRequestResult> = MadeMeal.fetchRequest()
+//                    let batchDeleteRequest4 = NSBatchDeleteRequest(fetchRequest: fetchRequest4)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest4)
+//
+//                    let fetchRequest5: NSFetchRequest<NSFetchRequestResult> = MealIngredientListDemo.fetchRequest()
+//                    let batchDeleteRequest5 = NSBatchDeleteRequest(fetchRequest: fetchRequest5)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest5)
+//
+//
+//                    let fetchRequest6: NSFetchRequest<NSFetchRequestResult> = MealList.fetchRequest()
+//                    let batchDeleteRequest6 = NSBatchDeleteRequest(fetchRequest: fetchRequest6)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest6)
+//
+//                    let fetchRequest7: NSFetchRequest<NSFetchRequestResult> = MealDemo.fetchRequest()
+//                    let batchDeleteRequest7 = NSBatchDeleteRequest(fetchRequest: fetchRequest7)
+//                    _ = try? managedObjectContext.execute(batchDeleteRequest7)
+//
+//
+//                    try? managedObjectContext.save()
+//                    dataController.save()
+//
+//                    print("Deleted?")
+//                }).padding()
             }
         }.onAppear {
-            self.loadMealDemo()
-            self.loadIngredientsAandAmounts()
+//            self.loadIngredientsAandAmounts()
+//            self.loadUser()
         }
         
         

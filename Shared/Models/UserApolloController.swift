@@ -32,7 +32,7 @@ class UserApolloController: ObservableObject {
 
     
     func getUserData() {
-        self.getUserQueryRunning = true
+//        self.getUserQueryRunning = true
         let query = CurrentUserQueryQuery()
         ApolloController.shared.apollo.fetch(query: query, cachePolicy: .fetchIgnoringCacheData) { result in
             self.getUserQueryRunning = false

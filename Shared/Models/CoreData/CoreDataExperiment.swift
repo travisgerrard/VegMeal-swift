@@ -82,7 +82,8 @@ class MealDemo: ManagedObject, Identifiable {
     @NSManaged var groceryList: NSSet?
     @NSManaged var madeMeal: NSSet?
     @NSManaged var mealList: NSSet?
-    @NSManaged var author: String?
+    @NSManaged var author: UserDemo?
+    @NSManaged var createdAt: Date?
 }
 
 extension MealDemoFragment: Identifiable {}
@@ -96,8 +97,36 @@ extension MealDemo: FragmentUpdatable {
         if let urlString = fragment.mealImage?.publicUrlTransformed {
             self.imageUrl =  URL(string: urlString)
         }
-        if let author = fragment.author?.id {
-            self.author = author
+        
+        if let author = fragment.author?.fragments.userDemoFragment {
+            let authorDB = UserDemo.object(in:managedObjectContext!, withFragment: author)
+            self.author = authorDB
+        }
+        
+        if let createdAt = fragment.createdAt {
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+           
+            self.createdAt = dateFormatter.date(from: createdAt)
+        }
+        
+        // Loads in meal ingredient list to meal...
+        fragment.ingredientList.forEach {
+            // Loads the mealIngredientList in the DB
+            let mealIngredientListFragment =  MealIngredientListDemo.object(in:managedObjectContext!, withFragment: $0.fragments.mealIngredientListFragment)
+            
+            mealIngredientListFragment?.mealDemo = self
+            
+            // Loads ingredients and amounts into DB and links them to mealIngredientList
+            if let ingredientFragment = $0.fragments.mealIngredientListFragment.ingredient?.fragments.ingredientFragment {
+                let ID = IngredientDemo.object(in:managedObjectContext!, withFragment: ingredientFragment)
+                mealIngredientListFragment?.ingredientDemo = ID
+            }
+            if let amountFragment = $0.fragments.mealIngredientListFragment.amount?.fragments.amountFragment {
+                let AD = AmountDemo.object(in:managedObjectContext!, withFragment: amountFragment)
+                mealIngredientListFragment?.amountDemo = AD
+            }
         }
     }
 }
@@ -114,9 +143,7 @@ extension MealIngredientListDemo: FragmentUpdatable {
     typealias Fragment = MealIngredientListFragment
     
     func update(with fragment: Fragment) {
-//        if let ingredientFragment = fragment.ingredient?.fragments.ingredientFragment {
-//            self.ingredientDemo = ingredientFragment
-//        }
+
     }
 }
 
@@ -156,7 +183,7 @@ extension AmountDemo: FragmentUpdatable {
 
 class MadeMeal: ManagedObject, Identifiable {
     @NSManaged var thoughts: String?
-    @NSManaged var author: String?
+    @NSManaged var author: UserDemo?
     @NSManaged var dateMade: Date?
     @NSManaged var meal: MealDemo?
 }
@@ -168,8 +195,9 @@ extension MadeMeal: FragmentUpdatable {
     
     func update(with fragment: Fragment) {
         self.thoughts = fragment.thoughts
-        if let author = fragment.author?.id {
-            self.author = author
+        if let author = fragment.author?.fragments.userDemoFragment {
+            let authorDB = UserDemo.object(in:managedObjectContext!, withFragment: author)
+            self.author = authorDB
         }
         if let dateMade = fragment.dateMade {
             var dateFormatter: DateFormatter {
@@ -188,7 +216,7 @@ extension MadeMeal: FragmentUpdatable {
 class GroceryList: ManagedObject, Identifiable {
     @NSManaged var dateCompleted: Date?
     @NSManaged var isCompleted: Bool
-    @NSManaged var author: String?
+    @NSManaged var author: UserDemo?
     @NSManaged var amount: AmountDemo?
     @NSManaged var ingredient: IngredientDemo?
     @NSManaged var meal: MealDemo?
@@ -202,8 +230,24 @@ extension GroceryList: FragmentUpdatable {
     
     func update(with fragment: Fragment) {
         self.isCompleted = fragment.isCompleted!
-        if let author = fragment.author?.id {
-            self.author = author
+        if let author = fragment.author?.fragments.userDemoFragment {
+            let authorDB = UserDemo.object(in:managedObjectContext!, withFragment: author)
+            self.author = authorDB
+        }
+        if let ingredient = fragment.ingredient?.fragments.ingredientFragment {
+            let ingredientDB = IngredientDemo.object(in: managedObjectContext!, withFragment: ingredient)
+            self.ingredient = ingredientDB
+            if let category = ingredient.category {
+                self.category = Int16(category)
+            }
+        }
+        if let amount = fragment.amount?.fragments.amountFragment {
+            let amountDB = AmountDemo.object(in: managedObjectContext!, withFragment: amount)
+            self.amount = amountDB
+        }
+        if let meal = fragment.meal?.fragments.mealDemoFragment {
+            let mealDB = MealDemo.object(in: managedObjectContext!, withFragment: meal)
+            self.meal = mealDB
         }
         if let dateCompleted = fragment.dateCompleted {
             
@@ -219,7 +263,7 @@ extension GroceryList: FragmentUpdatable {
 class MealList: ManagedObject, Identifiable {
     @NSManaged var dateCompleted: Date?
     @NSManaged var isCompleted: Bool
-    @NSManaged var author: String?
+    @NSManaged var author: UserDemo?
     @NSManaged var meal: MealDemo?
     }
 
@@ -230,8 +274,9 @@ extension MealList: FragmentUpdatable {
     
     func update(with fragment: Fragment) {
         self.isCompleted = fragment.isCompleted!
-        if let author = fragment.author?.id {
-            self.author = author
+        if let author = fragment.author?.fragments.userDemoFragment {
+            let authorDB = UserDemo.object(in:managedObjectContext!, withFragment: author)
+            self.author = authorDB
         }
         if let dateCompleted = fragment.dateCompleted {
             
@@ -240,6 +285,27 @@ extension MealList: FragmentUpdatable {
            
             self.dateCompleted = dateFormatter.date(from: dateCompleted)
         }
+    }
+    
+}
+
+class UserDemo: ManagedObject, Identifiable {
+    @NSManaged var name: String?
+    @NSManaged var followers: NSSet?
+    @NSManaged var follows: NSSet?
+    @NSManaged var groceryList: NSSet?
+    @NSManaged var madeMeal: NSSet?
+    @NSManaged var meal: NSSet?
+    @NSManaged var mealList: NSSet?
+    }
+
+extension UserDemoFragment : Identifiable {}
+
+extension UserDemo: FragmentUpdatable {
+    typealias Fragment = UserDemoFragment
+    
+    func update(with fragment: Fragment) {
+        self.name = fragment.name
     }
     
 }

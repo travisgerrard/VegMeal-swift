@@ -50,27 +50,14 @@ struct GroceryListCoreDataView: View {
                 
                 
             case .success(let graphQLResult):
-                print("!?!?")
+                print("!?!? - Loaded Grocery List...")
                 if let data = graphQLResult.data {
                     if let allGroceryLists = data.allGroceryLists {
                         for groceryItem in allGroceryLists {
                             if let groceryListFragment = groceryItem?.fragments.groceryListFragment {
                                 
-                                let groceryItemDB = GroceryList.object(in: managedObjectContext, withFragment: groceryListFragment)
+                                _ = GroceryList.object(in: managedObjectContext, withFragment: groceryListFragment)
                                 
-                                let groceryListIngredient = IngredientDemo.object(in: managedObjectContext, withFragment: groceryListFragment.ingredient?.fragments.ingredientFragment)
-                                
-                                let groceryListAmount = AmountDemo.object(in: managedObjectContext, withFragment: groceryListFragment.amount?.fragments.amountFragment)
-                                
-                                let groceryListMeal = MealDemo.object(in: managedObjectContext, withFragment: groceryListFragment.meal?.fragments.mealDemoFragment)
-                                
-                                groceryItemDB?.ingredient = groceryListIngredient
-                                if let category = groceryItemDB?.ingredient?.category {
-                                    groceryItemDB?.category = category
-                                }
-                                
-                                groceryItemDB?.amount = groceryListAmount
-                                groceryItemDB?.meal = groceryListMeal
                                 try? managedObjectContext.save()
                                 
                             }
@@ -130,7 +117,7 @@ struct GroceryListCoreDataView: View {
                     .listStyle(PlainListStyle())
                 }
                 .onAppear {
-                    self.loadGroceryList()
+//                    self.loadGroceryList()
                 }
                 
                 GeometryReader { bounds in
@@ -222,24 +209,26 @@ struct GroceryListCoreDataCellView: View {
         let today = Date()
         
         grocery.dateCompleted = today
-        
+        try? managedObjectContext.save()
+
         let iso8601DateFormatter = ISO8601DateFormatter()
         iso8601DateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         let formatter3 = iso8601DateFormatter.string(from: today)
         
         let mutation = CompleteGroceryListMutation(id: grocery.idString, dateCompleted: formatter3, isCompleted: grocery.isCompleted)
+
         
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
             case .failure(let error):
                 print(error)
+                managedObjectContext.undo()
             // Need to undo recent core data cahnges
             // Perhaps this takes picture or resetting contexts, then showing alert.
             
             case .success(let graphQLResults):
                 _ = graphQLResults
                 //                print("success: \(graphQLResults)")
-                try? managedObjectContext.save()
             // Don't need to do anything as coredata as local core data already reflects
             // Perhaps this would be a good place to save the context
             }
@@ -251,16 +240,17 @@ struct GroceryListCoreDataCellView: View {
         let mutation = DeleteGroceryListItemMutation(id: grocery.idString)
         
         managedObjectContext.delete(grocery)
-        
+        try? managedObjectContext.save()
+
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
             case .failure(let error):
+                managedObjectContext.undo()
                 print(error)
                 
             case .success(let graphQLResults):
                 _ = graphQLResults
 //                print("Success: \(graphQLResults)")
-                try? managedObjectContext.save()
             }
         }
     }
@@ -282,7 +272,9 @@ struct GroceryListCoreDataCellView: View {
                         .onEnded { _ in
                             // What to do when complete button is pressed
                             completeIsPressed = false
-                            toggleGroceryComplete(grocery: grocery)
+                            withAnimation{
+                                toggleGroceryComplete(grocery: grocery)
+                            }
                         }
             )
             
@@ -311,7 +303,9 @@ struct GroceryListCoreDataCellView: View {
             .gesture(TapGesture()
                         .onEnded {
                             // What happens when you tap trash button
-                            removeItemFromGroceryList(grocery: grocery)
+                            withAnimation{
+                                removeItemFromGroceryList(grocery: grocery)
+                            }
                         }
             )
             

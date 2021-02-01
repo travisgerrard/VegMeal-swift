@@ -140,21 +140,21 @@ struct MealLog: View {
         } else {
             VStack {
                 HStack {
-                    Text("\((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!) made this meal on: \(dateFormatter.string(from: mealLogDate))")
+//                    Text("\((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!) made this meal on: \(dateFormatter.string(from: mealLogDate))")
                     Spacer()
                 }
                 if thoughts.count > 0 && thoughts != "Thoughts on meal and life?" {
                     VStack {
-                        if mealLog.author!.id == userid {
-                            HStack {
-                                Button("Edit Comment", action: {
-                                    withAnimation(.spring()) {
-                                        self.isEditingMealLog.toggle()
-                                    }
-                                })
-                                Spacer()
-                            }
-                        }
+//                        if mealLog.author!.id == userid {
+//                            HStack {
+//                                Button("Edit Comment", action: {
+//                                    withAnimation(.spring()) {
+//                                        self.isEditingMealLog.toggle()
+//                                    }
+//                                })
+//                                Spacer()
+//                            }
+//                        }
                         VStack {
                             HStack {
                                 Text(thoughts)
@@ -175,19 +175,19 @@ struct MealLog: View {
                         .padding(.top, 5)
                     }
                 } else {
-                    if mealLog.author!.id == userid {
-                        
-                        HStack {
-                            Button("Write a Comment", action: {
-                                withAnimation(.spring()) {
-                                    self.isEditingMealLog.toggle()
-                                }
-                            })
-                            
-                            
-                            Spacer()
-                        }
-                    }
+//                    if mealLog.author!.id == userid {
+//
+//                        HStack {
+//                            Button("Write a Comment", action: {
+//                                withAnimation(.spring()) {
+//                                    self.isEditingMealLog.toggle()
+//                                }
+//                            })
+//
+//
+//                            Spacer()
+//                        }
+//                    }
                     
                 }
             }.padding()

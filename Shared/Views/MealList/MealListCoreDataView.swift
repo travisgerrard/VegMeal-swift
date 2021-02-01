@@ -44,7 +44,7 @@ struct MealListCoreDataView: View {
                 print(error)
                 
             case .success(let graphQLResult):
-                print("?!?!")
+                print("?!?! - loaded mealLists")
                 if let data = graphQLResult.data {
                     if let allMealLists = data.allMealLists {
                         for mealListItem in allMealLists {
@@ -76,16 +76,17 @@ struct MealListCoreDataView: View {
         let formatter3 = iso8601DateFormatter.string(from: today)
         
         let mutation = CompleteMyMealMutation(id: mealListItem.idString, dateCompleted: formatter3, isCompleted: mealListItem.isCompleted)
-        
+        try? managedObjectContext.save()
+
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
             case .failure(let error):
+                managedObjectContext.undo()
                 print(error)
             
             case .success(let graphQLResults):
 //                print("success: \(graphQLResults)")
                 _ = graphQLResults
-                try? managedObjectContext.save()
             }
             
         }
@@ -129,7 +130,9 @@ struct MealListCoreDataView: View {
                                             }
                                             .onEnded { _ in
                                                 // Do when button is clicked
-                                                toggleMealComplete(mealListItem: item)
+                                                withAnimation{
+                                                    toggleMealComplete(mealListItem: item)
+                                                }
                                                 
                                             }
                                          
@@ -202,8 +205,9 @@ struct MealListCoreDataView: View {
                                             }
                                             .onEnded { _ in
                                                 // Do when button is clicked
-                                                toggleMealComplete(mealListItem: item)
-                                                
+                                                withAnimation{
+                                                    toggleMealComplete(mealListItem: item)
+                                                }
                                                 
                                             }
                                 )
@@ -271,7 +275,7 @@ struct MealListCoreDataView: View {
                 
             }
             .onAppear {
-                self.loadMealList()
+//                self.loadMealList()
             }
         } else {
             LoginInCreateAccountPromt()

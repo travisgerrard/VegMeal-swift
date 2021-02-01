@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecentlyCommentedSocialMealView: View {
-    @State var mealLog: MadeMealFragment
+    @State var mealLog: MadeMeal
     @AppStorage("userid") var userid = ""
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -22,28 +22,28 @@ struct RecentlyCommentedSocialMealView: View {
         VStack {
             
             
-            if mealLog.meal?.fragments.mealFragment != nil {
-                MealFragmentView(meal: mealLog.meal!.fragments.mealFragment, wideView: true)
-                
+            if mealLog.meal != nil {
+                MealFragmentCoreDataView(meal: mealLog.meal!, wideView: true)
+//                MealFragmentView(meal: mealLog.meal!.fragments.mealFragment, wideView: true)
             }
             VStack {
                 VStack {
                     VStack{
                         
                         HStack {
-                            Text("Made on: \(dateFormatter.string(from: dateFormatter.date(from: mealLog.dateMade!)!))")
+                            Text("Made on: \(mealLog.dateMade!, style: .date)")
                                 .foregroundColor(.primary).font(.headline)
                             Spacer()
                         }
                         HStack {
-                            Text("By: \((mealLog.author!.id == userid ? "You" : mealLog.author!.name)!)")
+                            Text("By: \(mealLog.thoughtsAuthorId == userid ? "You" : "\(mealLog.thoughtsAuthorName)")")
                                 .foregroundColor(.primary).font(.headline)
                             Spacer()
                         }.padding(.bottom, 5)
                         Divider()
                         
                         HStack {
-                            Text(mealLog.thoughts ?? "No thoughts on this meal yet?")
+                            Text(mealLog.thoughts ?? "No thoughts enetered yet")
                                 .foregroundColor(.primary)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .padding(.leading, 5)
@@ -69,12 +69,12 @@ struct RecentlyCommentedSocialMealView: View {
     }
 }
 
-
-struct RecentlyCommentedSocialMealView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecentlyCommentedSocialMealView(mealLog: MadeMealFragment.example)
-    }
-}
+//
+//struct RecentlyCommentedSocialMealView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecentlyCommentedSocialMealView(mealLog: MadeMealFragment.example)
+//    }
+//}
 
 // Making it so we can have half rounded corners
 extension View {

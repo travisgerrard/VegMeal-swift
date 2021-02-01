@@ -18,6 +18,8 @@ struct SocialMainView: View {
     
     static let tag: String? = "SocialView"
     
+ 
+    
     var body: some View {
         if isLogged {
             ZStack{
@@ -37,7 +39,7 @@ struct SocialMainView: View {
                                 ForEach(self.socialController.recentlyAddedMeals) { meal in
                                     NavigationLink(destination: ModalViewSimplified(meal: meal)) {
 
-                                    RecentlyAddedSocialMealView(meal: meal)
+//                                    RecentlyAddedSocialMealView(meal: meal)
                                     }.buttonStyle(FlatLinkStyle())
                                 }
                             }
@@ -49,10 +51,10 @@ struct SocialMainView: View {
                         ScrollView(.vertical, showsIndicators: false) {
                             VStack(alignment: .center) {
                                 ForEach(self.socialController.recentlyAddedComments) { mealLog in
-                                    NavigationLink(destination: ModalViewSimplified(meal: (mealLog.meal?.fragments.mealFragment)!)) {
+//                                    NavigationLink(destination: ModalViewSimplified(meal: (mealLog.meal?.fragments.mealDemoFragment)!)) {
 
-                                    RecentlyCommentedSocialMealView(mealLog: mealLog)
-                                    }.buttonStyle(FlatLinkStyle())
+//                                    RecentlyCommentedSocialMealView(mealLog: mealLog)
+//                                    }.buttonStyle(FlatLinkStyle())
                                 }
                             }
                         }

@@ -8,6 +8,7 @@
 import SwiftUI
 import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
+import CoreData
 
 struct MealCoreDataView: View {
     var meal: MealDemo
@@ -17,8 +18,13 @@ struct MealCoreDataView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     
     @State private var showEditMealModal: Bool = false
+    @State var addMealAgainAlert: Bool = false
+    @State var onMealPlanerAlready: Bool = false
     
     func addMealToGroceryList() {
+//        meal.mealIngredientListDemo?.forEach {
+//
+//        }
         let mutation = AddMealToGroceryListMutation(mealId: meal.idString, authorId: userId)
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
@@ -28,15 +34,56 @@ struct MealCoreDataView: View {
             case .success(let graphQLResult):
                 print("????")
                 if let data = graphQLResult.data {
-                    if let addMealToGroceryList = data.addMealToGroceryList {
-                        print(addMealToGroceryList)
+
+                    // Add grocery list itesms with a new query...
+                    let query = GroceryListForMealQuery(mealId: meal.idString, authorId: userId)
+                    ApolloController.shared.apollo.fetch(query: query) { resultTwo in
+                        switch resultTwo {
+                        case .failure(let error):
+                            print(error)
+                        
+                        case .success(let graphQLResultTwo):
+                            if let dataTwo = graphQLResultTwo.data {
+                                if let allGroceryLists = dataTwo.allGroceryLists {
+                                    allGroceryLists.forEach {
+                                        
+                                        _ = GroceryList.object(in: managedObjectContext, withFragment: $0?.fragments.groceryListFragment)
+                    
+                                    }
+                                }
+                            }
+                        }
                     }
+                    
+                    // add
                     if let addMealToMealList = data.addMealToMealList {
                         print(addMealToMealList)
+                        let mealListDB = MealList.object(in: managedObjectContext, withFragment: addMealToMealList.fragments.mealListFragment)
+                        mealListDB?.meal = meal
                     }
                 }
             }
         }
+        try? managedObjectContext.save()
+    }
+    
+    func isAlreadyOnMealList() {
+        let mealListByNameFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "MealList")
+        mealListByNameFetch.predicate = NSPredicate(format: "meal == %@ && isCompleted = false", meal)
+        
+        do {
+            let fetchedMealListByMeal = try managedObjectContext.fetch(mealListByNameFetch) as! [MealList]
+            
+            if fetchedMealListByMeal.count > 0 {
+                onMealPlanerAlready = true
+            } else {
+                onMealPlanerAlready = false
+            }
+        }   catch {
+            fatalError("Failed to get mealList: \(error)")
+            
+        }
+        
     }
     
     var body: some View {
@@ -70,6 +117,7 @@ struct MealCoreDataView: View {
                             .overlay(
                                 VStack {
                                     HStack {
+                                
                                         Text(meal.mealName)
                                             .font(.title)
                                             .fontWeight(.bold)
@@ -78,6 +126,7 @@ struct MealCoreDataView: View {
                                             .padding(.top)
                                             .padding(.bottom, 1)
                                         Spacer()
+                                        
                                     }
                                     HStack {
                                         Text(meal.mealDetail)
@@ -90,17 +139,38 @@ struct MealCoreDataView: View {
                                     HStack {
                                         if userId != "" {
                                             
-                                            Button(action: {
-                                                addMealToGroceryList()
-                                            }) {
-                                                Image(systemName: "cart.badge.plus")
-                                                Text("/")
-                                                Image(systemName: "folder.badge.plus")
-                                            }
-                                            .font(.callout)
-                                            .padding(.leading)
-                                            .padding(.bottom)
                                             
+                                            
+                                            if onMealPlanerAlready {
+                                                Button(action: {
+                                                    addMealAgainAlert.toggle()
+                                                }) {
+                                                    Image(systemName: "cart.fill")
+                                                    Text("/")
+                                                    Image(systemName: "folder.fill")
+                                                }
+                                                .font(.callout)
+                                                .padding(.leading)
+                                                .padding(.bottom)
+                                                .onAppear {
+                                                    isAlreadyOnMealList()
+                                                }
+                                            } else {
+                                                Button(action: {
+                                                    addMealToGroceryList()
+                                                }) {
+                                                    Image(systemName: "cart.badge.plus")
+                                                    Text("/")
+                                                    Image(systemName: "folder.badge.plus")
+                                                }
+                                                .font(.callout)
+                                                .padding(.leading)
+                                                .padding(.bottom)
+                                                .onAppear {
+                                                    isAlreadyOnMealList()
+                                                }
+                                                
+                                            }
                                             
                                         }
                                         Spacer()
@@ -118,11 +188,14 @@ struct MealCoreDataView: View {
                                 , alignment: .bottom)
                             .clipShape(RoundedRectangle(cornerRadius: 0, style: .continuous))
                             .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 10)
+                            .padding(.top, 80)
                             .frame(width: (pictureSize.width - proxy.size.width) + proxy.size.width,
                                    height: (pictureSize.height - proxy.size.height/10))
                         
-                        ListOfMealIngredientsCoreDataView(meal: meal, didCreateMeal: userId == meal.mealAuthor)
+                        
+                        ListOfMealIngredientsCoreDataView(meal: meal, didCreateMeal: userId == meal.mealAuthor).padding(.top, 36)
                       
+                        VStack {
                         if userId != "" {
                             if userId == meal.mealAuthor {
                                 AddToGroceryListCoreDataView(meal: meal)
@@ -135,8 +208,15 @@ struct MealCoreDataView: View {
                                 MealLogCoreDataView(meal: meal)
                             }.padding(.bottom, 150).padding(.top, userId == meal.mealAuthor ? 80 : 0)
                         }
+                        }.alert(isPresented: $addMealAgainAlert) {
+                            Alert(title: Text("Are you sure?"), message: Text("Are you sure you want to add thsi meal to your planner multiple times?"), primaryButton: .default(Text("Yes")) {
+                                // Add meal to meallog again
+                                addMealToGroceryList()
+                            }, secondaryButton: .cancel())
+                        }
                     }
                 }
+                .navigationBarTitle(Text(meal.mealName), displayMode: .inline)
             }
         }
     }

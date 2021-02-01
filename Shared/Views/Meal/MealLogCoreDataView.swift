@@ -305,12 +305,12 @@ struct  MealLogCoreData: View {
         } else {
             VStack {
                 HStack {
-                    Text("\((mealLog.author == userid ? "You" : "Follower")) made this meal on: \(dateFormatter.string(from: mealLog.mealDateMade))")
+                    Text("\((mealLog.thoughtsAuthorId == userid ? "You" : "\(mealLog.thoughtsAuthorName)")) made this meal on: \(dateFormatter.string(from: mealLog.mealDateMade))")
                     Spacer()
                 }
                 if mealLog.mealThoughts != "Thoughts on meal and life?" {
                     VStack {
-                        if mealLog.author == userid {
+                        if mealLog.thoughtsAuthorId == userid {
                             HStack {
                                 Button("Edit Comment", action: {
                                     withAnimation(.spring()) {
@@ -340,7 +340,7 @@ struct  MealLogCoreData: View {
                         .padding(.top, 5)
                     }
                 } else {
-                    if mealLog.author! == userid {
+                    if mealLog.thoughtsAuthorId == userid {
                         
                         HStack {
                             Button("Write a Comment", action: {

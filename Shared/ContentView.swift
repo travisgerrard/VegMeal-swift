@@ -6,162 +6,180 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
-    @EnvironmentObject var networkingController: ApolloNetworkingController     //Get the networking controller from the environment objects.
-    @EnvironmentObject var mealListController: MealListApolloController
-    
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @EnvironmentObject var userController: UserApolloController
+
     @AppStorage("isLogged") var isLogged = false
     @AppStorage("userid") var userid = ""
     
-    @Namespace private var ns_grid // ids to match grid elements with modal
-    @Namespace private var ns_favorites // ids to match favorite icons with modal
-    @Namespace private var ns_search // ids to match grid elements with modal
-    
-    
-    @State private var shake = false
-    @State private var blur: Bool = false
-    
-    // Tap flags
-    @State var mealDoubleTap: String? = nil
-    @State private var mealTap: String? = nil
-    @State private var mealIndex: Int? = nil
-    @State private var favoriteTap: String? = nil
     @State private var searchTap: Bool = false
-    @State private var accountTap: Bool = false
-    
-    // Views are matched at insertion, but onAppear we broke the match
-    // in order to animate immediately after view insertion
-    // These flags control the match/unmatch
-    @State private var flyFromGridToFavorite: Bool = false
-    @State private var flyFromGridToModal: Bool = false
-    @State var flyFromFavoriteToModal: Bool = false
-    
-    // Determine if geometry matches occur
-    var matchGridToModal: Bool { !flyFromGridToModal && mealTap != nil }
-    var matchFavoriteToModal: Bool { !flyFromGridToModal && favoriteTap != nil }
-    func matchGridToFavorite(_ id: String) -> Bool { mealDoubleTap == id && !flyFromGridToFavorite }
-    let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
-    
+      
     @SceneStorage("selectedView") var selectedView: String?
 
+    func loadMealDemo() {
+        if userid != "" && isLogged {
+            let query = UpdateAllOnLaunchQuery(userId: userid)
+            ApolloController.shared.apollo.fetch(query: query) { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                    
+                case .success(let graphQLResult):
+                    print("!!!! - Loaded update all query")
+                    if let data = graphQLResult.data {
+                        // Load meals
+                        if let allMeals = data.allMeals {
+                            for meal in allMeals {
+                                if let mealDemoFragment = meal?.fragments.mealDemoFragment {
+
+                                    // Loads all meals into DB
+                                    _ = MealDemo.object(in:managedObjectContext, withFragment: mealDemoFragment)
+                                    
+                                }
+                            }
+                        }
+                        
+                        // Load ingredients/amounts
+                        if let allAmounts = data.allAmounts {
+                            for amount in allAmounts {
+                                if let amountFragment = amount?.fragments.amountFragment {
+                                    _ = AmountDemo.object(in: managedObjectContext, withFragment: amountFragment)
+                                }
+                            }
+                        }
+                        if let allIngredients = data.allIngredients {
+                            for ingredient in allIngredients {
+                                if let ingredientFragment = ingredient?.fragments.ingredientFragment {
+                                    _ = IngredientDemo.object(in: managedObjectContext, withFragment: ingredientFragment)
+                                }
+                            }
+                        }
+                        
+                        
+                        // Load grocery list
+                        if let allGroceryLists = data.allGroceryLists {
+                            // Delete prior grocery lists
+                            let fetchRequest3: NSFetchRequest<NSFetchRequestResult> = GroceryList.fetchRequest()
+                            let batchDeleteRequest3 = NSBatchDeleteRequest(fetchRequest: fetchRequest3)
+                            _ = try? managedObjectContext.execute(batchDeleteRequest3)
+                            
+                            for groceryItem in allGroceryLists {
+                                if let groceryListFragment = groceryItem?.fragments.groceryListFragment {
+                                    
+                                    _ = GroceryList.object(in: managedObjectContext, withFragment: groceryListFragment)
+                                    
+                                    try? managedObjectContext.save()
+                                    
+                                }
+                            }
+                        }
+                        
+                        // Load meal list
+                        if let allMealLists = data.allMealLists {
+                            // Delete prior meal lists
+                            let fetchRequest6: NSFetchRequest<NSFetchRequestResult> = MealList.fetchRequest()
+                            let batchDeleteRequest6 = NSBatchDeleteRequest(fetchRequest: fetchRequest6)
+                            _ = try? managedObjectContext.execute(batchDeleteRequest6)
+                            
+                            for mealListItem in allMealLists {
+                                if let mealListFragment = mealListItem?.fragments.mealListFragment {
+                                    
+                                    
+                                    let mealListItemDB = MealList.object(in: managedObjectContext, withFragment: mealListFragment)
+                                    
+                                    let mealListMeal = MealDemo.object(in: managedObjectContext, withFragment: mealListFragment.meal?.fragments.mealDemoFragment)
+                                    
+                                    mealListItemDB?.meal = mealListMeal
+                                }
+                            }
+                        }
+                        
+                        // Load user
+                        if let allUsers = data.allUsers {
+                            if allUsers.count > 0 {
+                                if let currentUser = allUsers[0]?.fragments.userDemoFragment {
+                                    let currentUserDB = UserDemo.object(in: managedObjectContext, withFragment: currentUser)
+                                    
+                                    allUsers[0]?.follows.forEach {
+                                        let followsUserDB = UserDemo.object(in: managedObjectContext, withFragment: $0.fragments.userDemoFragment)
+                                        
+                                        currentUserDB?.mutableSetValue(forKey: "follows").add(followsUserDB!)
+                                        
+                                    }
+                                    try? managedObjectContext.save()
+                                }
+                                
+                            }
+                        }
+                        
+                        try? managedObjectContext.save()
+                    }
+                }
+            }
+        } else {
+            let query = AllMealsDemoQuery()
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+
+                case .success(let graphQLResult):
+                    print("!!!! - Loaded all meals")
+                    if let data = graphQLResult.data {
+                        if let allMeals = data.allMeals {
+                            for meal in allMeals {
+                                if let mealDemoFragment = meal?.fragments.mealDemoFragment {
+
+                                    // Loads all meals into DB
+                                    _ = MealDemo.object(in:managedObjectContext, withFragment: mealDemoFragment)
+                                    
+                                }
+                            }
+                            try? managedObjectContext.save()
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
-            //-------------------------------------------------------
-            // Main View: Grid (zIndex = 1)
-            // Headerview: Add meal button, Meal Plan (zIndex = 2)
-            //-------------------------------------------------------
             VStack {
                 TabView(selection: $selectedView) {
-                    
-//                    AllMealsView(searchTap: $searchTap, accountTap: $accountTap, blur: $blur, ns_search: ns_search, ns_grid: ns_grid, openModal: openModal(_:fromGrid:))
                     AllMealsCoreDataWrapperView(searchTap: $searchTap)
                     .tabItem {
                         Image(systemName: "rectangle.stack")
                         Text("All Meals")
                     }.tag(AllMealsView.tag)
                     
-//                    GroceryListView()
                     GroceryListCoreDataView()
                         .tabItem {
                             Image(systemName: "cart")
                             Text("Grocery List")
                         }.tag(GroceryListView.tag)
                     
-//                    MealListView()
                     MealListCoreDataView()
                         .tabItem {
                             Image(systemName: "folder")
                             Text("Meal Planner")
                         }.tag(MealListView.tag)
                     
-                    SocialMainView()
+                        SocialMainCoreDataView(userid: userid)
                         .tabItem {
                             Image(systemName: "rectangle.stack.person.crop")
                             Text("Social")
                         }
                         .tag(SocialMainView.tag)
-
-                    
                 }
             }
-            
-            //-------------------------------------------------------
-            // Backdrop blurred view (zIndex = 3)
-            //-------------------------------------------------------
-//            BlurViewTwo(active: blur, onTap: dismissModal)
-            BlurViewTwo(active: blur, onTap: {})
-                .zIndex(3)
-            
-            //-------------------------------------------------------
-            // Modal View (zIndex = 4)
-            //-------------------------------------------------------
-            if mealTap != nil && mealIndex != nil || favoriteTap != nil {
-                ModalView(
-                    id: mealTap ?? favoriteTap!,
-                    meal: self.$networkingController.meals[mealIndex!],
-                    pct: flyFromGridToModal ? 1 : 0,
-                    flyingFromGrid: mealTap != nil,
-                    userId: isLogged ? userid : nil,
-                    onClose: dismissModal)
-                    .matchedGeometryEffect(id: matchGridToModal ? mealTap! : "0", in: ns_grid, isSource: false)
-                    .matchedGeometryEffect(id: matchFavoriteToModal ? favoriteTap! : "0", in: ns_favorites, isSource: false)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
-                    .onDisappear { flyFromGridToModal = false }
-                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
-                    .zIndex(4)
-            }
-            
-            if searchTap {
-                SearchView(shouldCloseView: $searchTap)
-                    //                    .matchedGeometryEffect(id: searchTap ? "search" : "0", in: ns_search, isSource: false)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
-                    .onDisappear { flyFromGridToModal = false }
-                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
-                    .onDisappear {blur = false}
-                    .zIndex(4)
-            }
-            
-            if accountTap {
-//                UserView(onClose: dismissModal, pct: flyFromGridToModal ? 1 : 0, showModal: $accountTap)
-                    UserView(showModal: $accountTap)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onAppear { withAnimation(.fly) { flyFromGridToModal = true } }
-                    .onDisappear { flyFromGridToModal = false }
-                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .move(edge: .bottom)))
-                    .onDisappear {blur = false}
-                    .zIndex(4)
-
-            }
-            
         }
-    }
-    
-    func dismissModal() {
-        withAnimation(.basic) {
-            mealTap = nil
-            mealIndex = nil
-            favoriteTap = nil
-            blur = false
-            accountTap = false
-        }
-    }
-    
-    func openModal(_ item: MealFragment, fromGrid: Bool) {
-        
-        if fromGrid {
-            mealTap = item.id
-            mealIndex = self.networkingController.meals.firstIndex(where: {$0.id == item.id})
-            
-        } else {
-            favoriteTap = item.id
-        }
-        
-        withAnimation(.basic) {
-            blur = true
+        .onAppear{
+            self.loadMealDemo()
+            userController.getUserData()
         }
     }
     
