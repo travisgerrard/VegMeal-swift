@@ -41,7 +41,7 @@ struct UserView: View {
                         if self.userController.loggedInUser != nil {
         
                             ForEach(0 ..< userController.otherUsers.count) { index in
-                                isFollowingToggle(otherUser: $userController.otherUsers[index], currentUser: self.userController.loggedInUser!)
+                                IsFollowingToggle(otherUser: $userController.otherUsers[index], currentUser: self.userController.loggedInUser!)
                             }
                         }
                     }
@@ -76,7 +76,7 @@ struct UserView: View {
 }
 
 
-struct isFollowingToggle: View {
+struct IsFollowingToggle: View {
     @EnvironmentObject var userController: UserApolloController
     
     @Binding var otherUser: OtherUser
@@ -91,9 +91,9 @@ struct isFollowingToggle: View {
         // Since ismarked is bound to model, array of followers updates automatically, and below updates server with API call
         // If there is an error in API call, that could be an issue.
         if isMarked {
-            userController.startFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
+            userController.startFollowingUser(idToChangeFollowing: otherUser.id, currentUser: currentUser.id)
         } else {
-            userController.stopFollowingUser(id_to_change_following: otherUser.id, current_user: currentUser.id)
+            userController.stopFollowingUser(idToChangeFollowing: otherUser.id, currentUser: currentUser.id)
         }
         print("\(id) is marked: \(isMarked)")
     }

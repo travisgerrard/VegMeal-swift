@@ -27,7 +27,7 @@ struct AddMealView: View {
     @EnvironmentObject var networkingController: ApolloNetworkingController
     @Binding var showModal: Bool
     
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     
     
     func loadImage() {

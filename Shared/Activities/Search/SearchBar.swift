@@ -15,9 +15,9 @@ struct SearchBar: View {
     @Binding var text: String
     @Binding var isEditing: Bool
     @Binding var listIsLoading: Bool
-    @Binding var shouldCloseView: Bool // Needed becuase in search view we don't want ending of editing to close the view. 
+    // Needed becuase in search view we don't want ending of editing to close the view.
+    @Binding var shouldCloseView: Bool
     var placeHolder: String
-
 
     var body: some View {
         VStack {
@@ -39,10 +39,8 @@ struct SearchBar: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
-//                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             .padding(.leading, 8)
 
-                       
                         Spacer()
                         if listIsLoading {
                             ProgressView().padding(.trailing, 8)
@@ -50,18 +48,15 @@ struct SearchBar: View {
                         if self.isEditing {
                             Button(action: {
                                 self.text = ""
-                            }) {
+                            }, label: {
                                 Image(systemName: "multiply.circle.fill")
                                     .foregroundColor(.gray)
                                     .padding(.trailing, 8)
-                            }
+                            })
                         }
                     }
                 )
                 .padding(.horizontal, 10)
-                
-
-
 
                 if isEditing || shouldCloseView {
                     Button(action: {
@@ -70,9 +65,9 @@ struct SearchBar: View {
                         self.text = ""
                         // Dismiss the keyboard
                         hideKeyboard()
-                    }) {
+                    }, label: {
                         Text("Cancel")
-                    }
+                    })
                     .padding(.trailing, 10)
                     .transition(.move(edge: .trailing))
                     .animation(.default)
@@ -85,6 +80,12 @@ struct SearchBar: View {
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(text: .constant(""), isEditing: .constant(true), listIsLoading: .constant(false), shouldCloseView: .constant(true), placeHolder: "Placeholder")
+        SearchBar(
+            text: .constant(""),
+            isEditing: .constant(true),
+            listIsLoading: .constant(false),
+            shouldCloseView: .constant(true),
+            placeHolder: "Placeholder"
+        )
     }
 }

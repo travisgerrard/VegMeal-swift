@@ -57,7 +57,7 @@ struct MealLog_Previews: PreviewProvider {
 struct MealLog: View {
     @EnvironmentObject var mealLogController: MealLogApolloController
     let mealLog: MadeMealFragment
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()

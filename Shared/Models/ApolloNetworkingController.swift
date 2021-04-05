@@ -100,6 +100,8 @@ class ApolloNetworkingController: ObservableObject {
     @Published var shouldCloseAddUpdateMealScreen = false
     @Published var uploadImageError: Error?
     
+    @Environment(\.managedObjectContext) var managedObjectContext
+
     func addNewMeal(authorId: String, inputImage: UIImage, name: String, description: String) {
         
         self.uploadImageError = nil
@@ -123,7 +125,10 @@ class ApolloNetworkingController: ObservableObject {
                 
             case .success(let graphQLResult):
                 //                print("Success: \(graphQLResult)")
-//                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
+                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealDemoFragment else { break }
+                _ = MealDemo.object(in:self.managedObjectContext, withFragment: fragment)
+                try? self.managedObjectContext.save()
+
 //
 //                self.meals.append(fragment)
                 self.shouldCloseAddUpdateMealScreen = true
@@ -161,9 +166,10 @@ class ApolloNetworkingController: ObservableObject {
                 }
                 
                 print("Success: \(graphQLResult)")
-//                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealFragment else { break }
-//                
-//                self.meals.append(fragment)
+                guard let fragment = graphQLResult.data?.createMeal?.fragments.mealDemoFragment else { break }
+                _ = MealDemo.object(in:self.managedObjectContext, withFragment: fragment)
+                try? self.managedObjectContext.save()
+                
                 self.shouldCloseAddUpdateMealScreen = true
                 self.shouldCloseAddUpdateMealScreen = true
                 
@@ -275,7 +281,14 @@ class ApolloNetworkingController: ObservableObject {
                         guard let mealIngredientList = graphQLResult.data?.mealIngredientList else { break }
                         
                         if let mealToUpdateIndex = self.meals.firstIndex(where: {$0.id == mealId}) {
-                            let ingredientListToAdd = MealFragment.IngredientList(id: mealIngredientList.id, ingredient: self.parseIngredient(object: mealIngredientList), amount: self.parseAmount(object: mealIngredientList))
+                            let ingredientListToAdd = MealFragment.IngredientList(
+                                id: mealIngredientList.id,
+                                ingredient: self.parseIngredient(
+                                    object: mealIngredientList),
+                                amount: self.parseAmount(
+                                    object: mealIngredientList
+                                )
+                            )
                             //                            print("ingredientListToAdd: \(ingredientListToAdd)")
                             
                             self.meals[mealToUpdateIndex].ingredientList.append(ingredientListToAdd)

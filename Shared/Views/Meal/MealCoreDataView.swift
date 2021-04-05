@@ -11,9 +11,11 @@ import struct Kingfisher.DownsamplingImageProcessor
 import CoreData
 
 struct MealCoreDataView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+
     var meal: MealDemo
     let pictureSize = CGSize(width: screen.width, height: 375)
-    @AppStorage("userid") var userId = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userId = ""
     
     @Environment(\.managedObjectContext) var managedObjectContext
     
@@ -22,9 +24,7 @@ struct MealCoreDataView: View {
     @State var onMealPlanerAlready: Bool = false
     
     func addMealToGroceryList() {
-//        meal.mealIngredientListDemo?.forEach {
-//
-//        }
+
         let mutation = AddMealToGroceryListMutation(mealId: meal.idString, authorId: userId)
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
@@ -61,10 +61,13 @@ struct MealCoreDataView: View {
                         let mealListDB = MealList.object(in: managedObjectContext, withFragment: addMealToMealList.fragments.mealListFragment)
                         mealListDB?.meal = meal
                     }
+                    onMealPlanerAlready.toggle()
+
                 }
             }
         }
         try? managedObjectContext.save()
+        
     }
     
     func isAlreadyOnMealList() {
@@ -72,7 +75,7 @@ struct MealCoreDataView: View {
         mealListByNameFetch.predicate = NSPredicate(format: "meal == %@ && isCompleted = false", meal)
         
         do {
-            let fetchedMealListByMeal = try managedObjectContext.fetch(mealListByNameFetch) as! [MealList]
+            let fetchedMealListByMeal = try managedObjectContext.fetch(mealListByNameFetch) as? [MealList] ?? []
             
             if fetchedMealListByMeal.count > 0 {
                 onMealPlanerAlready = true
@@ -96,7 +99,7 @@ struct MealCoreDataView: View {
                                 options: [
                                     .transition(.fade(0.2)),
                                     .processor(
-                                        DownsamplingImageProcessor(size: CGSize(width: 400, height: 400))
+                                        DownsamplingImageProcessor(size: CGSize(width: sizeClass == .compact ? 400 : 700, height: sizeClass == .compact ? 400 : 700))
                                     ),
                                     .cacheOriginalImage
                                 ])
@@ -222,8 +225,9 @@ struct MealCoreDataView: View {
     }
 }
 
-//struct MealCoreDataView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MealCoreDataView()
-//    }
-//}
+struct MealCoreDataView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        MealCoreDataView(meal: MealDemo.example)
+    }
+}

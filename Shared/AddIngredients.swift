@@ -101,9 +101,17 @@ struct AddIngredients: View {
 
             ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(text: self.$networkingController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, shouldCloseView: $shouldAmountBeOpen, placeHolder: "Amount").onChange(of: self.networkingController.amount, perform: { value in
-                        searchForAmount()
-                    })
+                    SearchBar(
+                        text: self.$networkingController.amount,
+                        isEditing: $isEditingAmount,
+                        listIsLoading: $amountListIsLoading,
+                        shouldCloseView: $shouldAmountBeOpen,
+                        placeHolder: "Amount")
+                        .onChange(
+                            of: self.networkingController.amount,
+                            perform: { value in
+                                searchForAmount()
+                            })
                     if !amountList.isEmpty && isEditingAmount {
                         OptionsList(list: amountList, text: self.$networkingController.amount, isEditing: $isEditingAmount)
                                 .frame(maxWidth: .infinity, maxHeight: 300)
@@ -113,9 +121,17 @@ struct AddIngredients: View {
 
 
                 VStack {
-                    SearchBar(text: self.$networkingController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, shouldCloseView: $shouldIngredientBeOpen, placeHolder: "Ingredient").onChange(of: self.networkingController.ingredient, perform: { value in
-                        searchForIngredient()
-                    })
+                    SearchBar(
+                        text: self.$networkingController.ingredient,
+                        isEditing: $isEditingIngredient,
+                        listIsLoading: $ingredientListIsLoading,
+                        shouldCloseView: $shouldIngredientBeOpen,
+                        placeHolder: "Ingredient")
+                        .onChange(
+                            of: self.networkingController.ingredient,
+                            perform: { value in
+                                searchForIngredient()
+                            })
                     if !ingredientList.isEmpty && isEditingIngredient {
                         OptionsList(list: ingredientList, text: self.$networkingController.ingredient, isEditing: $isEditingIngredient)
 

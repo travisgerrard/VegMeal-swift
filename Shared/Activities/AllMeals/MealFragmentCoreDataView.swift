@@ -12,7 +12,11 @@ import struct Kingfisher.DownsamplingImageProcessor
 struct MealFragmentCoreDataView: View {
     var meal: MealDemo
     var wideView = false
-    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: []) var meals: FetchedResults<MealDemo> // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
+
+    // Even though we wont be reading from this FetchRequest in this view
+    // you need it for the changes to be reflected immediately in your view.
+
+    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: []) var meals: FetchedResults<MealDemo>
 
     var body: some View {
         KFImage(meal.mealImageUrl,
@@ -35,9 +39,9 @@ struct MealFragmentCoreDataView: View {
             }
             .resizable()
             .scaledToFill()
-            .frame(width: wideView ? screen.width - 100 : 175, height: wideView ? screen.width - 100 :225)
+            .frame(maxWidth: wideView ? .infinity : 175, maxHeight: wideView ? .infinity :225)
             .overlay(
-                VStack{
+                VStack {
                     HStack {
                         Text(meal.mealName)
                             .foregroundColor(.primary)
@@ -62,21 +66,25 @@ struct MealFragmentCoreDataView: View {
 
                         Spacer()
                     }
-                }.background(BlurView(style: .systemMaterial))
-                , alignment: .bottom)
-            .cornerRadius(30, corners: wideView ? [.topLeft, .topRight] : [.topLeft, .topRight, .bottomLeft, .bottomRight])
+                }
+                .background(
+                    BlurView(
+                        style: .systemMaterial
+                    )
+                ),
+                alignment: .bottom
+            )
+            .cornerRadius(
+                30,
+                corners: wideView ? [.topLeft, .topRight] : [.topLeft, .topRight, .bottomLeft, .bottomRight]
+            )
             .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
-            .padding(.horizontal, 30)
             .padding(.bottom, 30)
     }
 }
 
-//struct MealFragmentCoreDataView_Previews: PreviewProvider {
-//    static var dataController = DataController.preview
-//
-//    static var previews: some View {
-//        MealFragmentCoreDataView(meal: Meal.example)
-////            .environment(\.managedObjectContext, dataController.container.viewContext)
-////            .environmentObject(dataController)
-//    }
-//}
+struct MealFragmentCoreDataView_Previews: PreviewProvider {
+    static var previews: some View {
+        MealFragmentCoreDataView(meal: MealDemo.example)
+    }
+}

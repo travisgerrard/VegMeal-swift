@@ -12,12 +12,19 @@ struct SocialMainCoreDataView: View {
     @EnvironmentObject var socialController: SocialApolloController
     @EnvironmentObject var networkingController: ApolloNetworkingController
     
-    @AppStorage("isLogged") var isLogged = false
-    @AppStorage("userid") var userid = ""
+    @AppStorage("isLogged", store: UserDefaults.shared) var isLogged = false
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     
-    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \MealDemo.createdAt, ascending: false)]) var meals: FetchedResults<MealDemo>
+    @FetchRequest(
+        entity: MealDemo.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \MealDemo.createdAt, ascending: false)]
+    ) var meals: FetchedResults<MealDemo>
 
-    @FetchRequest(entity: MadeMeal.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \MadeMeal.dateMade, ascending: false)]) var thoughts: FetchedResults<MadeMeal> // Even though we wont be reading from this FetchRequest in this
+    // Even though we wont be reading from this FetchRequest in this
+    @FetchRequest(
+        entity: MadeMeal.entity(),
+        sortDescriptors: [NSSortDescriptor(keyPath: \MadeMeal.dateMade, ascending: false)]
+    ) var thoughts: FetchedResults<MadeMeal>
    
     let currentUser: FetchRequest<UserDemo>
 
@@ -39,40 +46,46 @@ struct SocialMainCoreDataView: View {
     func loadSocialViewData() {
         var arrayOfFollwerId: [String] = []
 
-        let singleCurrentUser = currentUser.wrappedValue[0]
-        
-        singleCurrentUser.follows?.forEach {
-            arrayOfFollwerId.append(($0 as! UserDemo).idString)
-        }
-        
-        let query = AllMealsQuerySocialQuery(ids: [userid] + arrayOfFollwerId)
-        ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
-
+        if !currentUser.wrappedValue.isEmpty {
+            let singleCurrentUser = currentUser.wrappedValue[0]
             
-            switch result {
-            case .failure(let error):
-                print(error)
-                
-            case .success(let graphQLResults):
-//                guard let mostRecentMeals = graphQLResults.data?.allMeals else { break }
-                guard let allMadeMeals = graphQLResults.data?.allMadeMeals else { break }
-                
-                for madeMeal in allMadeMeals {
-                    if let madeMealFragment = madeMeal?.fragments.madeMealFragment {
+            singleCurrentUser.follows?.forEach {
+                let user = $0 as? UserDemo
+                if user != nil {
+                    arrayOfFollwerId.append(user!.idString)
+                }
+            }
+            
+            let query = AllMealsQuerySocialQuery(ids: [userid] + arrayOfFollwerId)
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
 
-                        // Load made meal into DB
-                        let madeMealDB = MadeMeal.object(in: managedObjectContext, withFragment: madeMealFragment)
-                        
-                        if let mealDemoFragment = madeMealFragment.meal?.fragments.mealDemoFragment {
-                            let mealDB = MealDemo.object(in: managedObjectContext, withFragment: mealDemoFragment)
-                            madeMealDB?.meal = mealDB
+                
+                switch result {
+                case .failure(let error):
+                    print(error)
+                    
+                case .success(let graphQLResults):
+    //                guard let mostRecentMeals = graphQLResults.data?.allMeals else { break }
+                    guard let allMadeMeals = graphQLResults.data?.allMadeMeals else { break }
+                    
+                    for madeMeal in allMadeMeals {
+                        if let madeMealFragment = madeMeal?.fragments.madeMealFragment {
+
+                            // Load made meal into DB
+                            let madeMealDB = MadeMeal.object(in: managedObjectContext, withFragment: madeMealFragment)
+                            
+                            if let mealDemoFragment = madeMealFragment.meal?.fragments.mealDemoFragment {
+                                let mealDB = MealDemo.object(in: managedObjectContext, withFragment: mealDemoFragment)
+                                madeMealDB?.meal = mealDB
+                            }
                         }
                     }
+                    try? managedObjectContext.save()
+                    
                 }
-                try? managedObjectContext.save()
-                
             }
         }
+        
     }
     
     var body: some View {
@@ -119,7 +132,7 @@ struct SocialMainCoreDataView: View {
                     .onAppear {
                         loadSocialViewData()
                     }
-                }
+                }.navigationViewStyle(StackNavigationViewStyle())
                 
             }
             
@@ -135,40 +148,12 @@ struct SocialMainCoreDataView: View {
     }
 }
 //
-//struct SocialMainView_Previews: PreviewProvider {
+// struct SocialMainView_Previews: PreviewProvider {
 //
 //    static var previews: some View {
 //        SocialMainView()
 //            .environmentObject(UserApolloController())
 //            .environmentObject(SocialApolloController())
 //    }
-//}
+// }
 //
-//struct LoadingSubView: View {
-//    @AppStorage("userid") var userid = ""
-//    var queryLoading: Bool
-//    let reload: () -> ()
-//
-//    var body: some View {
-//        VStack {
-//            HStack {
-//                if queryLoading {
-//                    ProgressView().padding(.leading)
-//                } else {
-//
-//                    Button(action: reload) {
-//                        Image(systemName: "arrow.triangle.2.circlepath")
-//                            .font(.system(size: 17, weight: .bold))
-//                            .padding(.all, 10)
-//                            .clipShape(Circle())
-//                    }
-//                }
-//
-//
-//                Spacer()
-//
-//            }
-//            Spacer()
-//        }
-//    }
-//}

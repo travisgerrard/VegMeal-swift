@@ -8,13 +8,14 @@
 import SwiftUI
 import KingfisherSwiftUI
 import struct Kingfisher.DownsamplingImageProcessor
+import WidgetKit
 
 struct MealListCoreDataView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var dataController: DataController
     
-    @AppStorage("userid") var userid = ""
-    @AppStorage("isLogged") var isLogged = false
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
+    @AppStorage("isLogged", store: UserDefaults.shared) var isLogged = false
     
     static let tag: String? = "MealListView"
     
@@ -35,6 +36,7 @@ struct MealListCoreDataView: View {
             predicate: NSPredicate(format: "isCompleted = %d", true))
     }
     
+    // Not currently being run
     func loadMealList() {
         let query = GetAllMealListsForQuery(id: userid)
         ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
@@ -77,6 +79,9 @@ struct MealListCoreDataView: View {
         
         let mutation = CompleteMyMealMutation(id: mealListItem.idString, dateCompleted: formatter3, isCompleted: mealListItem.isCompleted)
         try? managedObjectContext.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
+        
 
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
@@ -96,6 +101,8 @@ struct MealListCoreDataView: View {
                 let mutation = DeleteMyMealListItemMutation(id: mealListItem.idString)
 
         managedObjectContext.delete(mealListItem)
+        try? managedObjectContext.save()
+        WidgetCenter.shared.reloadAllTimelines()
 
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             switch result {
@@ -138,7 +145,7 @@ struct MealListCoreDataView: View {
                                          
                                 )
                                 NavigationLink(
-                                    destination: MealCoreDataView(meal: item.meal! /* ?? MealDemo.object(in: managedObjectContext, withFragment: MealDemoFragment(id: "123", name: "demo", description: "demo desc", mealImage: nil ,ingredientList: [], author: nil)))!*/),
+                                    destination: MealCoreDataView(meal: item.meal!),
                                     label: {
                                         
                                         HStack {
@@ -273,7 +280,7 @@ struct MealListCoreDataView: View {
                 }
                 .navigationBarTitle("Meal Planner")
                 
-            }
+            }.navigationViewStyle(StackNavigationViewStyle())
             .onAppear {
 //                self.loadMealList()
             }

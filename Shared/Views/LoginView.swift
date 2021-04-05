@@ -7,8 +7,12 @@
 
 import SwiftUI
 import Combine
+import CoreData
 
 struct LoginView: View {
+    @Environment(\.managedObjectContext) var managedObjectContext
+    @EnvironmentObject var dataController: DataController
+    
     @State var emailText = ""
     @State var password = ""
     @State var nameText = ""
@@ -23,12 +27,58 @@ struct LoginView: View {
     @Binding var showLogin: Bool
     @State var isSignUp = false
     
-    @AppStorage("isLogged") var isLogged = false
-    @AppStorage("email") var email = ""
-    @AppStorage("userid") var userid = ""
-    @AppStorage("token") var token = ""
+    @AppStorage("isLogged", store: UserDefaults.shared) var isLogged = false
+    @AppStorage("email", store: UserDefaults.shared) var email = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
+    @AppStorage("token", store: UserDefaults.shared) var token = ""
     @EnvironmentObject var userController: UserApolloController
-
+    
+    func loadMealDemo() {
+        
+        if userid != "" && isLogged {
+            let query = UpdateAllOnLaunchQuery(userId: userid)
+            ApolloController.shared.apollo.fetch(query: query) { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                    
+                case .success(let graphQLResult):
+                    print("!!!! - Loaded update all query")
+                    if let data = graphQLResult.data {
+                        dataController.syncOnLoad(data)
+                    }
+                }
+            }
+        } else {
+            let query = AllMealsDemoQuery()
+            ApolloController.shared.apollo.fetch(query: query, cachePolicy: .returnCacheDataAndFetch) { result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                    
+                case .success(let graphQLResult):
+                    print("!!!! - Loaded all meals")
+                    if let data = graphQLResult.data {
+                        if let allMeals = data.allMeals {
+                            dataController.container.performBackgroundTask { backgroundContext in
+                                
+                                for meal in allMeals {
+                                    if let mealDemoFragment = meal?.fragments.mealDemoFragment {
+                                        
+                                        
+                                        // Loads all meals into DB
+                                        _ = MealDemo.object(in:backgroundContext, withFragment: mealDemoFragment)
+                                        
+                                    }
+                                }
+                                try? backgroundContext.save()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     func login() {
         hideKeyboard()
@@ -52,6 +102,8 @@ struct LoginView: View {
                         isSuccessful = true
                         
                         isLogged = true
+                        
+                        self.loadMealDemo()
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             isSuccessful = false
@@ -174,7 +226,7 @@ struct LoginView: View {
                         
                         if self.isSignUp {
                             Divider().padding(.leading, 80)
-
+                            
                             HStack {
                                 Image(systemName: "person.crop.circle.fill")
                                     .foregroundColor(Color(#colorLiteral(red: 0.7608050108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)))
@@ -232,7 +284,7 @@ struct LoginView: View {
                             Text("\(self.isSignUp ? "Log in" : "Sign up")")
                                 .font(.subheadline)
                         })
-                       
+                        
                         
                         Spacer()
                         

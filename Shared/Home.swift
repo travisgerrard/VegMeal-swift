@@ -32,7 +32,6 @@ struct Home_Previews: PreviewProvider {
             .environmentObject(SocialApolloController())
             .environment(\.managedObjectContext, dataController.container.viewContext)
             .environmentObject(dataController)
+            .environmentObject(UserApolloController())
     }
 }
-
-

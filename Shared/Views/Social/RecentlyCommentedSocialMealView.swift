@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct RecentlyCommentedSocialMealView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+    
     @State var mealLog: MadeMeal
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
@@ -24,7 +26,6 @@ struct RecentlyCommentedSocialMealView: View {
             
             if mealLog.meal != nil {
                 MealFragmentCoreDataView(meal: mealLog.meal!, wideView: true)
-//                MealFragmentView(meal: mealLog.meal!.fragments.mealFragment, wideView: true)
             }
             VStack {
                 VStack {
@@ -52,8 +53,9 @@ struct RecentlyCommentedSocialMealView: View {
                         }
                         
                     }
+                    .frame(maxWidth: .infinity)
                     .padding()
-                    .frame(width: screen.width - 100)
+                    
                     .background(BlurViewTwo(active: true, onTap: {}))
                     .cornerRadius(30, corners: [.bottomLeft, .bottomRight])
                     .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
@@ -63,9 +65,9 @@ struct RecentlyCommentedSocialMealView: View {
                 }
                 .padding(.top, 5)
                 
-            }.padding().offset(y:-60)
+            }.padding(.vertical).offset(y:-60)
         }
-        .padding(.bottom, -70).frame(maxWidth: screen.width)
+        .padding(.horizontal, sizeClass == .compact ? 25 : 100).padding(.bottom, -70).frame(maxWidth: .infinity)
     }
 }
 

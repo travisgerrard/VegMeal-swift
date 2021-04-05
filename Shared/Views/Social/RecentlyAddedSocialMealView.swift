@@ -18,7 +18,7 @@ struct RecentlyAddedSocialMealView: View {
                 } else {
                     Text("Added: N/A").font(.footnote).offset(y:-15)
                 }
-            }
+            }.padding(.horizontal, 20)
 
 
 

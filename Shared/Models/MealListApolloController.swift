@@ -43,7 +43,13 @@ class  MealListApolloController: ObservableObject {
                 guard let returnedCompletedMealList = graphQLResults.data?.myMealCompleted else { break }
                 self.completedMealList.removeAll()
                 for meal in returnedCompletedMealList {
-                    self.completedMealList.append(MealListItem(id: meal!.id, isCompleted: meal!.isCompleted!, dateCompleted: meal!.dateCompleted ?? "No Date", meal: meal!.meal!.fragments.mealFragment))
+                    self.completedMealList.append(
+                        MealListItem(
+                            id: meal!.id,
+                            isCompleted: meal!.isCompleted!,
+                            dateCompleted: meal!.dateCompleted ?? "No Date",
+                            meal: meal!.meal!.fragments.mealFragment)
+                    )
                 }
             }
         }

@@ -54,10 +54,7 @@ struct SearchMealsCoreDataView: View {
     let mealSearch: FetchRequest<MealDemo>
 
     @Environment(\.managedObjectContext) var managedObjectContext
-    let c = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
-    //    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: [],
-    //                  predicate: NSPredicate(format: "name CONTAINS %@", text)) var mealSearch: FetchedResults<MealDemo> // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
-    //}
+    let columnSpacing = GridItem(.adaptive(minimum: 175, maximum: 175), spacing: 10)
     
     init(text: String) {
         self.text = text
@@ -72,7 +69,7 @@ struct SearchMealsCoreDataView: View {
     
     
     var body: some View {
-            LazyVGrid(columns: [c], spacing: 20) {
+            LazyVGrid(columns: [columnSpacing], spacing: 20) {
                 ForEach(mealSearch.wrappedValue) { meal in
                     NavigationLink(
                         destination: MealCoreDataView(meal: meal),

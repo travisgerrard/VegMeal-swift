@@ -15,7 +15,7 @@ struct MealLogCoreDataView: View {
     @Environment(\.managedObjectContext) var managedObjectContext
     @EnvironmentObject var userController: UserApolloController
     
-    @AppStorage("userid") var userId = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userId = ""
     
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -84,7 +84,7 @@ struct MealLogCoreDataView: View {
                 managedObjectContext.undo()
                 
             case .success(let graphQLResults):
-//                print("Success: \(graphQLResults)")
+                //                print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
                     print(error)
                     managedObjectContext.undo()
@@ -145,12 +145,11 @@ struct  MealLogCoreData: View {
 
     @State var isEditingMealLog = false
     let mealLog: MadeMeal
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     @State var thoughts: String
     @State var mealLogDate: Date
     
-    @State var showingDeleteMealAlert: Bool = false
-
+    @State private var showingDeleteMealAlert = false
     
     var placeholderString = "Thoughts on meal and life?"
 
@@ -182,8 +181,8 @@ struct  MealLogCoreData: View {
                 print("Error: \(error)")
                 managedObjectContext.undo()
 
-                // Should undo coredata deletion...
-                
+            // Should undo coredata deletion...
+
             case .success(let graphQLResults):
                 print("Success: \(graphQLResults)")
                 if let error = graphQLResults.errors {
@@ -244,10 +243,12 @@ struct  MealLogCoreData: View {
                 }.padding()
                 TextEditor(text: $thoughts)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .foregroundColor(mealLog.mealThoughts == placeholderString ? .gray : .primary)
+                    .foregroundColor(mealLog.mealThoughts == placeholderString && thoughts == placeholderString ? .gray : .primary)
                     .onTapGesture {
                         if mealLog.mealThoughts == placeholderString {
-                            self.thoughts = ""
+                            if self.thoughts == placeholderString {
+                                self.thoughts = ""
+                            }
                         } else {
                             self.thoughts = mealLog.mealThoughts
                         }
@@ -272,14 +273,28 @@ struct  MealLogCoreData: View {
                             self.isEditingMealLog.toggle()
                         }
                     }).padding(.trailing)
-                    Button("Delete", action: {
+                    Button(action: {
                         withAnimation(.spring()) {
                             // Delete this meal log
                             // Should add in alert here...
-                            showingDeleteMealAlert.toggle()
+                            print("Pressed this button")
+                            self.showingDeleteMealAlert.toggle()
                         }
-                    }).foregroundColor(.red)
-                    
+                    }, label: {
+                        Text("Delete")
+                            .foregroundColor(.red)
+                    })
+                    .alert(isPresented: $showingDeleteMealAlert) {
+                        Alert(
+                            title: Text("Are you sure?"),
+                            message: Text("Are you sure you want to delete this log entry?"),
+                            primaryButton: .destructive(Text("Delete")) {
+                                deleteLogFromMealLog(mealLog: mealLog)
+                                self.isEditingMealLog.toggle()
+
+                            },
+                            secondaryButton: .cancel())
+                    }
                     
                     Spacer()
                 }.padding()
@@ -292,15 +307,8 @@ struct  MealLogCoreData: View {
             .padding(.horizontal, 30)
             .padding(.bottom, 30)
             .onAppear {
-//                thoughtsDefault = thoughts
-//                mealLogDateDeafult = mealLogDate
-            }
-            .alert(isPresented: $showingDeleteMealAlert) {
-                Alert(title: Text("Are you sure?"), message: Text("Are you sure you want to delete this log entry?"), primaryButton: .default(Text("Yes")) {
-                    deleteLogFromMealLog(mealLog: mealLog)
-                    self.isEditingMealLog.toggle()
-
-                }, secondaryButton: .cancel())
+                //                thoughtsDefault = thoughts
+                //                mealLogDateDeafult = mealLogDate
             }
         } else {
             VStack {

@@ -18,10 +18,10 @@ struct OtherUser: Identifiable {
 }
 
 class UserApolloController: ObservableObject {
-    @AppStorage("isLogged") var isLogged = false
-    @AppStorage("email") var email = ""
-    @AppStorage("userid") var userid = ""
-    @AppStorage("token") var token = ""
+    @AppStorage("isLogged", store: UserDefaults.shared) var isLogged = false
+    @AppStorage("email", store: UserDefaults.shared) var email = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
+    @AppStorage("token", store: UserDefaults.shared) var token = ""
     
     @Published var getUserQueryRunning: Bool = false
     @Published var getUserQueryError: Error?
@@ -118,10 +118,10 @@ class UserApolloController: ObservableObject {
     @Published var startFollowingMutationRunning: Bool = false
     @Published var startFollowingMutationError: Error?
     
-    func startFollowingUser(id_to_change_following: String, current_user: String) {
+    func startFollowingUser(idToChangeFollowing: String, currentUser: String) {
         print("startFollowingUser was called")
         self.startFollowingMutationRunning = true
-        let mutation = StartFollowingMutation(id_to_change_following: id_to_change_following, current_user: current_user)
+        let mutation = StartFollowingMutation(id_to_change_following: idToChangeFollowing, current_user: currentUser)
         
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             self.startFollowingMutationRunning = false
@@ -145,10 +145,10 @@ class UserApolloController: ObservableObject {
     @Published var stopFollowingMutationRunning: Bool = false
     @Published var stopFollowingMutationError: Error?
     
-    func stopFollowingUser(id_to_change_following: String, current_user: String) {
+    func stopFollowingUser(idToChangeFollowing: String, currentUser: String) {
         print("stopFollowingUser was called")
         self.stopFollowingMutationRunning = true
-        let mutation = StopFollowingMutation(id_to_change_following: id_to_change_following, current_user: current_user)
+        let mutation = StopFollowingMutation(id_to_change_following: idToChangeFollowing, current_user: currentUser)
         
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
             self.stopFollowingMutationRunning = false

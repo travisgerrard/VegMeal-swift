@@ -23,7 +23,17 @@ extension MealFragment: Identifiable {
     
     // Static makes it useable in previews
     static var example: MealFragment {
-        MealFragment(id: "5f4c7bfdf818ca3c74eb7d6d", name: "Test", description: "Text description", createdAt: "2021-01-02T03:22:37.593Z", mealImage: MealFragment.MealImage(publicUrlTransformed: "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg"), author: MealFragment.Author(id: "1"), ingredientList: [
+        MealFragment(
+            id: "5f4c7bfdf818ca3c74eb7d6d",
+            name: "Test",
+            description: "Text description",
+            createdAt: "2021-01-02T03:22:37.593Z",
+            mealImage: MealFragment.MealImage(
+                publicUrlTransformed:
+                    "https://res.cloudinary.com/dehixvgdv/image/upload/v1601231238/veggily/5f70d984f115da6823f1bf9b.jpg"
+            ),
+            author: MealFragment.Author(id: "1"),
+            ingredientList: [
                         MealFragment.IngredientList(
                             id: "1",
                             ingredient:

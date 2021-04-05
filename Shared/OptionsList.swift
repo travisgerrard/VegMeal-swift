@@ -13,8 +13,7 @@ struct OptionsList: View {
     var list = [String]()
     @Binding var text: String
     @Binding var isEditing: Bool
-    
-    
+
     var body: some View {
         VStack {
             ScrollView {
@@ -22,7 +21,7 @@ struct OptionsList: View {
                     HStack {
                         Text(string).padding(.leading)
                         Spacer()
-                    }.onTapGesture(count:1) {
+                    }.onTapGesture(count: 1) {
                         text = string
                         isEditing = false
                         hideKeyboard()
@@ -36,7 +35,7 @@ struct OptionsList: View {
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
             .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 20)
             .padding(.horizontal, 5)
-            
+
             Spacer()
         }.zIndex(10)
     }
@@ -44,6 +43,10 @@ struct OptionsList: View {
 
 struct OptionsList_Previews: PreviewProvider {
     static var previews: some View {
-        OptionsList(list: ["1","1","1","1","1"], text: .constant("Text"), isEditing: .constant(false))
+        OptionsList(
+            list: ["1", "1", "1", "1", "1"],
+            text: .constant("Text"),
+            isEditing: .constant(false)
+        )
     }
 }

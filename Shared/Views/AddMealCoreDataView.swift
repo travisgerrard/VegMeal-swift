@@ -17,7 +17,7 @@ struct AddMealCoreDataView: View {
     
     var meal: MealDemo?
     
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     
     
     
@@ -49,14 +49,15 @@ struct AddMealViewWithData: View {
     @State private var inputImage: UIImage?
     
     
-    @AppStorage("userid") var userid = ""
+    @AppStorage("userid", store: UserDefaults.shared) var userid = ""
     
     @State var isUploadingImage: Bool = false
     @State var shouldCloseAddUpdateMealScreen = false
     @State var uploadImageError: Error?
     
     @Environment(\.managedObjectContext) var managedObjectContext
-    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: []) var meals: FetchedResults<MealDemo> // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
+    // Even though we wont be reading from this FetchRequest in this view you need it for the changes to be reflected immediately in your view.
+    @FetchRequest(entity: MealDemo.entity(), sortDescriptors: []) var meals: FetchedResults<MealDemo>
 
     func addNewMeal() {
         if image != nil && name != "" && description != "" {

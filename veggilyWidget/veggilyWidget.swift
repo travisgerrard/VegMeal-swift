@@ -8,25 +8,58 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import CoreData
 
 struct Provider: IntentTimelineProvider {
+    let snapshotEntry = SimpleEntry(date: Date(), mealNames: [])
+
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+        snapshotEntry
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration)
-        completion(entry)
+    func getSnapshot(
+        for configuration: ConfigurationIntent,
+        in context: Context,
+        completion: @escaping (SimpleEntry) -> Void
+    ) {
+        completion(snapshotEntry)
     }
 
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(
+        for configuration: ConfigurationIntent,
+        in context: Context,
+        completion: @escaping (Timeline<Entry>) -> Void
+    ) {
         var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
+        let managedObjectContext = DataController().container.viewContext
+
+        let mealsToMakeFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "MealList")
+        mealsToMakeFetch.predicate = NSPredicate(format: "isCompleted = %d", false)
+        
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)
+            
+            var entry = snapshotEntry
+            
+            var results = [MealList]()
+            var resultsNameString = [String]()
+            
+            do {
+                results = try managedObjectContext.fetch(mealsToMakeFetch) as? [MealList] ?? []
+
+            } catch let error as NSError { print("Could not fetch \(error), \(error.userInfo)") }
+            
+            results.forEach {
+                resultsNameString.append($0.meal!.name!)
+            }
+            
+            //            let randomIndex = Int(arc4random_uniform(UInt32(results.count)))
+
+            
+            entry = SimpleEntry(date: entryDate!, mealNames: resultsNameString)
+            
             entries.append(entry)
         }
 
@@ -37,33 +70,46 @@ struct Provider: IntentTimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
-    let configuration: ConfigurationIntent
+    let mealNames: [String]
 }
 
-struct veggilyWidgetEntryView : View {
+struct VeggilyWidgetEntryView: View {
     var entry: Provider.Entry
 
     var body: some View {
-        Text(entry.date, style: .time)
+        VStack {
+
+            ForEach(entry.mealNames, id: \.self) { entryMealList in
+                Text(entryMealList).padding(.bottom, 2)
+
+            }
+
+        }
     }
 }
 
 @main
-struct veggilyWidget: Widget {
+struct VeggilyWidget: Widget {
     let kind: String = "veggilyWidget"
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
-            veggilyWidgetEntryView(entry: entry)
+            VeggilyWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Veggily Widget")
+        .description("See what meals are coming up.")
+        .supportedFamilies([.systemMedium])
     }
 }
 
-struct veggilyWidget_Previews: PreviewProvider {
+struct VeggilyWidget_Previews: PreviewProvider {
     static var previews: some View {
-        veggilyWidgetEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        VeggilyWidgetEntryView(
+            entry: SimpleEntry(
+                date: Date(),
+                mealNames: ["Pizza", "Bean Soup", "Waffels", "Pad Thai", "Mac N Cheese"]
+            )
+        )
+        .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
 }

@@ -99,18 +99,36 @@ struct AddToGroceryListView: View {
             
             ZStack(alignment: .top) {
                 VStack {
-                    SearchBar(text: self.$groceryListController.amount, isEditing: $isEditingAmount, listIsLoading: $amountListIsLoading, shouldCloseView: $shouldAmountBeOpen, placeHolder: "Amount").onChange(of: groceryListController.amount, perform: { value in
-                        searchForAmount()
-                    })
+                    SearchBar(
+                        text: self.$groceryListController.amount,
+                        isEditing: $isEditingAmount,
+                        listIsLoading: $amountListIsLoading,
+                        shouldCloseView: $shouldAmountBeOpen,
+                        placeHolder: "Amount")
+                        .onChange(
+                            of: groceryListController.amount,
+                            perform: { value in
+                                searchForAmount()
+                            }
+                        )
                     if !amountList.isEmpty && isEditingAmount {
                         OptionsList(list: amountList, text: self.$groceryListController.amount, isEditing: $isEditingAmount)
                     }
                 }.padding(.bottom).zIndex(3)
                 
                 VStack {
-                    SearchBar(text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient, listIsLoading: $ingredientListIsLoading, shouldCloseView: $shouldIngredientBeOpen, placeHolder: "Ingredient").onChange(of: self.groceryListController.ingredient, perform: { value in
-                        searchForIngredient()
-                    })
+                    SearchBar(
+                        text: self.$groceryListController.ingredient,
+                        isEditing: $isEditingIngredient,
+                        listIsLoading: $ingredientListIsLoading,
+                        shouldCloseView: $shouldIngredientBeOpen,
+                        placeHolder: "Ingredient")
+                        .onChange(
+                            of: self.groceryListController.ingredient,
+                            perform: { value in
+                                searchForIngredient()
+                            }
+                        )
                     if !ingredientList.isEmpty && isEditingIngredient {
                         OptionsList(list: ingredientList, text: self.$groceryListController.ingredient, isEditing: $isEditingIngredient)
                         
@@ -127,13 +145,13 @@ struct AddToGroceryListView: View {
                 HStack{
                     Spacer()
                     
-                    if self.groceryListController.addIngredientToGroceryListMutationRunning {
+                    if self.groceryListController.aITGLMRunning {
                         ProgressView()
                     }
                     
                     Button("Add", action: {
                         addIngredientToGroceryList()
-                    }).padding().disabled(self.groceryListController.amount.count == 0 || self.groceryListController.ingredient.count == 0 || self.groceryListController.addIngredientToGroceryListMutationRunning)
+                    }).padding().disabled(self.groceryListController.amount.count == 0 || self.groceryListController.ingredient.count == 0 || self.groceryListController.aITGLMRunning)
                     
                 }.offset(x: 0, y: 100)
             }

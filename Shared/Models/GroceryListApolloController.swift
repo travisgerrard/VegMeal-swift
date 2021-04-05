@@ -9,13 +9,12 @@ import Apollo
 import Combine
 import SwiftUI
 
-
 class GroceryListApolloController: ObservableObject {
     @Published var groceryList: [GroceryListFragment] = []
     @Published var completedGroceryList: [GroceryListFragment] = []
     @Published var groceryListQueryRunning: Bool = false
     @Published var groceryListQueryError: Error?
-    
+
     func getGroceryList(userId: String) {
         groceryListQueryRunning = true
         let query = GetGroceryListQuery(id: userId)
@@ -24,7 +23,7 @@ class GroceryListApolloController: ObservableObject {
             switch result {
             case .failure(let error):
                 self.groceryListQueryError = error
-                
+
             case .success(let graphQLResults):
 //                print("Success: \(graphQLResults)")
                 guard let returnedGroceryList = graphQLResults.data?.groceryToComplete else { break }
@@ -32,32 +31,37 @@ class GroceryListApolloController: ObservableObject {
                 for grocery in returnedGroceryList {
                     self.groceryList.append(grocery!.fragments.groceryListFragment)
                 }
-                self.groceryList = self.groceryList.sorted(by: { ($0.ingredient?.fragments.ingredientFragment.category)! > ($1.ingredient?.fragments.ingredientFragment.category)! }) // Sorts by category
+                self.groceryList = self.groceryList.sorted(
+                    by: {
+                        ($0.ingredient?.fragments.ingredientFragment.category)! > ($1.ingredient?.fragments.ingredientFragment.category)!
+
+                    }
+                ) // Sorts by category
                 
                 guard let returnedCompleteGroceryList = graphQLResults.data?.groceryCompleted else { break }
                 self.completedGroceryList.removeAll()
                 for grocery in returnedCompleteGroceryList {
                     self.completedGroceryList.append(grocery!.fragments.groceryListFragment)
                 }
-            
-                
+
             }
         }
     }
     
     @Published var amount = ""
     @Published var ingredient = ""
-    @Published var addIngredientToGroceryListMutationRunning: Bool = false
-    @Published var addIngredientToGroceryListMutationError: Error?
+    // addIngredientToGroceryListMutation = aITGLM
+    @Published var aITGLMRunning: Bool = false
+    @Published var aITGLMError: Error?
     
     func addIngredientToGroceryList() {
-        addIngredientToGroceryListMutationRunning = true
+        aITGLMRunning = true
         let mutation = AddGroceryListMutation(ingredient: ingredient, amount: amount)
         ApolloController.shared.apollo.perform(mutation: mutation) { result in
-            self.addIngredientToGroceryListMutationRunning = false
+            self.aITGLMRunning = false
             switch result {
             case .failure(let error):
-                self.addIngredientToGroceryListMutationError = error
+                self.aITGLMError = error
                 
             case .success(let graphQLResults):
 //                print("Success: \(graphQLResults)")
@@ -67,7 +71,7 @@ class GroceryListApolloController: ObservableObject {
                 ApolloController.shared.apollo.fetch(query: query) { result in
                     switch result {
                     case .failure(let error):
-                        self.addIngredientToGroceryListMutationError = error
+                        self.aITGLMError = error
                         
                     case .success(let graphQLResultTwo):
 //                        print("Success: \(graphQLResultTwo)")
@@ -78,7 +82,7 @@ class GroceryListApolloController: ObservableObject {
                         guard let itemArray = graphQLResultTwo.data?.allGroceryLists else { break }
                         let item = itemArray[0]!.fragments.groceryListFragment
                         
-                        self.groceryList.insert(item , at: 0)
+                        self.groceryList.insert(item, at: 0)
                     }
                 }
             }
@@ -129,7 +133,6 @@ class GroceryListApolloController: ObservableObject {
                     print(error)
                     return
                 }
-                
                 if let groceryListToCompleteIndex = self.groceryList.firstIndex(where: {$0.id == id}) {
                     self.completedGroceryList.insert(self.groceryList[groceryListToCompleteIndex], at: 0)
                     self.groceryList.remove(at: groceryListToCompleteIndex)
